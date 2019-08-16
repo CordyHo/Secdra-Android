@@ -7,9 +7,10 @@ import com.google.gson.Gson
 
 class MPictureModel(private val iPictureInterface: IPictureInterface) {
 
-    fun getMainPictureFromUrl() {
+    fun getMainPictureFromUrl(page: Int) {
         UrlRequest()
                 .url("")
+                .param("page",page)
                 .getDataFromUrlPost(object : UrlRequest.DataRequestResponse {
                     override fun onRequestSuccess(jsonData: String) {
                         iPictureInterface.getPictureListSuccess(Gson().fromJson(jsonData, JsonBeanPicture::class.java))

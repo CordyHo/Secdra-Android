@@ -7,4 +7,8 @@ interface IPictureInterface {
     fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture)
 
     fun getPictureListFailure(msg: String?)
+
+    fun getMorePictureListSuccess(jsonBeanPicture: JsonBeanPicture)
+
+    fun getMorePictureListFailure(msg: String?)
 }

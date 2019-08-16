@@ -3,20 +3,10 @@ package com.cordy.secdra.utils
 object AccountManager {
     private const val SIGN_TAG = "SIGN_TAG"
     private const val TOKEN = "TOKEN"
-    private const val TEACHER_ID = "TEACHER_ID"
     private const val USER_DETAILS = "USER_DETAILS"
-    private const val EMAIL = "EMAIL"
 
     val isSignIn: Boolean
         get() = PreferencesHelper.getAppFlag(SIGN_TAG)
-
-    var teacherId: String?
-        get() = PreferencesHelper.getCustomAppProfile(TEACHER_ID)     //teacherId
-        set(teacherId) = PreferencesHelper.addCustomAppProfile(TEACHER_ID, teacherId)      //teacherId
-
-    var email: String?
-        get() = PreferencesHelper.getCustomAppProfile(EMAIL)     //email
-        set(email) = PreferencesHelper.addCustomAppProfile(EMAIL, email)      //email
 
     var token: String?
         get() = PreferencesHelper.getCustomAppProfile(TOKEN)     //getToken

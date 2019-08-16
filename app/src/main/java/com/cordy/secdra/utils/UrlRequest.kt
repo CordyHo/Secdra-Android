@@ -1,10 +1,17 @@
 package com.cordy.secdra.utils
 
 import com.android.volley.DefaultRetryPolicy
+import com.android.volley.NetworkResponse
+import com.android.volley.ParseError
+import com.android.volley.Response
+import com.android.volley.toolbox.HttpHeaderParser
 import com.android.volley.toolbox.StringRequest
 import com.cordy.secdra.SecdraApplication
 import org.json.JSONObject
+import java.io.UnsupportedEncodingException
+import java.nio.charset.Charset
 import java.util.*
+
 
 class UrlRequest {
 
@@ -25,10 +32,10 @@ class UrlRequest {
     fun getDataFromUrlPost(dataRequestResponse: DataRequestResponse) {
         val stringRequest = object : StringRequest(Method.POST, url, { response ->
             val jsonObject = JSONObject(response)
-            if (jsonObject.getInt("state") == AppParamUtils.httpSuccess) {
-                dataRequestResponse.onRequestSuccess(response)  //state 0请求成功
+            if (jsonObject.getInt("status") == AppParamUtils.httpSuccess) {
+                dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
             } else {
-                val msg = jsonObject.getString("msg")
+                val msg = jsonObject.getString("message")
                 if (!JumpToLoginUtils.jumpToLogin(msg))
                     dataRequestResponse.onRequestFailure(msg)
             }
@@ -39,6 +46,42 @@ class UrlRequest {
             override fun getHeaders(): Map<String?, String?> { //传头部
                 requestParams[AppParamUtils.key_token] = AccountManager.token + ""
                 return requestParams
+            }
+
+            override fun getParams(): Map<String?, String?> { //传Post参数
+                return requestParams
+            }
+        }
+        stringRequest.tag = url
+        //设置超时时长
+        stringRequest.retryPolicy = DefaultRetryPolicy(10000, 0, 2f)
+        SecdraApplication.httpQueues?.add(stringRequest)
+    }
+
+    fun getTokenFromUrlLoginPost(dataRequestResponse: DataRequestResponse) {
+        val stringRequest = object : StringRequest(Method.POST, url, { response ->
+            val jsonObject = JSONObject(response)
+            if (jsonObject.getInt("status") == AppParamUtils.httpSuccess) {
+                dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
+            } else {
+                val msg = jsonObject.getString("message")
+                dataRequestResponse.onRequestFailure(msg)
+            }
+        }, { error ->
+            dataRequestResponse.onRequestFailure("error：" + error?.networkResponse?.statusCode)
+        }) {
+
+            override fun parseNetworkResponse(response: NetworkResponse): Response<String> {
+                return try {
+                    val responseHeaders = response.headers
+                    val rawCookies = responseHeaders["Set-Cookie"]
+                    //格式化后存入cookie
+                    AccountManager.token = rawCookies
+                    val dataString = String(response.data, Charset.forName("utf-8"))
+                    Response.success(dataString, HttpHeaderParser.parseCacheHeaders(response))
+                } catch (e: UnsupportedEncodingException) {
+                    Response.error(ParseError(e))
+                }
             }
 
             override fun getParams(): Map<String?, String?> { //传Post参数
