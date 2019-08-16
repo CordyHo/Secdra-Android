@@ -1,10 +1,12 @@
 package com.cordy.secdra.module.main.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
+import com.cordy.secdra.module.user.view.LoginActivity
 import com.cordy.secdra.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -18,6 +20,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 
     override fun initView() {
