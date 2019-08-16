@@ -32,7 +32,7 @@ class SecdraApplication : Application() {
     }
 
     private fun initCrashReport() {
-        val appID = "5e453cbf7e"
+        val appID = "e9ee7a2284"
         val packageName = application?.packageName
         val processName = getProcessName(android.os.Process.myPid())
         val strategy = CrashReport.UserStrategy(application)

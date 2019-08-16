@@ -22,9 +22,9 @@
         tools:replace="android:allowBackup">
 
         <activity
-            android:name=".module.main.view.MainActivity"
+            android:name=".module.main.view.CoverActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="user"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,6 +32,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".module.main.view.MainActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="user"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".module.user.view.LoginActivity"
