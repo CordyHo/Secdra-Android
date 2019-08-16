@@ -8,7 +8,7 @@ import java.util.*
 
 class UrlRequest {
 
-    private val requestParams = HashMap<String, String>()
+    private val requestParams = HashMap<String?, String?>()
     private var url = ""
 
     fun url(url: String?): UrlRequest {
@@ -16,7 +16,7 @@ class UrlRequest {
         return this
     }
 
-    fun param(key: String, value: Any?): UrlRequest {
+    fun param(key: String?, value: Any?): UrlRequest {
         requestParams[key] = value.toString()
         return this
     }
@@ -33,21 +33,20 @@ class UrlRequest {
                     dataRequestResponse.onRequestFailure(msg)
             }
         }, { error ->
-            dataRequestResponse.onRequestFailure("網絡錯誤：" + error?.networkResponse?.statusCode)
+            dataRequestResponse.onRequestFailure("error：" + error?.networkResponse?.statusCode)
         }) {
 
-            override fun getHeaders(): Map<String, String> { //传头部
+            override fun getHeaders(): Map<String?, String?> { //传头部
                 requestParams[AppParamUtils.key_token] = AccountManager.token + ""
-                requestParams[AppParamUtils.key_teacherId] = AccountManager.teacherId + ""
                 return requestParams
             }
 
-            override fun getParams(): Map<String, String> { //传Post参数
+            override fun getParams(): Map<String?, String?> { //传Post参数
                 return requestParams
             }
         }
         stringRequest.tag = url
-        /*设置超时时长*/
+        //设置超时时长
         stringRequest.retryPolicy = DefaultRetryPolicy(10000, 0, 2f)
         SecdraApplication.httpQueues?.add(stringRequest)
     }

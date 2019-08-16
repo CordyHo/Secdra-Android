@@ -20,7 +20,6 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
-        startActivity(Intent(this, LoginActivity::class.java))
     }
 
     override fun initView() {
