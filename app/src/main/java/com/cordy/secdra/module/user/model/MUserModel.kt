@@ -6,14 +6,14 @@ import org.json.JSONObject
 
 class MUserModel(private val iUserInterface: IUserInterface) {
 
-    fun login(email: String?, pw: String?) {
+    fun login(phone: String?, pw: String?) {
         UrlRequest()
-                .url("/login/login")
-                .param("email", email)
+                .url("user/login")
+                .param("phone", phone)
                 .param("password", pw)
                 .getTokenFromUrlLoginPost(object : UrlRequest.DataRequestResponse {
                     override fun onRequestSuccess(jsonData: String) {
-                        iUserInterface.loginSuccess(JSONObject(jsonData).getString("msg"))
+                        iUserInterface.loginSuccess(JSONObject(jsonData).getString("message"))
                     }
 
                     override fun onRequestFailure(errMsg: String) {

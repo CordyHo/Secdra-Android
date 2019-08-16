@@ -28,8 +28,6 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         initView()
-        if (!intent?.getStringExtra("email").isNullOrBlank())
-            etPhone.setText(intent?.getStringExtra("email"))
     }
 
     override fun loginSuccess(msg: String) {

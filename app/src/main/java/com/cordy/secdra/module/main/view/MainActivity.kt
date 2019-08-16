@@ -30,6 +30,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        getDataFromUrl()
     }
 
     private fun getDataFromUrl() {
