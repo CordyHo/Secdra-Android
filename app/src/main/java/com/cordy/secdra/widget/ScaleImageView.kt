@@ -2,9 +2,9 @@ package com.cordy.secdra.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 
-class ScaleImageView(context: Context, attrs: AttributeSet? = null) : ImageView(context, attrs) {
+class ScaleImageView(context: Context, attrs: AttributeSet? = null) : AppCompatImageView(context, attrs) {
     private var initWidth: Int = 0
     private var initHeight: Int = 0
 
