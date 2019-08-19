@@ -59,7 +59,7 @@ object ImageLoader {
                 .fitCenter()
         application?.run {
             Glide.with(this)
-                    .load(AppParamUtils.portrait_img_url + url+AppParamUtils.thumb_portrait_img_200)
+                    .load(AppParamUtils.portrait_img_url + url + AppParamUtils.thumb_portrait_img_200)
                     .apply(options)
                     .into(iv_image)
         }
@@ -73,7 +73,7 @@ object ImageLoader {
                 .fitCenter()
         application?.run {
             Glide.with(this)
-                    .load(AppParamUtils.portrait_img_url + url+AppParamUtils.thumb_portrait_img_500)
+                    .load(AppParamUtils.portrait_img_url + url + AppParamUtils.thumb_portrait_img_500)
                     .apply(options)
                     .into(iv_image)
         }
