@@ -100,7 +100,6 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh.setProgressViewOffset(true, 0, 100)
         srlRefresh.post { srlRefresh.isRefreshing = true }
         val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))

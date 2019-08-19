@@ -10,19 +10,11 @@
     app:cardElevation="2dp"
     tools:context=".module.main.adapter.PictureRvAdapter">
 
-    <ImageView
+    <com.cordy.secdra.widget.ScaleImageView
         android:id="@+id/iv_picture"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
         tools:ignore="ContentDescription" />
-
-    <TextView
-        android:id="@+id/tv_msg"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@color/colorPrimary"
-        android:textSize="30sp" />
 
 </androidx.cardview.widget.CardView>
