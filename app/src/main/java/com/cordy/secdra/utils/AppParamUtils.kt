@@ -14,7 +14,7 @@ object AppParamUtils {
 
     const val thumb_portrait_img_200 = "-small200"
 
-    const val thumb_portrait_img_500 = "-small200"
+    const val thumb_portrait_img_500 = "-small500"
 
     const val httpSuccess = 200
 

@@ -16,9 +16,13 @@ import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.interfaces.IPictureInterface
 import com.cordy.secdra.module.main.model.MPictureModel
+import com.cordy.secdra.module.user.bean.JsonBeanUser
+import com.cordy.secdra.utils.AccountManager
+import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.ScreenUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
+import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -40,10 +44,17 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         setContentView(R.layout.activity_main)
         initView()
         getDataFromUrl()
+        setViewData()
     }
 
     private fun getDataFromUrl() {
         model.getMainPictureFromUrl(0)
+    }
+
+    private fun setViewData() {
+        val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
+        tv_name.text = jsonBeanUser.data?.name
+        ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
     }
 
     private fun initRv(jsonBeanPicture: JsonBeanPicture) {
@@ -107,7 +118,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         adapter.setOnLoadMoreListener(this, rvPicture)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationHide = ScreenUtils.getNavigationBarHeight(this)
-        lv_toolbar.setPadding(0, ScreenUtils.getStatusHeight(this), 0, 0)
+        toolbar.layoutParams.height = ScreenUtils.getStatusHeight(this) + ScreenUtils.dp2px(this, 56f)
+        tv_name.setPadding(0, ScreenUtils.getStatusHeight(this), 0, 0)
         adapter.footerLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationHide)  //设置RV底部=导航栏高度
     }
 
