@@ -46,9 +46,8 @@ class ScreenUtils private constructor() {
          * @param context
          * @return
          */
-        fun getScreenWidth(context: Context): Int {
-            val wm = context
-                .getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        fun getScreenWidth(context: Context?): Int {
+            val wm = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val outMetrics = DisplayMetrics()
             wm.defaultDisplay?.getMetrics(outMetrics)
             return outMetrics.widthPixels
@@ -62,7 +61,7 @@ class ScreenUtils private constructor() {
          */
         fun getScreenHeight(context: Context): Int {
             val wm = context
-                .getSystemService(Context.WINDOW_SERVICE) as WindowManager
+                    .getSystemService(Context.WINDOW_SERVICE) as WindowManager
             val outMetrics = DisplayMetrics()
             wm.defaultDisplay?.getMetrics(outMetrics)
             return outMetrics.heightPixels
@@ -82,8 +81,8 @@ class ScreenUtils private constructor() {
                 val clazz = Class.forName("com.android.internal.R\$dimen")
                 val `object` = clazz.newInstance()
                 val height = Integer.parseInt(
-                    clazz.getField("status_bar_height")
-                        .get(`object`).toString()
+                        clazz.getField("status_bar_height")
+                                .get(`object`).toString()
                 )
                 statusHeight = context.resources.getDimensionPixelSize(height)
             } catch (e: Exception) {
@@ -116,9 +115,9 @@ class ScreenUtils private constructor() {
             }
             try {
                 @SuppressLint("PrivateApi") val m =
-                    Class.forName("android.os.SystemProperties").getMethod("get", String::class.java)
+                        Class.forName("android.os.SystemProperties").getMethod("get", String::class.java)
                 @SuppressLint("PrivateApi") val navBarOverride =
-                    m.invoke(Class.forName("android.os.SystemProperties"), "qemu.hw.mainkeys") as String
+                        m.invoke(Class.forName("android.os.SystemProperties"), "qemu.hw.mainkeys") as String
                 if ("1" == navBarOverride) {
                     hasNavigationBar = false
                 } else if ("0" == navBarOverride) {
@@ -181,8 +180,8 @@ class ScreenUtils private constructor() {
          */
         fun dp2px(context: Context?, dpVal: Float): Int {
             return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_DIP,
-                dpVal, context?.resources?.displayMetrics
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    dpVal, context?.resources?.displayMetrics
             ).toInt()
         }
 
@@ -195,8 +194,8 @@ class ScreenUtils private constructor() {
          */
         fun sp2px(context: Context, spVal: Float): Int {
             return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP,
-                spVal, context.resources.displayMetrics
+                    TypedValue.COMPLEX_UNIT_SP,
+                    spVal, context.resources.displayMetrics
             ).toInt()
         }
 
