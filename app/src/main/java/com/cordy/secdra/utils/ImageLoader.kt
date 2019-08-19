@@ -9,14 +9,42 @@ import com.cordy.secdra.SecdraApplication.Companion.application
 
 object ImageLoader {
 
-    fun setImageFromUrl(url: Any?, iv_image: ImageView) {
+    fun setBaseImageFromUrl(url: Any?, iv_image: ImageView) {  //普通图片小图
         val options = RequestOptions()
                 .error(R.mipmap.ic_launcher)
                 .placeholder(R.mipmap.ic_launcher)
                 .fitCenter()
         application?.run {
             Glide.with(this)
-                    .load(url)
+                    .load(AppParamUtils.base_img_url + url + AppParamUtils.thumb_base_image)
+                    .transition(DrawableTransitionOptions().crossFade())
+                    .apply(options)
+                    .into(iv_image)
+        }
+    }
+
+    fun setOriginBaseImageFromUrl(url: Any?, iv_image: ImageView) {  //普通图片原图
+        val options = RequestOptions()
+                .error(R.mipmap.ic_launcher)
+                .placeholder(R.mipmap.ic_launcher)
+                .fitCenter()
+        application?.run {
+            Glide.with(this)
+                    .load(AppParamUtils.base_img_url + url)
+                    .transition(DrawableTransitionOptions().crossFade())
+                    .apply(options)
+                    .into(iv_image)
+        }
+    }
+
+    fun setBackGroundImageFromUrl(url: Any?, iv_image: ImageView) {  //背景图原图
+        val options = RequestOptions()
+                .error(R.mipmap.ic_launcher)
+                .placeholder(R.mipmap.ic_launcher)
+                .fitCenter()
+        application?.run {
+            Glide.with(this)
+                    .load(AppParamUtils.back_ground_img_url + url)
                     .transition(DrawableTransitionOptions().crossFade())
                     .apply(options)
                     .into(iv_image)

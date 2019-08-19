@@ -94,16 +94,16 @@ class ScreenUtils private constructor() {
         }
 
         fun getNavigationBarHeight(context: Context): Int {
-            if (!checkDeviceHasNavigationBar(context))
-                return 0
+            return if (!checkDeviceHasNavigationBar(context))
+                0
             else {
                 val resourceId: Int
                 val rid = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
                 if (rid != 0) {
                     resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-                    return context.resources.getDimensionPixelSize(resourceId)
+                    context.resources.getDimensionPixelSize(resourceId)
                 } else
-                    return 0
+                    0
             }
         }
 

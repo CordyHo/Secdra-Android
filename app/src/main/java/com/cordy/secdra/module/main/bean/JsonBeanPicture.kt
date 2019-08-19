@@ -1,10 +1,12 @@
 package com.cordy.secdra.module.main.bean
 
+import java.util.*
+
 class JsonBeanPicture {
 
     var status: Int = 0
     var message: Any? = null
-    var data: DataBean? = null
+    var data: DataBean = DataBean()
 
     class DataBean {
 
@@ -18,7 +20,7 @@ class JsonBeanPicture {
         var numberOfElements: Int = 0
         var size: Int = 0
         var isEmpty: Boolean = false
-        var content: List<ContentBean>? = null
+        var content = ArrayList<ContentBean>()
 
         class PageableBean {
             /**
@@ -95,7 +97,7 @@ class JsonBeanPicture {
             var user: UserBean? = null
             var createDate: String? = null
             var modifiedDate: String? = null
-            var tagList: List<String>? = null
+            var tagList = ArrayList<String>()
 
             class UserBean {
                 /**

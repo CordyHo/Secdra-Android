@@ -82,9 +82,9 @@ class UrlRequest {
         val stringRequest = object : StringRequest(Method.POST, url, { response ->
             val jsonObject = JSONObject(response)
             if (jsonObject.getInt("status") == AppParamUtils.httpSuccess) {
-                println(response)
                 dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
                 AccountManager.userDetails = response
+                AccountManager.userId = jsonObject.getJSONObject("data").getString("id")
                 AccountManager.setSignState(true)
             } else {
                 val msg = jsonObject.getString("message")

@@ -4,6 +4,7 @@ object AccountManager {
     private const val SIGN_TAG = "SIGN_TAG"
     private const val TOKEN = "TOKEN"
     private const val USER_DETAILS = "USER_DETAILS"
+    private const val USER_ID = "userId"
 
     val isSignIn: Boolean
         get() = PreferencesHelper.getAppFlag(SIGN_TAG)
@@ -11,6 +12,10 @@ object AccountManager {
     var token: String?
         get() = PreferencesHelper.getCustomAppProfile(TOKEN)     //getToken
         set(token) = PreferencesHelper.addCustomAppProfile(TOKEN, token)      //setToken
+
+    var userId: String?
+        get() = PreferencesHelper.getCustomAppProfile(USER_ID)     //get用户ID
+        set(userId) = PreferencesHelper.addCustomAppProfile(USER_ID, userId)      //set用户ID
 
     var userDetails: String?
         get() = PreferencesHelper.getCustomAppProfile(USER_DETAILS)  //get用户信息
