@@ -94,6 +94,7 @@
 
 # 防止jsonBean混淆
 -keep class com.cordy.secdra.module.main.bean.** {*;}
+-keep class com.cordy.secdra.module.user.bean.** {*;}
 # 防止jsonBean混淆
 
 -keepattributes *Annotation*
