@@ -51,7 +51,7 @@ object ImageLoader {
         }
     }
 
-    fun setPortraitFromUrl(url: Any?, iv_image: ImageView) {
+    fun setPortrait200FromUrl(url: Any?, iv_image: ImageView) {
         val options = RequestOptions()
                 .error(R.mipmap.ic_launcher)
                 .placeholder(R.mipmap.ic_launcher)
@@ -59,7 +59,21 @@ object ImageLoader {
                 .fitCenter()
         application?.run {
             Glide.with(this)
-                    .load(url)
+                    .load(AppParamUtils.portrait_img_url + url+AppParamUtils.thumb_portrait_img_200)
+                    .apply(options)
+                    .into(iv_image)
+        }
+    }
+
+    fun setPortrait500FromUrl(url: Any?, iv_image: ImageView) {
+        val options = RequestOptions()
+                .error(R.mipmap.ic_launcher)
+                .placeholder(R.mipmap.ic_launcher)
+                .dontAnimate()
+                .fitCenter()
+        application?.run {
+            Glide.with(this)
+                    .load(AppParamUtils.portrait_img_url + url+AppParamUtils.thumb_portrait_img_500)
                     .apply(options)
                     .into(iv_image)
         }

@@ -11,7 +11,6 @@ class MPictureModel(private val iPictureInterface: IPictureInterface) {
     fun getMainPictureFromUrl(page: Int) {
         UrlRequest()
                 .url("draw/paging?page=$page&userid=${AccountManager.userId}")
-                //     .param("pageable", "{page:0,size:20,sort:\"createDate,desc\"}")
                 .getDataFromUrlGet(object : UrlRequest.DataRequestResponse {
                     override fun onRequestSuccess(jsonData: String) {
                         if (page < 1)
