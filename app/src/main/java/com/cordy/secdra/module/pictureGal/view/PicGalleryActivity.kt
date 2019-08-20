@@ -35,13 +35,8 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         onBackPressed()
     }
 
-    override fun onPageScrollStateChanged(state: Int) {
-    }
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-    }
-
     override fun onPageSelected(position: Int) {
+        //todo 发广播更新RV rvPicture.smoothScrollToPosition(index)  滚动位置在头顶
     }
 
     override fun onBackPressed() {
@@ -55,4 +50,11 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         vpPicture.addOnPageChangeListener(this)
         sbl_layout.setOnLayoutCloseListener(this)
     }
+
+    override fun onPageScrollStateChanged(state: Int) {
+    }
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+    }
+
 }
