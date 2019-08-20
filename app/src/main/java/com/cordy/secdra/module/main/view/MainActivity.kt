@@ -1,9 +1,14 @@
 package com.cordy.secdra.module.main.view
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
+import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -15,24 +20,29 @@ import com.cordy.secdra.R
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.interfaces.IPictureInterface
+import com.cordy.secdra.module.main.interfaces.RvItemClickListener
 import com.cordy.secdra.module.main.model.MPictureModel
+import com.cordy.secdra.module.pictureGal.view.PicGalleryActivity
 import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.utils.AccountManager
 import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.ScreenUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
+import java.io.Serializable
 
 @SuppressLint("InflateParams")
-class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private var lastClickTime: Long = 0
     private lateinit var srlRefresh: SwipeRefreshLayout
     private lateinit var rvPicture: RecyclerView
-    private val adapter = PictureRvAdapter()
+    private lateinit var ctlToolbar: CollapsingToolbarLayout
+    private val adapter = PictureRvAdapter(this)
     private val model = MPictureModel(this)
     private var page = 1
 
@@ -53,12 +63,20 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun setViewData() {
         val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
-        tv_name.text = jsonBeanUser.data?.name
+        ctlToolbar.title = jsonBeanUser.data?.name
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
     }
 
     private fun initRv(jsonBeanPicture: JsonBeanPicture) {
         adapter.setNewData(jsonBeanPicture.data.content)
+    }
+
+    override fun onItemClick(ivPicture: ImageView, pos: Int) {  //点击事件
+        val intent = Intent(this, PicGalleryActivity::class.java)
+        intent.putExtra("bean", adapter.data as Serializable)
+        intent.putExtra("pos", pos)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, "picture")
+        startActivity(intent, options.toBundle())
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture) {
@@ -106,6 +124,9 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     override fun initView() {
         srlRefresh = srl_refresh
         rvPicture = rv_picture
+        ctlToolbar = ctl_toolbar
+        ctlToolbar.setCollapsedTitleTextColor(Color.WHITE)
+        ctlToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorPrimary))
         srlRefresh.setOnRefreshListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
@@ -117,10 +138,22 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         adapter.openLoadAnimation(ScaleInAnimation())
         adapter.setOnLoadMoreListener(this, rvPicture)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
-        val navigationHide = ScreenUtils.getNavigationBarHeight(this)
-        toolbar.layoutParams.height = ScreenUtils.getStatusHeight(this) + ScreenUtils.dp2px(this, 56f)
-        tv_name.setPadding(0, ScreenUtils.getStatusHeight(this), 0, 0)
-        adapter.footerLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationHide)  //设置RV底部=导航栏高度
+        val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
+        adapter.footerLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
+        setToolBarHeightAndPadding()
+    }
+
+    private fun setToolBarHeightAndPadding() {
+        srlRefresh.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                val statusBarHeight = ScreenUtils.getStatusHeight(this@MainActivity)
+                val height = toolbar.measuredHeight
+                toolbar.layoutParams.height = height + statusBarHeight
+                toolbar.setPadding(0, statusBarHeight, 0, 0)
+                if (height > 0)
+                    srlRefresh.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
     override fun onBackPressed() {

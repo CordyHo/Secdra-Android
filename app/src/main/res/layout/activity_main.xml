@@ -15,12 +15,15 @@
         android:background="@color/colorPrimary">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/ctl_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:isScrollContainer="true"
-            app:contentScrim="@color/colorPrimary"
+            android:transitionGroup="true"
+            app:collapsedTitleGravity="center_horizontal"
+            app:expandedTitleGravity="center_horizontal"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|enterAlways|snap"
-            app:titleEnabled="false">
+            app:titleEnabled="true">
 
             <ImageView
                 android:id="@+id/iv_background"
@@ -40,15 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:contentInsetStart="0dp"
+                app:contentInsetStartWithNavigation="0dp"
                 app:layout_collapseMode="pin">
-
-                <TextView
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
 
             </androidx.appcompat.widget.Toolbar>
 

@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
 class ScaleImageView(context: Context, attrs: AttributeSet? = null) : AppCompatImageView(context, attrs) {
+
     private var initWidth: Int = 0
     private var initHeight: Int = 0
 

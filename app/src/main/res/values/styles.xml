@@ -13,6 +13,15 @@
         <item name="android:navigationBarColor">@color/colorPrimary</item>
     </style>
 
+    <style name="AppTheme.NoActionBar.Transparent">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowContentTransitions">true</item>
+    </style>
+
     <!-- toolbar白色返回键样式 -->
     <style name="AppTheme.ToolBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:background">@color/colorPrimary</item>

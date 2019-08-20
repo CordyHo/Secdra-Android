@@ -36,8 +36,14 @@
         <activity
             android:name=".module.main.view.MainActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="user"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".module.pictureGal.view.PicGalleryActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
         <activity
             android:name=".module.user.view.LoginActivity"
