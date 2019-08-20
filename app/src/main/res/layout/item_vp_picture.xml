@@ -6,15 +6,17 @@
     android:animateLayoutChanges="true"
     tools:context=".module.pictureGal.adapter.VpPictureAdapter">
 
-    <com.cordy.secdra.widget.PhotoView
-        android:id="@+id/iv_pictureOrigin"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/iv_pictureThumb"
         android:layout_width="match_parent"
+        android:adjustViewBounds="true"
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 
-    <com.cordy.secdra.widget.PhotoView
-        android:id="@+id/iv_pictureThumb"
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/iv_pictureOrigin"
         android:layout_width="match_parent"
+        android:adjustViewBounds="true"
         android:layout_height="match_parent"
         android:layout_gravity="center" />
 

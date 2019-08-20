@@ -42,4 +42,5 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.0.0'     //圆形IV
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.46'    // rv adapter
     implementation 'com.github.zyyoona7:recyclerviewdivider:1.0.2' // RV分割线
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0' //photoView
 }

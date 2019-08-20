@@ -21,8 +21,6 @@ class VpPictureAdapter(private val context: Activity, private val beanList: Arra
         val ivPictureThumb = rootView.iv_pictureThumb
         val ivPictureOrigin = rootView.iv_pictureOrigin
         val pbProgress = rootView.pb_progress
-        ivPictureThumb.enableRotate()
-        ivPictureOrigin.enableRotate()
         ImageLoader.setBaseImageWithoutPlaceholderFromUrl(beanList[position].url, ivPictureThumb)  //小图，可能加转圈
         ImageLoader.setOriginBaseImageCallBackFromUrl(beanList[position].url, object : ImageLoadCallBack {  //原图
             override fun onBitmapCallBack(bitmap: Bitmap?) {
