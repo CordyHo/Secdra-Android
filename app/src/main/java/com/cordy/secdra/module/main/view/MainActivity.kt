@@ -46,6 +46,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private val model = MPictureModel(this)
     private var page = 1
 
+    // 写广播 todo
+
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
         window.navigationBarColor = ContextCompat.getColor(this, R.color.navigation_Transparent)

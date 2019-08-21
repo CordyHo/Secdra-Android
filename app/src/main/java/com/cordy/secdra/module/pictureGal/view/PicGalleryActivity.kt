@@ -1,7 +1,9 @@
 package com.cordy.secdra.module.pictureGal.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
@@ -36,11 +38,12 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
     }
 
     override fun onPageSelected(position: Int) {
-        //todo 发广播更新RV rvPicture.smoothScrollToPosition(index)  滚动位置在头顶
+        // 发广播更新RV rvPicture.smoothScrollToPosition(index)  滚动位置在头顶
+        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("scrollPos").putExtra("scrollPos", position))
     }
 
     override fun onBackPressed() {
-        sbl_layout.setBackgroundColor(ContextCompat.getColor(this,android.R.color.transparent))
+        sbl_layout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent))
         finish() // 直接finish 没有元素共享动画
     }
 
