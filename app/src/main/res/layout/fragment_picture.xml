@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
-    tools:context=".module.pictureGal.adapter.VpPictureAdapter">
+    tools:context=".module.pictureGal.view.PicFragment">
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_pictureThumb"

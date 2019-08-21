@@ -86,7 +86,7 @@ class JsonBeanPicture : Serializable {
 
             var id: String? = null
             var introduction: String? = null
-            var url: String? = null
+            var url: String = ""
             var userId: String? = null
             var name: String? = null
             var privacy: String? = null

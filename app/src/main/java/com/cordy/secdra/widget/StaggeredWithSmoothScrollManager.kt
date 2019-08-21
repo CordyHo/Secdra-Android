@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
-class StaggeredManagerWithSmoothScroller(spanCount: Int, orientation: Int) : StaggeredGridLayoutManager(spanCount, orientation) {
+class StaggeredWithSmoothScrollManager(spanCount: Int, orientation: Int) : StaggeredGridLayoutManager(spanCount, orientation) {
 
     override fun smoothScrollToPosition(recyclerView: RecyclerView, state: RecyclerView.State?, position: Int) {
         val smoothScroller = TopSnappedSmoothScroller(recyclerView.context)
@@ -17,7 +17,7 @@ class StaggeredManagerWithSmoothScroller(spanCount: Int, orientation: Int) : Sta
     private inner class TopSnappedSmoothScroller(context: Context) : LinearSmoothScroller(context) {
 
         override fun computeScrollVectorForPosition(targetPosition: Int): PointF? {
-            return this@StaggeredManagerWithSmoothScroller.computeScrollVectorForPosition(targetPosition)
+            return this@StaggeredWithSmoothScrollManager.computeScrollVectorForPosition(targetPosition)
         }
 
         override fun getVerticalSnapPreference(): Int {

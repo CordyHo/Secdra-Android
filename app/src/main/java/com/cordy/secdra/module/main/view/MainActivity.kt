@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.app.SharedElementCallback
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,7 +33,8 @@ import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.ScreenUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
-import com.cordy.secdra.widget.StaggeredManagerWithSmoothScroller
+import com.cordy.secdra.widget.ScaleImageView
+import com.cordy.secdra.widget.StaggeredWithSmoothScrollManager
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
@@ -48,10 +50,12 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private lateinit var rvPicture: RecyclerView
     private lateinit var ctlToolbar: CollapsingToolbarLayout
     private val adapter = PictureRvAdapter(this)
+    private lateinit var layoutManager: StaggeredWithSmoothScrollManager
     private val model = MPictureModel(this)
     private var page = 1
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
+    private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -63,13 +67,36 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         getDataFromUrl()
         setViewData()
         initBroadcastReceiver()
+        exitShareElementCallback()
     }
 
-    private fun getDataFromUrl() {
+    override fun onActivityReenter(resultCode: Int, data: Intent) {
+        super.onActivityReenter(resultCode, data)
+        bundle = Bundle(data.extras)
+    }
+
+    private fun exitShareElementCallback() {    //返回时元素共享处理
+        setExitSharedElementCallback(object : SharedElementCallback() {
+            override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String?, View>?) {
+                bundle?.run {
+                    val pos = bundle?.getInt("pos", 0)
+                    sharedElements?.clear()
+                    names?.clear()
+                    val itemView = pos?.let { layoutManager.findViewByPosition(it) }
+                    val imageView = itemView?.findViewById<ScaleImageView>(R.id.iv_picture) as View   //找不到item崩溃，用pos也行，不用图片URL，加载太慢，预加载取消
+                    //注意这里第二个参数，如果放置的是条目的item则动画不自然。放置对应的imageView则完美
+                    sharedElements?.set(adapter.data[pos].url, imageView)
+                    bundle = null
+                }
+            }
+        })
+    }
+
+    private fun getDataFromUrl() {   //请求网络
         model.getMainPictureFromUrl(0)
     }
 
-    private fun setViewData() {
+    private fun setViewData() {    //设置用户信息
         val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
         ctlToolbar.title = jsonBeanUser.data?.name
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
@@ -93,7 +120,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         val intent = Intent(this, PicGalleryActivity::class.java)
         intent.putExtra("bean", adapter.data as Serializable)
         intent.putExtra("pos", pos)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, "picture")
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, adapter.data[pos].url)
         startActivity(intent, options.toBundle())
     }
 
@@ -149,7 +176,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
         srlRefresh.post { srlRefresh.isRefreshing = true }
-        val layoutManager = StaggeredManagerWithSmoothScroller(2, RecyclerView.VERTICAL)
+        layoutManager = StaggeredWithSmoothScrollManager(2, RecyclerView.VERTICAL)
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(
