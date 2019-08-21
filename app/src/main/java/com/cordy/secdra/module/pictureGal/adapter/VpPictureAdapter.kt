@@ -26,7 +26,7 @@ class VpPictureAdapter(private val context: Activity, private val beanList: Arra
             override fun onBitmapCallBack(bitmap: Bitmap?) {
                 context.runOnUiThread {
                     ivPictureOrigin.setImageBitmap(bitmap)
-                    ivPictureThumb.visibility =View.GONE
+                    ivPictureThumb.visibility = View.GONE
                     pbProgress.visibility = View.GONE
                 }
             }

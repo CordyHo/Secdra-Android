@@ -13,12 +13,13 @@ import com.cordy.secdra.widget.ImmersionBar
 import com.serhatsurguvec.swipablelayout.SwipeableLayout
 import kotlinx.android.synthetic.main.activity_pic_gallery.*
 
-class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, SwipeableLayout.OnLayoutCloseListener {
+class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener {
 
     private lateinit var vpPicture: ViewPager
     private lateinit var adapter: VpPictureAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
         ImmersionBar(this).setImmersionBar()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pic_gallery)
@@ -37,27 +38,16 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         onBackPressed()
     }
 
-    override fun onPageSelected(position: Int) {
-        // 发广播更新RV rvPicture.smoothScrollToPosition(index)  滚动位置在头顶
-        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("scrollPos").putExtra("scrollPos", position))
-    }
-
     override fun onBackPressed() {
         sbl_layout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent))
-        finish() // 直接finish 没有元素共享动画
+        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("scrollPos").putExtra("scrollPos", vpPicture.currentItem))
+        supportFinishAfterTransition() // 直接finish 没有元素共享动画
     }
 
     override fun initView() {
         super.initView()
         vpPicture = vp_picture
-        vpPicture.addOnPageChangeListener(this)
         sbl_layout.setOnLayoutCloseListener(this)
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {
-    }
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 
 }

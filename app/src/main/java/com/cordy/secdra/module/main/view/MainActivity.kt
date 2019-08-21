@@ -1,7 +1,10 @@
 package com.cordy.secdra.module.main.view
 
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -10,6 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -36,7 +40,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.Serializable
 
 @SuppressLint("InflateParams")
-class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
+        BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private var lastClickTime: Long = 0
     private lateinit var srlRefresh: SwipeRefreshLayout
@@ -45,8 +50,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private val adapter = PictureRvAdapter(this)
     private val model = MPictureModel(this)
     private var page = 1
-
-    // 写广播 todo
+    private lateinit var broadcastReceiver: BroadcastReceiver
+    private lateinit var localBroadcastManager: LocalBroadcastManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -57,6 +62,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         initView()
         getDataFromUrl()
         setViewData()
+        initBroadcastReceiver()
     }
 
     private fun getDataFromUrl() {
@@ -67,6 +73,16 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
         ctlToolbar.title = jsonBeanUser.data?.name
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
+    }
+
+    private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动  //todo 到中间？
+        broadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+           // todo     intent?.run { rvPicture.smoothScrollToPosition(intent.getIntExtra("scrollPos", 0)) }
+            }
+        }
+        localBroadcastManager = LocalBroadcastManager.getInstance(this)
+        localBroadcastManager.registerReceiver(broadcastReceiver, IntentFilter("scrollPos"))
     }
 
     private fun initRv(jsonBeanPicture: JsonBeanPicture) {
@@ -136,12 +152,19 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         val layoutManager = StaggeredManagerWithSmoothScroller(2, RecyclerView.VERTICAL)
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
-        rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
+        rvPicture.addItemDecoration(
+                StaggeredGridItemDecoration(
+                        StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(
+                                ScreenUtils.dp2px(this, 10f)
+                        )
+                )
+        )
         adapter.openLoadAnimation(ScaleInAnimation())
         adapter.setOnLoadMoreListener(this, rvPicture)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
-        adapter.footerLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
+        adapter.footerLayout.layoutParams =
+                LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
         setToolBarHeightAndPadding()
     }
 
@@ -156,6 +179,11 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
                     srlRefresh.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        localBroadcastManager.unregisterReceiver(broadcastReceiver)
     }
 
     override fun onBackPressed() {
