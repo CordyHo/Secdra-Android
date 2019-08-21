@@ -11,7 +11,6 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_picture"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:transitionName="picture" />
+        android:layout_height="match_parent" />
 
 </com.serhatsurguvec.swipablelayout.SwipeableLayout>

@@ -9,16 +9,16 @@
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_pictureThumb"
         android:layout_width="match_parent"
-        android:adjustViewBounds="true"
         android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:adjustViewBounds="true" />
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_pictureOrigin"
         android:layout_width="match_parent"
-        android:adjustViewBounds="true"
         android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:adjustViewBounds="true" />
 
     <ProgressBar
         android:id="@+id/pb_progress"

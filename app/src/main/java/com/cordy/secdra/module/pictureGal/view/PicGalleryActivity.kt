@@ -19,12 +19,12 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
     private lateinit var adapter: VpPictureAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
         ImmersionBar(this).setImmersionBar()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pic_gallery)
         initView()
         initVp()
+        supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
     }
 
     private fun initVp() {

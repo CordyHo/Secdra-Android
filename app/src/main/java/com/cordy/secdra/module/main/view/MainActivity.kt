@@ -78,7 +78,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动  //todo 到中间？
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-           // todo     intent?.run { rvPicture.smoothScrollToPosition(intent.getIntExtra("scrollPos", 0)) }
+                // todo     intent?.run { rvPicture.smoothScrollToPosition(intent.getIntExtra("scrollPos", 0)) }
             }
         }
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
