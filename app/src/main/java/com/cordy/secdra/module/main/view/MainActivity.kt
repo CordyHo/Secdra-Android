@@ -83,9 +83,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
                     sharedElements?.clear()
                     names?.clear()
                     val itemView = pos?.let { layoutManager.findViewByPosition(it) }
-                    val imageView = itemView?.findViewById<ScaleImageView>(R.id.iv_picture) as View   //找不到item崩溃，用pos也行，不用图片URL，加载太慢，预加载取消
-                    //注意这里第二个参数，如果放置的是条目的item则动画不自然。放置对应的imageView则完美
-                    sharedElements?.set(adapter.data[pos].url, imageView)
+                    itemView?.run {
+                        val imageView = itemView.findViewById<ScaleImageView>(R.id.iv_picture) as View
+                        sharedElements?.set(pos.toString(), imageView)  // pos 作为元素共享的唯一tag
+                    }
                     bundle = null
                 }
             }
@@ -120,7 +121,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         val intent = Intent(this, PicGalleryActivity::class.java)
         intent.putExtra("beanList", adapter.data as Serializable)
         intent.putExtra("pos", pos)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, adapter.data[pos].url)
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())  // pos 作为元素共享的唯一tag
         startActivity(intent, options.toBundle())
     }
 

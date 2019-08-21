@@ -74,7 +74,7 @@ class PicFragment : Fragment() {
         ivPictureOrigin.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 ivPictureOrigin.viewTreeObserver.removeOnPreDrawListener(this)
-                activity.supportStartPostponedEnterTransition()
+                activity.supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
                 return true
             }
         })

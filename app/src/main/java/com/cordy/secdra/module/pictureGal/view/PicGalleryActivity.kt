@@ -19,7 +19,6 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
 
     private lateinit var vpPicture: ViewPager
     private lateinit var adapter: VpPictureAdapter
-    private var beanList = ArrayList<JsonBeanPicture.DataBean.ContentBean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -32,7 +31,7 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
     }
 
     private fun initVp() {
-        beanList = intent?.getSerializableExtra("beanList") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
+        val beanList = intent?.getSerializableExtra("beanList") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
         adapter = VpPictureAdapter(beanList, supportFragmentManager)
         vpPicture.adapter = adapter
         intent?.run { vpPicture.currentItem = intent?.getIntExtra("pos", 0)!! }
@@ -41,11 +40,10 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
     private fun enterShareElementCallback() {
         setEnterSharedElementCallback(object : SharedElementCallback() {
             override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String?, View?>?) {
-                super.onMapSharedElements(names, sharedElements)
-                //  val url = mipmaps[mPager!!.currentItem].tag
                 val fragment = adapter.instantiateItem(vpPicture, vpPicture.currentItem) as PicFragment
+                val pos = vpPicture.currentItem
                 sharedElements?.clear()
-                sharedElements?.set(beanList[vpPicture.currentItem].url, fragment.sharedElement)  // todo 唯一值用位置可能有错？？
+                sharedElements?.set(pos.toString(), fragment.sharedElement)  // pos 作为元素共享的唯一tag
             }
         })
     }
