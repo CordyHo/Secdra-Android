@@ -16,6 +16,7 @@ import androidx.core.app.SharedElementCallback
 import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.animation.ScaleInAnimation
@@ -34,7 +35,6 @@ import com.cordy.secdra.utils.ScreenUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.ScaleImageView
-import com.cordy.secdra.widget.StaggeredWithSmoothScrollManager
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
@@ -42,15 +42,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.io.Serializable
 
 @SuppressLint("InflateParams")
-class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
-        BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private var lastClickTime: Long = 0
     private lateinit var srlRefresh: SwipeRefreshLayout
     private lateinit var rvPicture: RecyclerView
     private lateinit var ctlToolbar: CollapsingToolbarLayout
     private val adapter = PictureRvAdapter(this)
-    private lateinit var layoutManager: StaggeredWithSmoothScrollManager
+    private val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
     private val model = MPictureModel(this)
     private var page = 1
     private lateinit var broadcastReceiver: BroadcastReceiver
@@ -103,10 +102,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
     }
 
-    private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动  //todo 到中间？
+    private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                // todo     intent?.run { rvPicture.smoothScrollToPosition(intent.getIntExtra("scrollPos", 0)) }
+                intent?.run { rvPicture.smoothScrollToPosition(intent.getIntExtra("scrollPos", 0)) }
             }
         }
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
@@ -177,22 +176,14 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
         srlRefresh.post { srlRefresh.isRefreshing = true }
-        layoutManager = StaggeredWithSmoothScrollManager(2, RecyclerView.VERTICAL)
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
-        rvPicture.addItemDecoration(
-                StaggeredGridItemDecoration(
-                        StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(
-                                ScreenUtils.dp2px(this, 10f)
-                        )
-                )
-        )
+        rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
         adapter.openLoadAnimation(ScaleInAnimation())
         adapter.setOnLoadMoreListener(this, rvPicture)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
-        adapter.footerLayout.layoutParams =
-                LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
+        adapter.footerLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
         setToolBarHeightAndPadding()
     }
 

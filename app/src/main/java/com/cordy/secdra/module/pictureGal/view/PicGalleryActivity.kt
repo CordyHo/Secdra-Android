@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.SharedElementCallback
-import androidx.core.content.ContextCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.cordy.secdra.BaseActivity
@@ -15,10 +14,13 @@ import com.cordy.secdra.widget.ImmersionBar
 import com.serhatsurguvec.swipablelayout.SwipeableLayout
 import kotlinx.android.synthetic.main.activity_pic_gallery.*
 
-class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener {
+class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, SwipeableLayout.OnLayoutCloseListener {
+
 
     private lateinit var vpPicture: ViewPager
     private lateinit var adapter: VpPictureAdapter
+    private var beanList = ArrayList<JsonBeanPicture.DataBean.ContentBean>()
+    private lateinit var localBroadcastManager: LocalBroadcastManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -31,10 +33,11 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
     }
 
     private fun initVp() {
-        val beanList = intent?.getSerializableExtra("beanList") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
+        beanList = intent?.getSerializableExtra("beanList") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
         adapter = VpPictureAdapter(beanList, supportFragmentManager)
         vpPicture.adapter = adapter
         intent?.run { vpPicture.currentItem = intent?.getIntExtra("pos", 0)!! }
+        vpPicture.addOnPageChangeListener(this)
     }
 
     private fun enterShareElementCallback() {
@@ -48,13 +51,15 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
         })
     }
 
-    override fun OnLayoutClosed() {
+    override fun onPageSelected(position: Int) {  //滑动VP发送广播滚动RV到相应位置
+        localBroadcastManager.sendBroadcast(Intent("scrollPos").putExtra("scrollPos", vpPicture.currentItem))
+    }
+
+    override fun OnLayoutClosed() {  //下滑布局回调
         onBackPressed()
     }
 
     override fun onBackPressed() {
-        sbl_layout.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent))
-        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("scrollPos").putExtra("scrollPos", vpPicture.currentItem))
         setResult(RESULT_OK, Intent().putExtra("pos", vpPicture.currentItem))
         supportFinishAfterTransition()
     }
@@ -62,5 +67,12 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
     override fun initView() {
         vpPicture = vp_picture
         sbl_layout.setOnLayoutCloseListener(this)
+        localBroadcastManager = LocalBroadcastManager.getInstance(this)
+    }
+
+    override fun onPageScrollStateChanged(state: Int) {
+    }
+
+    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
     }
 }

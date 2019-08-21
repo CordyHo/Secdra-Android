@@ -12,7 +12,8 @@ import com.cordy.secdra.widget.ScaleImageView
 import de.hdodenhof.circleimageview.CircleImageView
 
 @SuppressLint("SetTextI18n")
-class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener) : BaseQuickAdapter<JsonBeanPicture.DataBean.ContentBean, BaseViewHolder>(R.layout.item_rv_picture) {
+class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener) :
+        BaseQuickAdapter<JsonBeanPicture.DataBean.ContentBean, BaseViewHolder>(R.layout.item_rv_picture) {
 
     override fun convert(helper: BaseViewHolder, item: JsonBeanPicture.DataBean.ContentBean) {
         val ivPicture = helper.getView<ScaleImageView>(R.id.iv_picture)
