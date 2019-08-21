@@ -32,7 +32,7 @@ class PicGalleryActivity : BaseActivity(), SwipeableLayout.OnLayoutCloseListener
     }
 
     private fun initVp() {
-        beanList = intent?.getSerializableExtra("bean") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
+        beanList = intent?.getSerializableExtra("beanList") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
         adapter = VpPictureAdapter(beanList, supportFragmentManager)
         vpPicture.adapter = adapter
         intent?.run { vpPicture.currentItem = intent?.getIntExtra("pos", 0)!! }

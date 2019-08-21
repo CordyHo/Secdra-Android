@@ -10,7 +10,7 @@ class VpPictureAdapter(private val beanList: ArrayList<JsonBeanPicture.DataBean.
     : FragmentPagerAdapter(support, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
-        return PicFragment.newFragment(position, beanList)
+        return PicFragment.newFragment(beanList[position])
     }
 
     override fun getCount(): Int {

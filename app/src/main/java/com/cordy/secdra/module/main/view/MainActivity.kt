@@ -118,7 +118,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onItemClick(ivPicture: ImageView, pos: Int) {  //点击事件
         val intent = Intent(this, PicGalleryActivity::class.java)
-        intent.putExtra("bean", adapter.data as Serializable)
+        intent.putExtra("beanList", adapter.data as Serializable)
         intent.putExtra("pos", pos)
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, adapter.data[pos].url)
         startActivity(intent, options.toBundle())

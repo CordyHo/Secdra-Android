@@ -19,8 +19,7 @@ import kotlinx.android.synthetic.main.fragment_picture.view.*
 class PicFragment : Fragment() {
 
     private lateinit var activity: PicGalleryActivity
-    private var pos: Int = 0
-    private var beanList = ArrayList<JsonBeanPicture.DataBean.ContentBean>()
+    private var bean = JsonBeanPicture.DataBean.ContentBean()
     private lateinit var pbProgress: ProgressBar
     private lateinit var ivPictureOrigin: PhotoView  //原图
     private lateinit var ivPictureThumb: PhotoView  //缩略图
@@ -29,10 +28,9 @@ class PicFragment : Fragment() {
         get() = ivPictureOrigin
 
     companion object {
-        fun newFragment(index: Int, beanList: ArrayList<JsonBeanPicture.DataBean.ContentBean>): Fragment {
+        fun newFragment(bean: JsonBeanPicture.DataBean.ContentBean): Fragment {
             val bundle = Bundle()
-            bundle.putInt("pos", index)
-            bundle.putSerializable("beanList", beanList)
+            bundle.putSerializable("bean", bean)
             val fragment = PicFragment()
             fragment.arguments = bundle
             return fragment
@@ -46,8 +44,7 @@ class PicFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.run { pos = arguments?.getInt("pos")!! }
-        beanList = arguments?.getSerializable("beanList") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
+        bean = arguments?.getSerializable("bean") as JsonBeanPicture.DataBean.ContentBean
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,8 +55,8 @@ class PicFragment : Fragment() {
     }
 
     private fun setPicture() {
-        ImageLoader.setBaseImageWithoutPlaceholderFromUrl(beanList[pos].url, ivPictureThumb)  //小图，可能加转圈
-        ImageLoader.setOriginBaseImageCallBackFromUrl(beanList[pos].url, object : ImageLoadCallBack {  //原图
+        ImageLoader.setBaseImageWithoutPlaceholderFromUrl(bean.url, ivPictureThumb)  //小图，可能加转圈
+        ImageLoader.setOriginBaseImageCallBackFromUrl(bean.url, object : ImageLoadCallBack {  //原图
             override fun onBitmapCallBack(bitmap: Bitmap?) {
                 activity.runOnUiThread {
                     ivPictureOrigin.setImageBitmap(bitmap)
