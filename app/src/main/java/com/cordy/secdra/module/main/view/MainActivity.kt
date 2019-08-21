@@ -54,6 +54,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
+    private var shouldLoadMore = true  // VP滑动时通知RV滚动会导致加载更多，会导致VP的adapter的数据出问题而崩溃
 
     companion object {
         val beanList = ArrayList<JsonBeanPicture.DataBean.ContentBean>()   //全局静态变量，用putExtra传递List给Activity的话，太大会炸掉
@@ -70,6 +71,17 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         setViewData()
         initBroadcastReceiver()
         exitShareElementCallback()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.loadMoreComplete()   // 为什么VP可以更新了？？？？ todo  注意输出 shouldLoadMore 和加载更多的回调，还有onLoadMoreRequested()的
+        shouldLoadMore = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        shouldLoadMore = false
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent) {
@@ -154,7 +166,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     override fun onLoadMoreRequested() {
-        model.getMainPictureFromUrl(page)
+        if (shouldLoadMore)
+            model.getMainPictureFromUrl(page)
     }
 
     override fun onClick(v: View) {
