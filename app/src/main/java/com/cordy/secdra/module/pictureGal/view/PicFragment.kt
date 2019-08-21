@@ -53,15 +53,12 @@ class PicFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_picture, container, false)
         initView(rootView)
-        setThumbPicture()
+        setPicture()
         return rootView
     }
 
-    private fun setThumbPicture() {
+    private fun setPicture() {
         ImageLoader.setBaseImageWithoutPlaceholderFromUrl(beanList[pos].url, ivPictureThumb)  //小图，可能加转圈
-    }
-
-    private fun setOriginPicture() {
         ImageLoader.setOriginBaseImageCallBackFromUrl(beanList[pos].url, object : ImageLoadCallBack {  //原图
             override fun onBitmapCallBack(bitmap: Bitmap?) {
                 activity.runOnUiThread {
@@ -71,11 +68,6 @@ class PicFragment : Fragment() {
                 }
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setOriginPicture()
     }
 
     private fun initView(rootView: View) {
