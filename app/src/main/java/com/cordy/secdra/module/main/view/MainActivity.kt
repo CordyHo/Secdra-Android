@@ -138,7 +138,6 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
             adapter.loadMoreComplete()
             adapter.addData(jsonBeanPicture.data.content)
             beanList.addAll(jsonBeanPicture.data.content)
-            localBroadcastManager.sendBroadcast(Intent("notifyVp"))  //由于VP滑动导致RV滚动，会加载更多而改变数据，因此要通知VP去刷新一下，防止崩溃
             page++
         } else
             adapter.loadMoreEnd(true)

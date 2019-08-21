@@ -1,9 +1,6 @@
 package com.cordy.secdra.module.pictureGal.view
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.SharedElementCallback
@@ -21,7 +18,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
     private lateinit var vpPicture: ViewPager
     private lateinit var adapter: VpPictureAdapter
     private lateinit var localBroadcastManager: LocalBroadcastManager
-    private lateinit var broadcastReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -29,7 +25,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         setContentView(R.layout.activity_pic_gallery)
         initView()
         initVp()
-        initBroadcastReceiver()
         supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
         enterShareElementCallback()
     }
@@ -55,16 +50,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         })
     }
 
-    private fun initBroadcastReceiver() {   //由于VP滑动导致RV滚动，会加载更多而改变数据，因此要通知VP去刷新一下，防止崩溃
-        broadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                intent?.run { vpPicture.adapter?.notifyDataSetChanged() }
-            }
-        }
-        localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        localBroadcastManager.registerReceiver(broadcastReceiver, IntentFilter("notifyVp"))
-    }
-
     override fun onPageSelected(position: Int) {  //滑动VP发送广播滚动RV到相应位置
         localBroadcastManager.sendBroadcast(Intent("scrollPos").putExtra("scrollPos", vpPicture.currentItem))
     }
@@ -76,11 +61,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
     override fun onBackPressed() {
         setResult(RESULT_OK, Intent().putExtra("pos", vpPicture.currentItem))
         supportFinishAfterTransition()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        localBroadcastManager.unregisterReceiver(broadcastReceiver)
     }
 
     override fun initView() {

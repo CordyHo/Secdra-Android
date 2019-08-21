@@ -3,8 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     tools:context=".module.pictureGal.view.PicFragment">
+
+    <ImageView
+        android:id="@+id/iv_pictureThumb"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        tools:ignore="ContentDescription" />
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/iv_pictureOrigin"

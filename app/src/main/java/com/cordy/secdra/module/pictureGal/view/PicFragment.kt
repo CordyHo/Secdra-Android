@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.cordy.secdra.R
@@ -21,6 +21,7 @@ class PicFragment : Fragment() {
     private var bean = JsonBeanPicture.DataBean.ContentBean()
     private lateinit var pbProgress: ProgressBar
     private lateinit var ivPictureOrigin: PhotoView  //原图
+    private lateinit var ivPictureThumb: ImageView  //缩略图
 
     val sharedElement: View?
         get() = ivPictureOrigin
@@ -53,22 +54,25 @@ class PicFragment : Fragment() {
     }
 
     private fun setPicture() {
-        ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {  //原图  //todo 可能ANR
+        ImageLoader.setBaseImageWithoutPlaceholderFromUrl(bean.url, ivPictureThumb)  //缩略图
+        ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {  //原图
             override fun onCallBack() {
                 pbProgress.visibility = View.GONE
+                ivPictureThumb.visibility = View.GONE
             }
         })
     }
 
     private fun initView(rootView: View) {
         ivPictureOrigin = rootView.iv_pictureOrigin
+        ivPictureThumb = rootView.iv_pictureThumb
         pbProgress = rootView.pb_progress
-        ivPictureOrigin.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+       /* ivPictureThumb.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                ivPictureOrigin.viewTreeObserver.removeOnPreDrawListener(this)
+                ivPictureThumb.viewTreeObserver.removeOnPreDrawListener(this)
                 activity.supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
                 return true
             }
-        })
+        })*/
     }
 }
