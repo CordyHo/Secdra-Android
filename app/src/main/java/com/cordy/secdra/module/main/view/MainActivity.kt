@@ -39,7 +39,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
-import java.io.Serializable
 
 @SuppressLint("InflateParams")
 class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
@@ -55,6 +54,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
+
+    companion object {
+        val beanList = ArrayList<JsonBeanPicture.DataBean.ContentBean>()   //全局静态变量，用putExtra传递List给Activity的话，太大会炸掉
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -114,11 +117,11 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun initRv(jsonBeanPicture: JsonBeanPicture) {
         adapter.setNewData(jsonBeanPicture.data.content)
+        beanList.addAll(jsonBeanPicture.data.content)
     }
 
     override fun onItemClick(ivPicture: ImageView, pos: Int) {  //点击事件
         val intent = Intent(this, PicGalleryActivity::class.java)
-        intent.putExtra("beanList", adapter.data as Serializable)
         intent.putExtra("pos", pos)
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())  // pos 作为元素共享的唯一tag
         startActivity(intent, options.toBundle())
@@ -134,6 +137,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         if (jsonBeanPicture.data.content.isNotEmpty()) {
             adapter.loadMoreComplete()
             adapter.addData(jsonBeanPicture.data.content)
+            beanList.addAll(jsonBeanPicture.data.content)
+            localBroadcastManager.sendBroadcast(Intent("notifyVp"))  //由于VP滑动导致RV滚动，会加载更多而改变数据，因此要通知VP去刷新一下，防止崩溃
             page++
         } else
             adapter.loadMoreEnd(true)

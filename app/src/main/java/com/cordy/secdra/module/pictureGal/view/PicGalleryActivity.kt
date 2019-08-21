@@ -1,6 +1,9 @@
 package com.cordy.secdra.module.pictureGal.view
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.SharedElementCallback
@@ -8,7 +11,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
-import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.pictureGal.adapter.VpPictureAdapter
 import com.cordy.secdra.widget.ImmersionBar
 import com.serhatsurguvec.swipablelayout.SwipeableLayout
@@ -16,11 +18,10 @@ import kotlinx.android.synthetic.main.activity_pic_gallery.*
 
 class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, SwipeableLayout.OnLayoutCloseListener {
 
-
     private lateinit var vpPicture: ViewPager
     private lateinit var adapter: VpPictureAdapter
-    private var beanList = ArrayList<JsonBeanPicture.DataBean.ContentBean>()
     private lateinit var localBroadcastManager: LocalBroadcastManager
+    private lateinit var broadcastReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -28,19 +29,22 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         setContentView(R.layout.activity_pic_gallery)
         initView()
         initVp()
+        initBroadcastReceiver()
         supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
         enterShareElementCallback()
     }
 
     private fun initVp() {
-        beanList = intent?.getSerializableExtra("beanList") as ArrayList<JsonBeanPicture.DataBean.ContentBean>
-        adapter = VpPictureAdapter(beanList, supportFragmentManager)
+        adapter = VpPictureAdapter(supportFragmentManager)
         vpPicture.adapter = adapter
         intent?.run { vpPicture.currentItem = intent?.getIntExtra("pos", 0)!! }
         vpPicture.addOnPageChangeListener(this)
     }
 
     private fun enterShareElementCallback() {
+        //每次进入和退出的时候都会进行调用，进入的时候获取到前面传来的共享元素的信息
+        //退出的时候，把这些信息传递给上一个Activity
+        //同时向sharedElements里面put view,跟对view添加transitionName作用一样
         setEnterSharedElementCallback(object : SharedElementCallback() {
             override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String?, View?>?) {
                 val fragment = adapter.instantiateItem(vpPicture, vpPicture.currentItem) as PicFragment
@@ -49,6 +53,16 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
                 sharedElements?.set(pos.toString(), fragment.sharedElement)  // pos 作为元素共享的唯一tag
             }
         })
+    }
+
+    private fun initBroadcastReceiver() {   //由于VP滑动导致RV滚动，会加载更多而改变数据，因此要通知VP去刷新一下，防止崩溃
+        broadcastReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                intent?.run { vpPicture.adapter?.notifyDataSetChanged() }
+            }
+        }
+        localBroadcastManager = LocalBroadcastManager.getInstance(this)
+        localBroadcastManager.registerReceiver(broadcastReceiver, IntentFilter("notifyVp"))
     }
 
     override fun onPageSelected(position: Int) {  //滑动VP发送广播滚动RV到相应位置
@@ -62,6 +76,11 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
     override fun onBackPressed() {
         setResult(RESULT_OK, Intent().putExtra("pos", vpPicture.currentItem))
         supportFinishAfterTransition()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        localBroadcastManager.unregisterReceiver(broadcastReceiver)
     }
 
     override fun initView() {

@@ -1,6 +1,6 @@
 package com.cordy.secdra.utils
 
-import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -28,7 +28,7 @@ object ImageLoader {
         }
     }
 
-    fun setBaseImageWithoutPlaceholderFromUrl(url: Any?, iv_image: ImageView) {  //普通图片小图
+    fun setBaseImageWithoutPlaceholderFromUrl(url: Any?, iv_image: ImageView) {  //普通图片小图没有占位符
         val options = RequestOptions()
                 .fitCenter()
         application?.run {
@@ -40,26 +40,40 @@ object ImageLoader {
         }
     }
 
-    fun setOriginBaseImageCallBackFromUrl(url: Any?, imageLoadCallBack: ImageLoadCallBack) {  //普通图片原图
+    fun setOriginBaseImageWithCallbackFromUrl(url: Any?, iv_image: ImageView, pictureLoadCallBack: PictureLoadCallBack) {  //普通图片原图
         val options = RequestOptions()
                 .fitCenter()
         application?.run {
             Glide.with(this)
-                    .asBitmap()
                     .load(AppParamUtils.base_img_url + url)
                     .apply(options)
-                    .listener(object : RequestListener<Bitmap> {
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Bitmap>?, isFirstResource: Boolean): Boolean {
+                    .transition(DrawableTransitionOptions().crossFade())
+                    .apply(options)
+                    .listener(object : RequestListener<Drawable> {
+
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            pictureLoadCallBack.onCallBack()
                             return false
                         }
 
-                        override fun onResourceReady(bitmap: Bitmap?, model: Any?, target: Target<Bitmap>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            bitmap?.run { imageLoadCallBack.onBitmapCallBack(bitmap) }
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                             return false
                         }
-
                     })
-                    .submit()
+                    .into(iv_image)
+        }
+    }
+
+    fun setOriginBaseImageFromUrl(url: Any?, iv_image: ImageView) {  //普通图片原图
+        val options = RequestOptions()
+                .fitCenter()
+        application?.run {
+            Glide.with(this)
+                    .load(AppParamUtils.base_img_url + url)
+                    .apply(options)
+                    .transition(DrawableTransitionOptions().crossFade())
+                    .apply(options)
+                    .into(iv_image)
         }
     }
 
