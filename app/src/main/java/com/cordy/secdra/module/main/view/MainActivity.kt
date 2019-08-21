@@ -75,7 +75,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onResume() {
         super.onResume()
-        adapter.loadMoreComplete()   // 为什么VP可以更新了？？？？ todo  注意输出 shouldLoadMore 和加载更多的回调，还有onLoadMoreRequested()的
+        adapter.loadMoreComplete()   // 为什么VP可以更新了？？？？ todo  注意输出 onResume()什么情况？ shouldLoadMore 和加载更多的回调，还有onLoadMoreRequested()的
         shouldLoadMore = true
     }
 
