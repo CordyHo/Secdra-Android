@@ -22,7 +22,7 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         ivPicture.setInitSize(item.width, item.height)  //重写IV的测量方法，设置图片宽高缩放到屏幕实际的宽高
         ImageLoader.setBaseImageWithoutPlaceholderFromUrl(item.url, ivPicture)
         ImageLoader.setPortrait200FromUrl(item.user?.head, ivPortrait)
-        tvName.text = item.user?.name
+        tvName.text = item.introduction
         helper.itemView.setOnClickListener {
             rvItemClickListener?.onItemClick(ivPicture, helper.adapterPosition)
         }
