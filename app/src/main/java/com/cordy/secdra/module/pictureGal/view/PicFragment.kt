@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.view.ViewTreeObserver
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.cordy.secdra.R
@@ -21,7 +21,6 @@ class PicFragment : Fragment() {
     private var bean = JsonBeanPicture.DataBean.ContentBean()
     private lateinit var pbProgress: ProgressBar
     private lateinit var ivPictureOrigin: PhotoView  //原图
-    private lateinit var ivPictureThumb: ImageView  //缩略图
 
     val sharedElement: View?
         get() = ivPictureOrigin
@@ -54,25 +53,23 @@ class PicFragment : Fragment() {
     }
 
     private fun setPicture() {
-        ImageLoader.setBaseImageWithoutPlaceholderFromUrl(bean.url, ivPictureThumb)  //缩略图
+        ImageLoader.setBaseImageWithoutPlaceholderFromUrl(bean.url, ivPictureOrigin)
         ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {  //原图
             override fun onCallBack() {
                 pbProgress.visibility = View.GONE
-                ivPictureThumb.visibility = View.GONE
             }
         })
     }
 
     private fun initView(rootView: View) {
         ivPictureOrigin = rootView.iv_pictureOrigin
-        ivPictureThumb = rootView.iv_pictureThumb
         pbProgress = rootView.pb_progress
-       /* ivPictureThumb.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        ivPictureOrigin.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
-                ivPictureThumb.viewTreeObserver.removeOnPreDrawListener(this)
+                ivPictureOrigin.viewTreeObserver.removeOnPreDrawListener(this)
                 activity.supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
                 return true
             }
-        })*/
+        })
     }
 }

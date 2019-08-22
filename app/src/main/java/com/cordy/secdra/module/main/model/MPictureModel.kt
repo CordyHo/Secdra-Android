@@ -14,16 +14,13 @@ class MPictureModel(private val iPictureInterface: IPictureInterface) {
                 .getDataFromUrlGet(object : UrlRequest.DataRequestResponse {
                     override fun onRequestSuccess(jsonData: String) {
                         if (page < 1)
-                            iPictureInterface.getPictureListSuccess(Gson().fromJson(jsonData, JsonBeanPicture::class.java))
+                            iPictureInterface.getPictureListSuccess(Gson().fromJson(jsonData, JsonBeanPicture::class.java), false)
                         else
-                            iPictureInterface.getMorePictureListSuccess(Gson().fromJson(jsonData, JsonBeanPicture::class.java))
+                            iPictureInterface.getPictureListSuccess(Gson().fromJson(jsonData, JsonBeanPicture::class.java), true)
                     }
 
                     override fun onRequestFailure(errMsg: String) {
-                        if (page < 1)
-                            iPictureInterface.getPictureListFailure(errMsg)
-                        else
-                            iPictureInterface.getMorePictureListFailure(errMsg)
+                        iPictureInterface.getPictureListFailure(errMsg)
                     }
 
                 })

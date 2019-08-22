@@ -41,23 +41,23 @@ import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
 
 @SuppressLint("InflateParams")
-class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
+        BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private var lastClickTime: Long = 0
     private lateinit var srlRefresh: SwipeRefreshLayout
     private lateinit var rvPicture: RecyclerView
     private lateinit var ctlToolbar: CollapsingToolbarLayout
-    private val adapter = PictureRvAdapter(this)
     private val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
     private val model = MPictureModel(this)
-    private var page = 1
+    private var page = 1   // 第一页为0，第二页为1
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private var shouldLoadMore = true  // VP滑动时通知RV滚动会导致加载更多，会导致VP的adapter的数据出问题而崩溃
 
     companion object {
-        val beanList = ArrayList<JsonBeanPicture.DataBean.ContentBean>()   //全局静态变量，用putExtra传递List给Activity的话，太大会炸掉
+        lateinit var adapter: PictureRvAdapter   //全局静态变量，adapter持有list数据，用putExtra传递List给Activity的话，太大会炸掉
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +75,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onResume() {
         super.onResume()
-        adapter.loadMoreComplete()   // 为什么VP可以更新了？？？？ todo  注意输出 onResume()什么情况？ shouldLoadMore 和加载更多的回调，还有onLoadMoreRequested()的
+        adapter.loadMoreComplete()   //回调一下才会加载更多
         shouldLoadMore = true
     }
 
@@ -120,16 +120,11 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                intent?.run { rvPicture.smoothScrollToPosition(intent.getIntExtra("scrollPos", 0)) }
+                intent?.run { rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0)) }
             }
         }
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
         localBroadcastManager.registerReceiver(broadcastReceiver, IntentFilter("scrollPos"))
-    }
-
-    private fun initRv(jsonBeanPicture: JsonBeanPicture) {
-        adapter.setNewData(jsonBeanPicture.data.content)
-        beanList.addAll(jsonBeanPicture.data.content)
     }
 
     override fun onItemClick(ivPicture: ImageView, pos: Int) {  //点击事件
@@ -139,28 +134,29 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         startActivity(intent, options.toBundle())
     }
 
-    override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture) {
-        stopRefresh()
-        page = 1
-        initRv(jsonBeanPicture)
+    override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {
+        if (!isLoadMore)   //第一次加载
+            initRv(jsonBeanPicture)
+        else
+            loadMoreRv(jsonBeanPicture)  //加载更多
     }
 
-    override fun getMorePictureListSuccess(jsonBeanPicture: JsonBeanPicture) {
+    private fun initRv(jsonBeanPicture: JsonBeanPicture) {
+        stopRefresh()
+        page = 1
+        adapter.setNewData(jsonBeanPicture.data.content)
+    }
+
+    private fun loadMoreRv(jsonBeanPicture: JsonBeanPicture) {
         if (jsonBeanPicture.data.content.isNotEmpty()) {
             adapter.loadMoreComplete()
             adapter.addData(jsonBeanPicture.data.content)
-            beanList.addAll(jsonBeanPicture.data.content)
             page++
         } else
             adapter.loadMoreEnd(true)
     }
 
     override fun getPictureListFailure(msg: String?) {
-        stopRefresh()
-        ToastUtil.showToastShort(msg)
-    }
-
-    override fun getMorePictureListFailure(msg: String?) {
         stopRefresh()
         ToastUtil.showToastShort(msg)
     }
@@ -194,13 +190,15 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh.setProgressViewOffset(true, 0, 100)
         srlRefresh.post { srlRefresh.isRefreshing = true }
         rvPicture.layoutManager = layoutManager
+        adapter = PictureRvAdapter(this)
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
         adapter.openLoadAnimation(ScaleInAnimation())
         adapter.setOnLoadMoreListener(this, rvPicture)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
-        adapter.footerLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
+        adapter.footerLayout.layoutParams =
+                LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
         setToolBarHeightAndPadding()
     }
 

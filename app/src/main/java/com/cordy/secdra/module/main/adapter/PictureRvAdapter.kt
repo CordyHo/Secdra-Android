@@ -12,7 +12,7 @@ import com.cordy.secdra.widget.ScaleImageView
 import de.hdodenhof.circleimageview.CircleImageView
 
 @SuppressLint("SetTextI18n")
-class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener) :
+class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         BaseQuickAdapter<JsonBeanPicture.DataBean.ContentBean, BaseViewHolder>(R.layout.item_rv_picture) {
 
     override fun convert(helper: BaseViewHolder, item: JsonBeanPicture.DataBean.ContentBean) {
@@ -24,7 +24,7 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener) :
         ImageLoader.setPortrait200FromUrl(item.user?.head, ivPortrait)
         tvName.text = item.user?.name
         helper.itemView.setOnClickListener {
-            rvItemClickListener.onItemClick(ivPicture, helper.adapterPosition)
+            rvItemClickListener?.onItemClick(ivPicture, helper.adapterPosition)
         }
     }
 }

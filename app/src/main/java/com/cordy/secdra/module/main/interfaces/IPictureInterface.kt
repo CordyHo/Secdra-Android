@@ -4,11 +4,7 @@ import com.cordy.secdra.module.main.bean.JsonBeanPicture
 
 interface IPictureInterface {
 
-    fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture)
+    fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean)
 
     fun getPictureListFailure(msg: String?)
-
-    fun getMorePictureListSuccess(jsonBeanPicture: JsonBeanPicture)
-
-    fun getMorePictureListFailure(msg: String?)
 }
