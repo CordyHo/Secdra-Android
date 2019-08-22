@@ -10,12 +10,11 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.cordy.secdra.R
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
-import com.cordy.secdra.utils.ImageLoader
-import com.cordy.secdra.utils.PictureLoadCallBack
+import com.cordy.secdra.utils.*
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.fragment_picture.view.*
 
-class PicFragment : Fragment() {
+class PicFragment : Fragment(), View.OnLongClickListener {
 
     private lateinit var activity: PicGalleryActivity
     private var bean = JsonBeanPicture.DataBean.ContentBean()
@@ -60,9 +59,16 @@ class PicFragment : Fragment() {
         })
     }
 
+    override fun onLongClick(v: View?): Boolean {   //长按保存图片
+        ToastUtil.showToastLong(AppParamUtils.base_img_url + bean.url + "去保存图片啊")
+        SavePictureUtils.savePicture(AppParamUtils.base_img_url + bean.url)
+        return false
+    }
+
     private fun initView(rootView: View) {
-        ivPictureOrigin = rootView.iv_pictureOrigin
         pbProgress = rootView.pb_progress
+        ivPictureOrigin = rootView.iv_pictureOrigin
+        ivPictureOrigin.setOnLongClickListener(this)
         ivPictureOrigin.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 ivPictureOrigin.viewTreeObserver.removeOnPreDrawListener(this)
