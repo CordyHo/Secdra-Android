@@ -20,7 +20,7 @@ class PicFragment : Fragment() {
     private lateinit var activity: PicGalleryActivity
     private var bean = JsonBeanPicture.DataBean.ContentBean()
     private lateinit var pbProgress: ProgressBar
-    private lateinit var ivPictureOrigin: PhotoView  //原图
+    private lateinit var ivPictureOrigin: PhotoView
 
     val sharedElement: View?
         get() = ivPictureOrigin
@@ -53,7 +53,6 @@ class PicFragment : Fragment() {
     }
 
     private fun setPicture() {
-        ImageLoader.setBaseImageWithoutPlaceholderFromUrl(bean.url, ivPictureOrigin)
         ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {  //原图
             override fun onCallBack() {
                 pbProgress.visibility = View.GONE

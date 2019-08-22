@@ -54,7 +54,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         localBroadcastManager.sendBroadcast(Intent("scrollPos").putExtra("scrollPos", vpPicture.currentItem))
     }
 
-    override fun OnLayoutClosed() {  //下滑布局回调
+    override fun OnLayoutClosed() {  //下滑关闭布局回调
         onBackPressed()
     }
 

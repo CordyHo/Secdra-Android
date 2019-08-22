@@ -20,7 +20,7 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         val ivPortrait = helper.getView<CircleImageView>(R.id.iv_portrait)
         val tvName = helper.getView<TextView>(R.id.tv_name)
         ivPicture.setInitSize(item.width, item.height)  //重写IV的测量方法，设置图片宽高缩放到屏幕实际的宽高
-        ImageLoader.setBaseImageFromUrl(item.url, ivPicture)
+        ImageLoader.setBaseImageWithoutPlaceholderFromUrl(item.url, ivPicture)
         ImageLoader.setPortrait200FromUrl(item.user?.head, ivPortrait)
         tvName.text = item.user?.name
         helper.itemView.setOnClickListener {
