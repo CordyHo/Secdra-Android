@@ -8,4 +8,6 @@
     <string name="requestStoragePermission">需要授予存储权限才能保存图片</string>
     <string name="giveCPermission">授予权限</string>
     <string name="requestStoragePermissionToast">请授予存储权限</string>
+    <string name="saveSuccess">保存成功！</string>
+    <string name="saveFailure">保存失败，请重新获取图片！</string>
 </resources>

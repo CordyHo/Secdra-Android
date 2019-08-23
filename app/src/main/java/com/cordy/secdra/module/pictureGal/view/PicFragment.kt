@@ -15,6 +15,7 @@ import com.cordy.secdra.module.permission.interfaces.IPermissionCallback
 import com.cordy.secdra.module.permission.utils.PermissionUtils
 import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.PictureLoadCallBack
+import com.cordy.secdra.utils.SavePictureUtils
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.fragment_picture.view.*
 
@@ -60,17 +61,16 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback {
         })
     }
 
-    override fun onLongClick(v: View?): Boolean {   //长按保存图片
-        PermissionUtils.requestStoragePermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, this)
+    override fun onLongClick(v: View?): Boolean {   //长按检查权限后保存图片
+        PermissionUtils.requestPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, this)
         return false
     }
 
-    override fun permissionGranted() {
-        println("给了权限")
+    override fun permissionGranted() {  //授予了权限
+        SavePictureUtils.savePicture(activity, bean.url)
     }
 
     override fun permissionDenied() {
-        println("不给")
     }
 
     private fun initView(rootView: View) {

@@ -21,7 +21,7 @@ class PermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
         super.onCreate(savedInstanceState)
-        intent?.getStringExtra("permissionName")?.run { permissionName = intent?.getStringExtra("permissionName")!! }
+        intent?.getStringExtra("permissionName")?.run { permissionName = intent.getStringExtra("permissionName")!! }
         requestPermission()
     }
 
@@ -32,12 +32,11 @@ class PermissionActivity : AppCompatActivity() {
             -> if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     && ActivityCompat.shouldShowRequestPermissionRationale(this, permissionName)) {
                 //用户拒绝权限
-                permissionDenied()
                 AlertDialog.Builder(this)
                         .setCancelable(true)
                         .setMessage(getString(R.string.requestStoragePermission))
                         .setPositiveButton(getString(R.string.giveCPermission)) { _, _ -> requestPermission() }
-                        .setNegativeButton("取消", null).show()
+                        .setNegativeButton("取消") { _, _ -> permissionDenied() }.show()
             } else if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     && !ActivityCompat.shouldShowRequestPermissionRationale(this, permissionName)) {
                 //用户点了不再显示

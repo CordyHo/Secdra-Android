@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.cordy.secdra.R
 import com.cordy.secdra.SecdraApplication.Companion.application
+import java.io.File
 
 object ImageLoader {
 

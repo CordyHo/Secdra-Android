@@ -9,9 +9,10 @@ import com.cordy.secdra.module.permission.interfaces.IPermissionCallback
 import com.cordy.secdra.module.permission.view.PermissionActivity
 
 object PermissionUtils : IPermissionCallback {
+
     var iPermissionCallback: IPermissionCallback? = null
 
-    fun requestStoragePermission(context: Context?, permissionName: String, iPermissionCallback: IPermissionCallback) {
+    fun requestPermission(context: Context?, permissionName: String, iPermissionCallback: IPermissionCallback) {
         this.iPermissionCallback = iPermissionCallback
         if (Build.VERSION.SDK_INT > 22) {
             context?.run {
