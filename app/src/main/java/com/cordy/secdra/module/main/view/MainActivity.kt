@@ -57,7 +57,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private var shouldLoadMore = true  // VP滑动时通知RV滚动会导致加载更多，会导致VP的adapter的数据出问题而崩溃
 
     companion object {
-        lateinit var adapter: PictureRvAdapter   //全局静态变量，adapter持有list数据，用putExtra传递List给Activity的话，太大会炸掉
+        var adapter: PictureRvAdapter? = null   //全局静态变量，adapter持有list数据，用putExtra传递List给Activity的话，太大会炸掉
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,7 +75,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onResume() {
         super.onResume()
-        adapter.loadMoreComplete()   //回调一下才会加载更多
+        adapter?.loadMoreComplete()   //回调一下才会加载更多
         shouldLoadMore = true
     }
 
@@ -145,16 +145,16 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun initRv(jsonBeanPicture: JsonBeanPicture) {
         stopRefresh()
         page = 1
-        adapter.setNewData(jsonBeanPicture.data.content)
+        adapter?.setNewData(jsonBeanPicture.data.content)
     }
 
     private fun loadMoreRv(jsonBeanPicture: JsonBeanPicture) {
         if (jsonBeanPicture.data.content.isNotEmpty()) {
-            adapter.loadMoreComplete()
-            adapter.addData(jsonBeanPicture.data.content)
+            adapter?.loadMoreComplete()
+            adapter?.addData(jsonBeanPicture.data.content)
             page++
         } else
-            adapter.loadMoreEnd(true)
+            adapter?.loadMoreEnd(true)
     }
 
     override fun getPictureListFailure(msg: String?) {
@@ -195,11 +195,11 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         adapter = PictureRvAdapter(this)
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
-        adapter.openLoadAnimation(ScaleInAnimation())
-        adapter.setOnLoadMoreListener(this, rvPicture)
-        adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
+        adapter?.openLoadAnimation(ScaleInAnimation())
+        adapter?.setOnLoadMoreListener(this, rvPicture)
+        adapter?.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
-        adapter.footerLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
+        adapter?.footerLayout?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
         toolbar.setOnClickListener(this)
         setToolBarHeightAndPadding()
     }
@@ -220,6 +220,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     override fun onDestroy() {
         super.onDestroy()
         localBroadcastManager.unregisterReceiver(broadcastReceiver)
+        adapter = null   //静态变量最后要赋空，防止内存泄漏
     }
 
     override fun onBackPressed() {

@@ -10,10 +10,10 @@ class VpPictureAdapter(support: FragmentManager)
     : FragmentPagerAdapter(support, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment {
-        return PicFragment.newFragment(adapter.data[position])
+        return PicFragment().newFragment(adapter?.data?.get(position))!!
     }
 
     override fun getCount(): Int {
-        return adapter.data.size
+        return adapter?.data?.size!!
     }
 }
