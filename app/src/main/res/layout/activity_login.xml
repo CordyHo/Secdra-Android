@@ -41,7 +41,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/ic_icon"
                 tools:ignore="ContentDescription" />
 
             <EditText
