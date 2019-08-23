@@ -36,8 +36,8 @@
             android:paddingEnd="35dp">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:adjustViewBounds="true"
@@ -111,6 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:layout_marginBottom="20dp"
                 android:background="@color/colorPrimary"
                 android:gravity="center"
                 android:text="@string/login"
