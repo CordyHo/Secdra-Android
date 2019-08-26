@@ -28,7 +28,7 @@ class ScreenUtils private constructor() {
     companion object {
 
         fun setStatusBarTxtColor(context: Activity) {
-            if (Build.VERSION.SDK_INT <= 22) {
+            if (Build.VERSION.SDK_INT < 26) {
                 context.window.statusBarColor = ContextCompat.getColor(context, R.color.black)
             } else {
                 if (Build.VERSION.SDK_INT >= 26) {

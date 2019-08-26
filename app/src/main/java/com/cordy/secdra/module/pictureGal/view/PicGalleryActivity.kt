@@ -8,6 +8,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
+import com.cordy.secdra.module.main.view.MainActivity
 import com.cordy.secdra.module.pictureGal.adapter.VpPictureAdapter
 import com.cordy.secdra.widget.ImmersionBar
 import kotlinx.android.synthetic.main.activity_pic_gallery.*
@@ -31,8 +32,9 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     private fun initVp() {
         adapter = VpPictureAdapter(supportFragmentManager)
         vpPicture.adapter = adapter
-        intent?.run { vpPicture.currentItem = intent?.getIntExtra("pos", 0)!! }
+        intent?.run { vpPicture.setCurrentItem(intent?.getIntExtra("pos", 0)!!, false) }
         vpPicture.addOnPageChangeListener(this)
+        changeBgColor(vpPicture.currentItem)  //第一次进来的时候改变颜色
     }
 
     private fun enterShareElementCallback() {
@@ -49,8 +51,13 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         })
     }
 
-    override fun onPageSelected(position: Int) {  //滑动VP发送广播滚动RV到相应位置
+    override fun onPageSelected(pos: Int) {  //滑动VP发送广播滚动RV到相应位置
+        changeBgColor(pos)
         localBroadcastManager.sendBroadcast(Intent("scrollPos").putExtra("scrollPos", vpPicture.currentItem))
+    }
+
+    private fun changeBgColor(pos: Int) {
+        MainActivity.adapter?.colorArray?.get(pos)?.let { vpPicture.setBackgroundColor(it) }  //改变背景颜色
     }
 
     override fun onBackPressed() {

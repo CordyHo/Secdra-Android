@@ -3,7 +3,6 @@ package com.cordy.secdra.module.permission.view
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -48,8 +47,7 @@ class PermissionActivity : AppCompatActivity() {
     }
 
     private fun requestPermission() {
-        if (Build.VERSION.SDK_INT > 22)
-            requestPermissions(arrayOf(permissionName), 1)
+        requestPermissions(arrayOf(permissionName), 1)
     }
 
     private fun permissionGranted() {

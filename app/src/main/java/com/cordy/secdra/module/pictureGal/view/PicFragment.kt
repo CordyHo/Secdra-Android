@@ -2,6 +2,7 @@ package com.cordy.secdra.module.pictureGal.view
 
 import android.Manifest
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +31,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
     val sharedElement: View?
         get() = ivPictureOrigin
 
-    fun newFragment(bean: JsonBeanPicture.DataBean.ContentBean?): Fragment? {
+    fun newFragment(bean: JsonBeanPicture.DataBean.ContentBean?): Fragment {
         val bundle = Bundle()
         bundle.putSerializable("bean", bean)
         this.arguments = bundle
@@ -56,7 +57,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
 
     private fun setPicture() {
         ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {  //原图
-            override fun onCallBack() {
+            override fun onCallBack(bitmap: Bitmap) {
                 pbProgress.visibility = View.GONE
             }
         })

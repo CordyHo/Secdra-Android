@@ -9,8 +9,8 @@ import com.cordy.secdra.module.pictureGal.view.PicFragment
 class VpPictureAdapter(support: FragmentManager)
     : FragmentPagerAdapter(support, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    override fun getItem(position: Int): Fragment {
-        return PicFragment().newFragment(adapter?.data?.get(position))!!
+    override fun getItem(pos: Int): Fragment {
+        return PicFragment().newFragment(adapter?.data?.get(pos))
     }
 
     override fun getCount(): Int {
