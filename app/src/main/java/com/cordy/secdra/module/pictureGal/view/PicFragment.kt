@@ -28,7 +28,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
     private var bean = JsonBeanPicture.DataBean.ContentBean()
     private lateinit var pbProgress: ProgressBar
     private lateinit var ivPictureOrigin: PhotoView
-    private var isHideUIBar = false
+    private var isHideUIBar = true
 
     val sharedElement: View?
         get() = ivPictureOrigin
