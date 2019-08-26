@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.cordy.secdra.R
@@ -17,9 +17,10 @@ import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.PictureLoadCallBack
 import com.cordy.secdra.utils.SavePictureUtils
 import com.github.chrisbanes.photoview.PhotoView
+import com.serhatsurguvec.swipablelayout.SwipeableLayout
 import kotlinx.android.synthetic.main.fragment_picture.view.*
 
-class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback {
+class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, SwipeableLayout.OnLayoutCloseListener {
 
     private lateinit var activity: PicGalleryActivity
     private var bean = JsonBeanPicture.DataBean.ContentBean()
@@ -66,6 +67,10 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback {
         return false
     }
 
+    override fun OnLayoutClosed() {  //下滑关闭Activity
+        activity.onBackPressed()
+    }
+
     override fun permissionGranted() {  //授予了权限
         SavePictureUtils.savePicture(activity, bean.url)
     }
@@ -74,10 +79,11 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback {
     }
 
     private fun initView(rootView: View) {
+        rootView.sbl_layout.setOnLayoutCloseListener(this)
         pbProgress = rootView.pb_progress
         ivPictureOrigin = rootView.iv_pictureOrigin
         ivPictureOrigin.setOnLongClickListener(this)
-        ivPictureOrigin.viewTreeObserver.addOnPreDrawListener(object : ViewTreeObserver.OnPreDrawListener {
+        ivPictureOrigin.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
             override fun onPreDraw(): Boolean {
                 ivPictureOrigin.viewTreeObserver.removeOnPreDrawListener(this)
                 activity.supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯

@@ -7,10 +7,6 @@ import androidx.appcompat.widget.Toolbar
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     open fun initView() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar?.run {

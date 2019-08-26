@@ -10,10 +10,9 @@ import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 import com.cordy.secdra.module.pictureGal.adapter.VpPictureAdapter
 import com.cordy.secdra.widget.ImmersionBar
-import com.serhatsurguvec.swipablelayout.SwipeableLayout
 import kotlinx.android.synthetic.main.activity_pic_gallery.*
 
-class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, SwipeableLayout.OnLayoutCloseListener {
+class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     private lateinit var vpPicture: ViewPager
     private lateinit var adapter: VpPictureAdapter
@@ -54,10 +53,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
         localBroadcastManager.sendBroadcast(Intent("scrollPos").putExtra("scrollPos", vpPicture.currentItem))
     }
 
-    override fun OnLayoutClosed() {  //下滑关闭布局回调
-        onBackPressed()
-    }
-
     override fun onBackPressed() {
         setResult(RESULT_OK, Intent().putExtra("pos", vpPicture.currentItem))
         supportFinishAfterTransition()
@@ -65,7 +60,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener, Swipe
 
     override fun initView() {
         vpPicture = vp_picture
-        sbl_layout.setOnLayoutCloseListener(this)
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
     }
 
