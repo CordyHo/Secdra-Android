@@ -43,6 +43,11 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
 
     private fun getPictureMainColor(pos: Int, bitmap: Bitmap) {
         palette = Palette.from(bitmap).generate()
-        colorArray.put(pos, palette.getDominantColor(Color.BLACK))  //保存要改变vp背景的颜色，这样滑动退出的时候，SwipeableLayout背景色也不会随动
+        val color = when (palette.getLightMutedColor(Color.BLACK)) {
+            Color.BLACK -> palette.getDominantColor(Color.BLACK)
+
+            else -> palette.getLightMutedColor(Color.BLACK)
+        }
+        colorArray.put(pos, color)  //保存要改变vp背景的颜色，这样滑动退出的时候，SwipeableLayout背景色也不会随动
     }
 }
