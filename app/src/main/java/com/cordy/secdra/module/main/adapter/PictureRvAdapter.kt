@@ -38,7 +38,6 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         ImageLoader.setPortrait200FromUrl(item.user?.head, ivPortrait)
         tvName.text = item.name
         helper.itemView.setOnClickListener {
-            println("看看name${item.name}")
             rvItemClickListener?.onItemClick(ivPicture, helper.adapterPosition)
         }
     }
