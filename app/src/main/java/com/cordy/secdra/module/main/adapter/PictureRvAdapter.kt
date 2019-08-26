@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.util.SparseIntArray
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.palette.graphics.Palette
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -31,23 +32,23 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         ImageLoader.setBaseImageWithoutPlaceholderCallbackFromUrl(item.url, ivPicture, object : PictureLoadCallBack {
             override fun onCallBack(bitmap: Bitmap) {
                 if (helper.adapterPosition >= 0)
-                    getPictureMainColor(helper.adapterPosition, bitmap)
+                    getPictureMainColor(helper.adapterPosition, bitmap, helper)
             }
         })
         ImageLoader.setPortrait200FromUrl(item.user?.head, ivPortrait)
         tvName.text = item.name
         helper.itemView.setOnClickListener {
+            println("看看name${item.name}")
             rvItemClickListener?.onItemClick(ivPicture, helper.adapterPosition)
         }
     }
 
-    private fun getPictureMainColor(pos: Int, bitmap: Bitmap) {
+    private fun getPictureMainColor(pos: Int, bitmap: Bitmap, helper: BaseViewHolder) {
         palette = Palette.from(bitmap).generate()
-        val color = when (palette.getLightMutedColor(Color.BLACK)) {
-            Color.BLACK -> palette.getDominantColor(Color.BLACK)
-
-            else -> palette.getLightMutedColor(Color.BLACK)
-        }
+        val color = palette.getMutedColor(Color.BLACK)
         colorArray.put(pos, color)  //保存要改变vp背景的颜色，这样滑动退出的时候，SwipeableLayout背景色也不会随动
+        //设置文字颜色和item的背景色，文字颜色要注意深浅色
+        (helper.itemView as CardView).setCardBackgroundColor(color)
+        helper.getView<TextView>(R.id.tv_name).setTextColor(palette.getLightVibrantColor(Color.WHITE))
     }
 }

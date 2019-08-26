@@ -35,12 +35,11 @@
             android:paddingStart="35dp"
             android:paddingEnd="35dp">
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:adjustViewBounds="true"
                 android:src="@drawable/ic_icon"
                 tools:ignore="ContentDescription" />
 
