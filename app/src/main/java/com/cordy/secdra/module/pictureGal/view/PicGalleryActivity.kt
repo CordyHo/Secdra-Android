@@ -35,7 +35,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         intent?.run { vpPicture.setCurrentItem(intent?.getIntExtra("pos", 0)!!, false) }
         vpPicture.addOnPageChangeListener(this)
         changeBgColor(vpPicture.currentItem)  //第一次进来的时候改变颜色
-        vpPicture.setOnClickListener { println("广告") }
     }
 
     private fun enterShareElementCallback() {

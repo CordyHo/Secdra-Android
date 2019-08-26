@@ -75,9 +75,7 @@ class ImmersionBar(private val activity: Activity) {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    fun setTransparentBar(@ColorInt color: Int, alpha: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    private fun setTransparentBar(@ColorInt color: Int, alpha: Int) {
             val window = activity.window
             val decorView = window.decorView
             val option = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -93,7 +91,7 @@ class ImmersionBar(private val activity: Activity) {
             window.navigationBarColor = finalColor
             window.statusBarColor = finalColor
 
-        } else {
+        /* else {
             val window = activity.window
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             val decorView = window.decorView as ViewGroup
@@ -106,7 +104,7 @@ class ImmersionBar(private val activity: Activity) {
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
                 decorView.addView(createNavBarView(activity, finalColor))
             }
-        }
+        }*/
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
