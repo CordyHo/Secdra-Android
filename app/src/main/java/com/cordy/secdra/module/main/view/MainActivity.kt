@@ -150,6 +150,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     override fun onClick(v: View) {
         when (v.id) {
             R.id.fb_top -> rvPicture.scrollToPosition(0)
+
+            R.id.iv_portrait -> openDrawer()
         }
     }
 
@@ -166,6 +168,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh = srl_refresh
         rvPicture = rv_picture
         srlRefresh.setOnRefreshListener(this)
+        iv_portrait.setOnClickListener(this)
         fb_top.setOnClickListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
