@@ -80,9 +80,9 @@
             android:rotation="-90"
             android:src="@android:drawable/ic_media_ff"
             app:fabSize="normal"
-            app:hoveredFocusedTranslationZ="5dp"
+            app:hoveredFocusedTranslationZ="10dp"
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-            app:pressedTranslationZ="5dp"
+            app:pressedTranslationZ="10dp"
             app:rippleColor="@color/bgTransparent" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
