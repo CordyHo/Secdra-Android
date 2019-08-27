@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
@@ -14,6 +13,8 @@ import android.widget.LinearLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.SharedElementCallback
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -32,7 +33,6 @@ import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.utils.*
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.ScaleImageView
-import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
@@ -41,14 +41,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
         BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
-    private var lastClickTime: Long = 0
+    private lateinit var dlDrawer: DrawerLayout
     private lateinit var srlRefresh: SwipeRefreshLayout
     private lateinit var rvPicture: RecyclerView
-    private lateinit var ctlToolbar: CollapsingToolbarLayout
     private val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
     private val model = MPictureModel(this)
     private val adapter: PictureRvAdapter = PictureRvAdapter(this)
     private var page = 1   // 第一页为0，第二页为1
+    private var lastClickTime: Long = 0
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
@@ -95,8 +95,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun setViewData() {    //设置用户信息
         val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
-        ctlToolbar.title = jsonBeanUser.data?.name
-        ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
+        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portrait)
     }
 
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
@@ -162,11 +161,9 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     override fun initView() {
+        dlDrawer = dl_drawer
         srlRefresh = srl_refresh
         rvPicture = rv_picture
-        ctlToolbar = ctl_toolbar
-        ctlToolbar.setCollapsedTitleTextColor(Color.WHITE)
-        ctlToolbar.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorPrimary))
         srlRefresh.setOnRefreshListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
@@ -196,6 +193,18 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         })
     }
 
+    private fun isDrawerOpen(): Boolean {
+        return dlDrawer.isDrawerOpen(GravityCompat.START)
+    }
+
+    private fun openDrawer() {
+        dlDrawer.openDrawer(GravityCompat.START)
+    }
+
+    private fun closeDrawer() {
+        dlDrawer.closeDrawer(GravityCompat.START)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         localBroadcastManager.unregisterReceiver(broadcastReceiver)
@@ -204,6 +213,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     override fun onBackPressed() {
         val currentTime = System.currentTimeMillis()
         when {
+            isDrawerOpen() -> closeDrawer()
+
             lastClickTime <= 0 -> {
                 lastClickTime = currentTime
                 ToastUtil.showToastShort(getString(R.string.press_once_again_exit) + getString(R.string.app_name))

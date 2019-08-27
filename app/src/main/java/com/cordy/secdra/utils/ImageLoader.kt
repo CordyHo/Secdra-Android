@@ -29,7 +29,7 @@ object ImageLoader {
         }
     }
 
-    fun setBaseImageWithoutPlaceholderCallbackFromUrl(url: Any?, iv_image: ImageView, pictureLoadCallBack: PictureLoadCallBack) {  //普通图片小图没有占位符
+    fun setBaseImageWithoutPlaceholderCallbackFromUrl(url: Any?, iv_image: ImageView, pictureLoadCallBack: PictureLoadCallBack?) {  //普通图片小图没有占位符
         val options = RequestOptions()
                 .fitCenter()
         application?.run {
@@ -41,7 +41,7 @@ object ImageLoader {
 
                         override fun onResourceReady(drawable: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             val bd = drawable as BitmapDrawable
-                            pictureLoadCallBack.onCallBack(bd.bitmap)
+                            pictureLoadCallBack?.onCallBack(bd.bitmap)
                             return false
                         }
 
