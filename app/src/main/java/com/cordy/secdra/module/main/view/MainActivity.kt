@@ -110,12 +110,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         localBroadcastManager.registerReceiver(broadcastReceiver, IntentFilter("scrollPos"))
     }
 
-    override fun onItemClick(ivPicture: ImageView, pos: Int) {  //点击事件
-        PicturesListMiddleware.setPictureList(adapter.data as ArrayList<JsonBeanPicture.DataBean.ContentBean>) //设置全局静态变量，adapter持有list数据，用putExtra传递List给Activity的话，太大会炸掉
-        val intent = Intent(this, PicGalleryActivity::class.java)
-        intent.putExtra("pos", pos)
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())  // pos 作为元素共享的唯一tag
-        startActivity(intent, options.toBundle())
+    override fun onItemClick(ivPicture: ImageView, pos: Int) {  //item点击事件
+        PicturesListMiddleware.setPictureList(adapter.data as ArrayList<JsonBeanPicture.DataBean.ContentBean>) //设置全局静态变量，用putExtra传递List给Activity的话，太大会炸掉
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
+        startActivity(Intent(this, PicGalleryActivity::class.java).putExtra("pos", pos), options.toBundle()) // pos 作为元素共享的唯一tag
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {
