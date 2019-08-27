@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="?attr/colorControlHighlight">
+    android:color="?attr/colorControlHighlight">  <!--点击时的颜色-->
+
     <item android:id="@android:id/mask">  <!--一定要加id mask-->
         <shape android:shape="oval">
             <solid android:color="#FFFFFF" /> <!--随便给个颜色，不然无效-->
         </shape>
     </item>
+
 </ripple>
