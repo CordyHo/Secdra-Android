@@ -1,15 +1,14 @@
 package com.cordy.secdra.module.main.bean
 
-import java.io.Serializable
 import java.util.*
 
-class JsonBeanPicture : Serializable {
+class JsonBeanPicture {
 
     var status: Int = 0
     var message: Any? = null
     var data: DataBean = DataBean()
 
-    class DataBean : Serializable {
+    class DataBean {
 
         var pageable: PageableBean? = null
         var isLast: Boolean = false
@@ -23,7 +22,7 @@ class JsonBeanPicture : Serializable {
         var isEmpty: Boolean = false
         var content = ArrayList<ContentBean>()
 
-        class PageableBean : Serializable {
+        class PageableBean {
             /**
              * sort : {"sorted":false,"unsorted":true,"empty":true}
              * pageSize : 20
@@ -53,7 +52,7 @@ class JsonBeanPicture : Serializable {
             }
         }
 
-        class SortBeanX : Serializable {
+        class SortBeanX {
             /**
              * sorted : false
              * unsorted : true
@@ -65,7 +64,7 @@ class JsonBeanPicture : Serializable {
             var isEmpty: Boolean = false
         }
 
-        class ContentBean : Serializable {
+        class ContentBean {
             /**
              * id : 402880e5672087880167208a3d450016
              * introduction : 这是一张我从p站下载的图片，很好看啊，真的很好看啊，所以把他放在自己的网站上，侵删
@@ -99,8 +98,9 @@ class JsonBeanPicture : Serializable {
             var createDate: String? = null
             var modifiedDate: String? = null
             var tagList = ArrayList<String>()
+            var color = 0
 
-            class UserBean : Serializable {
+            class UserBean {
                 /**
                  * id : 402880e566ddba740166ddbce0b70000
                  * phone : 1

@@ -3,7 +3,6 @@ package com.cordy.secdra.module.main.adapter
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.util.SparseIntArray
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.palette.graphics.Palette
@@ -22,7 +21,6 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         BaseQuickAdapter<JsonBeanPicture.DataBean.ContentBean, BaseViewHolder>(R.layout.item_rv_picture) {
 
     private lateinit var palette: Palette
-    val colorArray = SparseIntArray()
 
     override fun convert(helper: BaseViewHolder, item: JsonBeanPicture.DataBean.ContentBean) {
         val ivPicture = helper.getView<ScaleImageView>(R.id.iv_picture)
@@ -32,7 +30,7 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         ImageLoader.setBaseImageWithoutPlaceholderCallbackFromUrl(item.url, ivPicture, object : PictureLoadCallBack {
             override fun onCallBack(bitmap: Bitmap) {
                 if (helper.adapterPosition >= 0)
-                    getPictureMainColor(helper.adapterPosition, bitmap, helper)
+                    getPictureMainColor(bitmap, helper, item)
             }
         })
         ImageLoader.setPortrait200FromUrl(item.user?.head, ivPortrait)
@@ -42,10 +40,10 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         }
     }
 
-    private fun getPictureMainColor(pos: Int, bitmap: Bitmap, helper: BaseViewHolder) {
+    private fun getPictureMainColor(bitmap: Bitmap, helper: BaseViewHolder, item: JsonBeanPicture.DataBean.ContentBean) {
         palette = Palette.from(bitmap).generate()
         val color = palette.getMutedColor(Color.BLACK)
-        colorArray.put(pos, color)  //保存要改变vp背景的颜色，这样滑动退出的时候，SwipeableLayout背景色也不会随动
+        item.color = color  //保存要改变vp背景的颜色，这样滑动退出的时候，SwipeableLayout背景色也不会随动
         //设置文字颜色和item的背景色，文字颜色要注意深浅色
         (helper.itemView as CardView).setCardBackgroundColor(color)
         helper.getView<TextView>(R.id.tv_name).setTextColor(palette.getLightVibrantColor(Color.WHITE))

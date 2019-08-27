@@ -8,8 +8,8 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
-import com.cordy.secdra.module.main.view.MainActivity
 import com.cordy.secdra.module.pictureGal.adapter.VpPictureAdapter
+import com.cordy.secdra.utils.PicturesListMiddleware
 import com.cordy.secdra.widget.ImmersionBar
 import kotlinx.android.synthetic.main.activity_pic_gallery.*
 
@@ -30,7 +30,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     }
 
     private fun initVp() {
-        adapter = VpPictureAdapter(supportFragmentManager)
+        adapter = VpPictureAdapter(supportFragmentManager,PicturesListMiddleware.getPictureList())
         vpPicture.adapter = adapter
         intent?.run { vpPicture.setCurrentItem(intent?.getIntExtra("pos", 0)!!, false) }
         vpPicture.addOnPageChangeListener(this)
@@ -57,12 +57,17 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     }
 
     private fun changeBgColor(pos: Int) {
-        MainActivity.adapter?.colorArray?.get(pos)?.let { vpPicture.setBackgroundColor(it) }  //改变背景颜色
+        PicturesListMiddleware.getPictureList()?.get(pos)?.color?.let { vpPicture.setBackgroundColor(it) }  //改变背景颜色
     }
 
     override fun onBackPressed() {
         setResult(RESULT_OK, Intent().putExtra("pos", vpPicture.currentItem))
         supportFinishAfterTransition()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        PicturesListMiddleware.clearPictureList()   //清空PictureList，防止内存泄漏
     }
 
     override fun initView() {
