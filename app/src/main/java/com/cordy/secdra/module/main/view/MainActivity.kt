@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.SharedElementCallback
 import androidx.core.content.ContextCompat
@@ -55,8 +56,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
-        window.navigationBarColor = ContextCompat.getColor(this, R.color.navigation_Transparent)
-        window.statusBarColor = ContextCompat.getColor(this, R.color.navigation_Transparent)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.navigationTransparent)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.navigationTransparent)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
@@ -148,7 +149,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.toolbar -> rvPicture.scrollToPosition(0)
+            R.id.fb_top -> rvPicture.scrollToPosition(0)
         }
     }
 
@@ -165,6 +166,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh = srl_refresh
         rvPicture = rv_picture
         srlRefresh.setOnRefreshListener(this)
+        fb_top.setOnClickListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
         srlRefresh.post { srlRefresh.isRefreshing = true }
@@ -176,8 +178,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
         adapter.footerLayout?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
-        toolbar.setOnClickListener(this)
         setToolBarHeightAndPadding()
+        setFloatingActionButtonPadding(navigationBarHeight)
     }
 
     private fun setToolBarHeightAndPadding() {
@@ -191,6 +193,12 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
                     srlRefresh.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+    }
+
+    private fun setFloatingActionButtonPadding(navigationBarHeight: Int) {
+        val param = fb_top.layoutParams as CoordinatorLayout.LayoutParams
+        param.bottomMargin = param.bottomMargin + navigationBarHeight
+        fb_top.layoutParams = param
     }
 
     private fun isDrawerOpen(): Boolean {

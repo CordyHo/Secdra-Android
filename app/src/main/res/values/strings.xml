@@ -10,4 +10,5 @@
     <string name="requestStoragePermissionToast">请授予存储权限</string>
     <string name="saveSuccess">保存成功！</string>
     <string name="saveFailure">保存失败，请重新获取图片！</string>
+    <string name="search">搜索</string>
 </resources>

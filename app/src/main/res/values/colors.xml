@@ -5,5 +5,6 @@
     <color name="colorAccent">#FB7268</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
-    <color name="navigation_Transparent">#25000000</color>
+    <color name="navigationTransparent">#25000000</color>
+    <color name="bgTransparent">#40000000</color>
 </resources>
