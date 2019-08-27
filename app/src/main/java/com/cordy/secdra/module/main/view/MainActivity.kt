@@ -52,7 +52,6 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
-    private var shouldLoadMore = true  // VP滑动时通知RV滚动会导致加载更多，会导致VP的adapter的数据出问题而崩溃
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -65,17 +64,6 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         setViewData()
         initBroadcastReceiver()
         exitShareElementCallback()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        adapter.loadMoreComplete()   //回调一下才会加载更多
-        shouldLoadMore = true
-    }
-
-    override fun onPause() {
-        super.onPause()
-        shouldLoadMore = false
     }
 
     override fun onActivityReenter(resultCode: Int, data: Intent) {
@@ -158,8 +146,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     override fun onLoadMoreRequested() {
-        if (shouldLoadMore)
-            model.getMainPictureFromUrl(page)
+        model.getMainPictureFromUrl(page)
     }
 
     override fun onClick(v: View) {
