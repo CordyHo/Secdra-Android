@@ -33,7 +33,12 @@
                         android:id="@+id/iv_portrait"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
+                        android:background="@null"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="@drawable/bg_ripple"
                         android:src="@drawable/ic_icon"
+                        android:stateListAnimator="@drawable/selector_state_list_animator"
                         tools:ignore="ContentDescription" />
 
                 </androidx.appcompat.widget.Toolbar>
