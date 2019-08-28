@@ -210,7 +210,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         ivPortraitDrawer = nvNavigation.getHeaderView(0).iv_portraitDrawer
         ivBackground = nvNavigation.getHeaderView(0).iv_background
         tvName = nvNavigation.getHeaderView(0).tv_name
-        nvNavigation.getHeaderView(0).lv_userInfo.setPadding(0, ScreenUtils.dp2px(this, 20f) + ScreenUtils.getStatusHeight(this), 0, 0)
+        nvNavigation.getHeaderView(0).lv_userInfo.setPadding(0, ScreenUtils.dp2px(this, 15f) + ScreenUtils.getStatusHeight(this), 0, 0)
     }
 
     private fun setToolBarHeightAndPadding() {
