@@ -7,4 +7,5 @@
     <color name="white">#ffffff</color>
     <color name="navigationTransparent">#25000000</color>
     <color name="bgTransparent">#40000000</color>
+    <color name="whiteTransparent">#72FFFFFF</color>
 </resources>

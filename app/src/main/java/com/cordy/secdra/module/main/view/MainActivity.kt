@@ -153,6 +153,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
             R.id.fb_top -> rvPicture.scrollToPosition(0)
 
             R.id.iv_portrait -> openDrawer()
+
+            R.id.tv_search ->ToastUtil.showToastShort("去搜索！")
         }
     }
 
@@ -171,6 +173,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh.setOnRefreshListener(this)
         iv_portrait.setOnClickListener(this)
         fb_top.setOnClickListener(this)
+        tv_search.setOnClickListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
         srlRefresh.post { srlRefresh.isRefreshing = true }
