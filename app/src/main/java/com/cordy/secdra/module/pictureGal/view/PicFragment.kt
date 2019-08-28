@@ -63,7 +63,6 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
             override fun onCallBack(bitmap: Bitmap?, file: File?) {
                 activity.runOnUiThread {
                     pbProgress.visibility = View.GONE
-                    bitmap?.let { ivPictureOrigin.setImageBitmap(it) }
                     activity.supportStartPostponedEnterTransition()  //加载图片成功后才重新开启元素共享动画，更连贯
                 }
             }
