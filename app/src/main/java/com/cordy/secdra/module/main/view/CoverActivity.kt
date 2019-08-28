@@ -25,7 +25,7 @@ class CoverActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.cordy.secdra.R.layout.activity_cover)
         //隐藏SystemBar
-        val uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE
+        val uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         window.decorView.systemUiVisibility = uiOptions
         Handler().postDelayed({
             if (AccountManager.isSignIn)
@@ -33,7 +33,7 @@ class CoverActivity : AppCompatActivity() {
             else
                 startActivity(Intent(this, LoginActivity::class.java))
             finish()
-        }, 12800)
+        }, 800)
     }
 
     override fun onBackPressed() {}

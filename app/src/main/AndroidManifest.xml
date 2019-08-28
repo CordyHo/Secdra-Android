@@ -26,7 +26,6 @@
         <activity
             android:name=".module.main.view.CoverActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,13 +37,13 @@
         <activity
             android:name=".module.main.view.MainActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".module.pictureGal.view.PicGalleryActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
         <activity
