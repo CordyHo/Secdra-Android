@@ -35,7 +35,9 @@ class PermissionActivity : AppCompatActivity() {
                         .setCancelable(true)
                         .setMessage(getString(R.string.requestStoragePermission))
                         .setPositiveButton(getString(R.string.giveCPermission)) { _, _ -> requestPermission() }
-                        .setNegativeButton("取消") { _, _ -> permissionDenied() }.show()
+                        .setNegativeButton("取消") { _, _ -> permissionDenied() }
+                        .setOnDismissListener { permissionDenied() }
+                        .show()
             } else if (!(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                     && !ActivityCompat.shouldShowRequestPermissionRationale(this, permissionName)) {
                 //用户点了不再显示

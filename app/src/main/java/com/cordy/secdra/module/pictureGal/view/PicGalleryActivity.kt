@@ -25,7 +25,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         setContentView(R.layout.activity_pic_gallery)
         initView()
         initVp()
-        supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
+        supportPostponeEnterTransition()  //延迟元素共享动画，更连贯
         enterShareElementCallback()
     }
 
