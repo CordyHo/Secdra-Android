@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver.OnPreDrawListener
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.cordy.secdra.R
@@ -62,6 +61,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
         ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {  //原图
             override fun onCallBack(bitmap: Bitmap) {
                 pbProgress.visibility = View.GONE
+                activity.supportStartPostponedEnterTransition()  //加载图片成功后才重新开启元素共享动画，更连贯
             }
         })
     }
@@ -110,12 +110,5 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
         ivPictureOrigin = rootView.iv_pictureOrigin
         ivPictureOrigin.setOnLongClickListener(this)
         ivPictureOrigin.setOnClickListener(this)
-        ivPictureOrigin.viewTreeObserver.addOnPreDrawListener(object : OnPreDrawListener {
-            override fun onPreDraw(): Boolean {
-                ivPictureOrigin.viewTreeObserver.removeOnPreDrawListener(this)
-                activity.supportStartPostponedEnterTransition()  //延迟元素共享动画，更连贯
-                return true
-            }
-        })
     }
 }
