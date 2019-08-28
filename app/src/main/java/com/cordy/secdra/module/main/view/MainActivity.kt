@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.SharedElementCallback
@@ -34,15 +35,23 @@ import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.utils.*
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.ScaleImageView
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.layout_drawer_start.*
+import kotlinx.android.synthetic.main.layout_navigation_view_header.view.*
 
 @SuppressLint("InflateParams")
 class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
         BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private lateinit var dlDrawer: DrawerLayout
+    private lateinit var nvNavigation: NavigationView
+    private lateinit var ivPortraitDrawer: CircleImageView
+    private lateinit var ivBackground: ImageView
+    private lateinit var tvName: TextView
     private lateinit var srlRefresh: SwipeRefreshLayout
     private lateinit var rvPicture: RecyclerView
     private val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
@@ -61,6 +70,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        initNavigationView()
         getDataFromUrl()
         setViewData()
         initBroadcastReceiver()
@@ -97,6 +107,9 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun setViewData() {    //设置用户信息
         val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
         ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portrait)
+        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, ivPortraitDrawer)
+        ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, ivBackground)
+        tvName.text = jsonBeanUser.data?.name
     }
 
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
@@ -171,6 +184,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun initView() {
         dlDrawer = dl_drawer
+        nvNavigation = nv_navigation
         srlRefresh = srl_refresh
         rvPicture = rv_picture
         srlRefresh.setOnRefreshListener(this)
@@ -190,6 +204,13 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         adapter.footerLayout?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
         setToolBarHeightAndPadding()
         setFloatingActionButtonPadding(navigationBarHeight)
+    }
+
+    private fun initNavigationView() {
+        ivPortraitDrawer = nvNavigation.getHeaderView(0).iv_portraitDrawer
+        ivBackground = nvNavigation.getHeaderView(0).iv_background
+        tvName = nvNavigation.getHeaderView(0).tv_name
+        nvNavigation.getHeaderView(0).lv_userInfo.setPadding(0, ScreenUtils.dp2px(this, 20f) + ScreenUtils.getStatusHeight(this), 0, 0)
     }
 
     private fun setToolBarHeightAndPadding() {
