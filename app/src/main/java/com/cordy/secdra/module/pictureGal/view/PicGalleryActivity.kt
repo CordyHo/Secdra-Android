@@ -20,12 +20,12 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     private lateinit var localBroadcastManager: LocalBroadcastManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        supportPostponeEnterTransition()  //延迟元素共享动画，更连贯
         ImmersionBar(this).setImmersionBar()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pic_gallery)
         initView()
         initVp()
-        supportPostponeEnterTransition()  //延迟元素共享动画，更连贯
         enterShareElementCallback()
     }
 
