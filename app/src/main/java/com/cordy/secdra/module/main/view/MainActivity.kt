@@ -150,7 +150,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     override fun getPictureListFailure(msg: String?) {
-        rvPicture.visibility = View.INVISIBLE
+        if (rvPicture.childCount <= 0)
+            rvPicture.visibility = View.INVISIBLE
         stopRefresh()
         ToastUtil.showToastShort(msg)
     }

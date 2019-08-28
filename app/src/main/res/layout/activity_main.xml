@@ -87,7 +87,8 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="150dp"
                     android:src="@drawable/ic_rv_placeholder"
                     tools:ignore="ContentDescription" />
 
@@ -95,7 +96,8 @@
                     android:id="@+id/rv_picture"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white" />
+                    android:background="@color/white"
+                    android:visibility="invisible" />
 
             </FrameLayout>
 
