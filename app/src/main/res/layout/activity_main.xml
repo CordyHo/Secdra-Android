@@ -60,7 +60,7 @@
                             android:hint="@string/search"
                             android:paddingStart="17dp"
                             android:paddingTop="6dp"
-                            android:paddingEnd="10dp"
+                            android:paddingEnd="0dp"
                             android:paddingBottom="6dp"
                             android:textColorHint="@color/white"
                             android:textSize="14sp" />
