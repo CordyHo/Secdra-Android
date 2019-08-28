@@ -30,7 +30,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     }
 
     private fun initVp() {
-        adapter = VpPictureAdapter(supportFragmentManager,PicturesListMiddleware.getPictureList())
+        adapter = VpPictureAdapter(supportFragmentManager, PicturesListMiddleware.getPictureList())
         vpPicture.adapter = adapter
         intent?.run { vpPicture.setCurrentItem(intent?.getIntExtra("pos", 0)!!, false) }
         vpPicture.addOnPageChangeListener(this)
