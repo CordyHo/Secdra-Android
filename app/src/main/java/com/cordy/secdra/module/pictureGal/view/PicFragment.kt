@@ -20,6 +20,7 @@ import com.cordy.secdra.widget.ImmersionBar
 import com.github.chrisbanes.photoview.PhotoView
 import com.serhatsurguvec.swipablelayout.SwipeableLayout
 import kotlinx.android.synthetic.main.fragment_picture.view.*
+import java.io.File
 
 class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, SwipeableLayout.OnLayoutCloseListener, View.OnClickListener {
 
@@ -58,10 +59,13 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
     }
 
     private fun setPicture() {
-        ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {  //原图
-            override fun onCallBack(bitmap: Bitmap) {
-                pbProgress.visibility = View.GONE
-                activity.supportStartPostponedEnterTransition()  //加载图片成功后才重新开启元素共享动画，更连贯
+        ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {
+            override fun onCallBack(bitmap: Bitmap?, file: File?) {
+                activity.runOnUiThread {
+                    pbProgress.visibility = View.GONE
+                    bitmap?.let { ivPictureOrigin.setImageBitmap(it) }
+                    activity.supportStartPostponedEnterTransition()  //加载图片成功后才重新开启元素共享动画，更连贯
+                }
             }
         })
     }

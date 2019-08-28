@@ -41,7 +41,7 @@ object ImageLoader {
 
                         override fun onResourceReady(drawable: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             val bd = drawable as BitmapDrawable
-                            pictureLoadCallBack?.onCallBack(bd.bitmap)
+                            pictureLoadCallBack?.onCallBack(bd.bitmap, null)
                             return false
                         }
 
@@ -66,7 +66,7 @@ object ImageLoader {
 
                         override fun onResourceReady(drawable: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             val bd = drawable as BitmapDrawable
-                            pictureLoadCallBack.onCallBack(bd.bitmap)
+                            pictureLoadCallBack.onCallBack(bd.bitmap, null)
                             return false
                         }
 

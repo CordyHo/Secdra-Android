@@ -7,6 +7,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.cordy.secdra.R
 import com.cordy.secdra.SecdraApplication
 import java.io.File
@@ -21,7 +25,7 @@ object SavePictureUtils {
             override fun run() {
                 try {
                     createPictureFolder()
-                    val cacheFile = getGlidePictureFromCache(url)  //得到Glide缓存图片，要在后台线程执行
+                    val cacheFile = getGlidePictureFromCache(url, null)  //得到Glide缓存图片，要在后台线程执行
                     val newFile = File(PICTURE_PATH + url)    // 新建一个复制缓存图片的文件
                     newFile.run {
                         cacheFile?.copyTo(this, true)   //把缓存图片复制到新文件
@@ -37,12 +41,22 @@ object SavePictureUtils {
         }.start()
     }
 
-    fun getGlidePictureFromCache(url: Any?): File? {
+    fun getGlidePictureFromCache(url: Any?, pictureLoadCallBack: PictureLoadCallBack?): File? {
         SecdraApplication.application?.run {
             return try {
                 Glide.with(this)
                         .asFile()
                         .load(AppParamUtils.base_img_url + url)
+                        .addListener(object : RequestListener<File> {
+                            override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<File>?, isFirstResource: Boolean): Boolean {
+                                return false
+                            }
+
+                            override fun onResourceReady(file: File?, model: Any?, target: Target<File>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                                pictureLoadCallBack?.onCallBack(null, file)
+                                return false
+                            }
+                        })
                         .submit()
                         .get()
             } catch (e: Exception) {
