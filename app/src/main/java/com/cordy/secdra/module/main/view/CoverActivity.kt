@@ -8,6 +8,7 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import com.cordy.secdra.R
 import com.cordy.secdra.module.user.view.LoginActivity
 import com.cordy.secdra.utils.AccountManager
 
@@ -23,7 +24,7 @@ class CoverActivity : AppCompatActivity() {
             window.attributes = params
         }
         super.onCreate(savedInstanceState)
-        setContentView(com.cordy.secdra.R.layout.activity_cover)
+        setContentView(R.layout.activity_cover)
         //隐藏SystemBar
         val uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         window.decorView.systemUiVisibility = uiOptions

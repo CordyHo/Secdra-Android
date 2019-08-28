@@ -17,8 +17,6 @@ object ImageLoader {
 
     fun setBaseImageFromUrl(url: Any?, iv_image: ImageView) {  //普通图片小图
         val options = RequestOptions()
-                .error(com.cordy.secdra.R.mipmap.ic_launcher)
-                .placeholder(com.cordy.secdra.R.mipmap.ic_launcher)
                 .fitCenter()
         application?.run {
             Glide.with(this)
@@ -93,8 +91,6 @@ object ImageLoader {
 
     fun setBackGroundImageFromUrl(url: Any?, iv_image: ImageView) {  //背景图原图
         val options = RequestOptions()
-                .error(com.cordy.secdra.R.mipmap.ic_launcher)
-                .placeholder(com.cordy.secdra.R.mipmap.ic_launcher)
                 .fitCenter()
         application?.run {
             Glide.with(this)
@@ -107,8 +103,6 @@ object ImageLoader {
 
     fun setPortrait200FromUrl(url: Any?, iv_image: ImageView) {
         val options = RequestOptions()
-                .error(com.cordy.secdra.R.mipmap.ic_launcher)
-                .placeholder(com.cordy.secdra.R.mipmap.ic_launcher)
                 .dontAnimate()
                 .fitCenter()
         application?.run {
@@ -121,8 +115,6 @@ object ImageLoader {
 
     fun setPortrait500FromUrl(url: Any?, iv_image: ImageView) {
         val options = RequestOptions()
-                .error(com.cordy.secdra.R.mipmap.ic_launcher)
-                .placeholder(com.cordy.secdra.R.mipmap.ic_launcher)
                 .dontAnimate()
                 .fitCenter()
         application?.run {

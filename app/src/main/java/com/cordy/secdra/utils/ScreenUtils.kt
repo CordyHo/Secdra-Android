@@ -20,10 +20,6 @@ import com.cordy.secdra.R
  */
 class ScreenUtils private constructor() {
 
-    init {
-        /* cannot be instantiated */
-        throw UnsupportedOperationException("cannot be instantiated")
-    }
 
     companion object {
 
