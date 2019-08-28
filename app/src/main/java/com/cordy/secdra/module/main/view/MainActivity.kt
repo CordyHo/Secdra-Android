@@ -39,9 +39,8 @@ import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_main.*
 
 @SuppressLint("InflateParams")
-class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener,
-    RvItemClickListener,
-    BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
+        BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private lateinit var dlDrawer: DrawerLayout
     private lateinit var srlRefresh: SwipeRefreshLayout
@@ -75,18 +74,14 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun exitShareElementCallback() {    //返回时元素共享处理
         setExitSharedElementCallback(object : SharedElementCallback() {
-            override fun onMapSharedElements(
-                names: MutableList<String>?,
-                sharedElements: MutableMap<String?, View>?
-            ) {
+            override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String?, View>?) {
                 bundle?.run {
                     val pos = bundle?.getInt("pos", 0)
                     sharedElements?.clear()
                     names?.clear()
                     val itemView = pos?.let { layoutManager.findViewByPosition(it) }
                     itemView?.run {
-                        val imageView =
-                            itemView.findViewById<ScaleImageView>(R.id.iv_picture) as View
+                        val imageView = itemView.findViewById<ScaleImageView>(R.id.iv_picture) as View
                         sharedElements?.set(pos.toString(), imageView)  // pos 作为元素共享的唯一tag
                     }
                     bundle = null
@@ -118,12 +113,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     override fun onItemClick(ivPicture: ImageView, pos: Int) {  //item点击事件
         bundle?.putInt("pos", pos)  //提前设置pos，防止第一次进入没有共享动画
         PicturesListMiddleware.setPictureList(adapter.data as ArrayList<JsonBeanPicture.DataBean.ContentBean>) //设置全局静态变量，用putExtra传递List给Activity的话，太大会炸掉
-        val options =
-            ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
-        startActivity(
-            Intent(this, PicGalleryActivity::class.java).putExtra("pos", pos),
-            options.toBundle()
-        ) // pos 作为元素共享的唯一tag
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
+        startActivity(Intent(this, PicGalleryActivity::class.java).putExtra("pos", pos), options.toBundle()) // pos 作为元素共享的唯一tag
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {
@@ -191,28 +182,18 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh.post { srlRefresh.isRefreshing = true }
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
-        rvPicture.addItemDecoration(
-            StaggeredGridItemDecoration(
-                StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(
-                    ScreenUtils.dp2px(this, 10f)
-                )
-            )
-        )
+        rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
         adapter.openLoadAnimation(ScaleInAnimation())
         adapter.setOnLoadMoreListener(this, rvPicture)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
-        adapter.footerLayout?.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            navigationBarHeight
-        )  //设置RV底部=导航栏高度
+        adapter.footerLayout?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
         setToolBarHeightAndPadding()
         setFloatingActionButtonPadding(navigationBarHeight)
     }
 
     private fun setToolBarHeightAndPadding() {
-        srlRefresh.viewTreeObserver.addOnGlobalLayoutListener(object :
-            ViewTreeObserver.OnGlobalLayoutListener {
+        srlRefresh.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val statusBarHeight = ScreenUtils.getStatusHeight(this@MainActivity)
                 val height = toolbar.measuredHeight
