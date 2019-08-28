@@ -76,20 +76,27 @@ class ImmersionBar(private val activity: Activity) {
     }
 
     private fun setTransparentBar(@ColorInt color: Int, alpha: Int) {
-            val window = activity.window
-            val decorView = window.decorView
-            val option = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
-            decorView.systemUiVisibility = option
+        val window = activity.window
+        val decorView = window.decorView
+        val option = (View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+        decorView.systemUiVisibility = option
 
-            val finalColor = if (alpha == 0)
-                Color.TRANSPARENT
-            else
-                Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color))
+        val finalColor = if (alpha == 0)
+            Color.TRANSPARENT
+        else
+            Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color))
 
-            window.navigationBarColor = finalColor
-            window.statusBarColor = finalColor
+        window.navigationBarColor = finalColor
+        window.statusBarColor = finalColor
+
+        //刘海适配全屏
+        if (Build.VERSION.SDK_INT >= 28) {
+            val params = window.attributes
+            params.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+            window.attributes = params
+        }
 
         /* else {
             val window = activity.window
