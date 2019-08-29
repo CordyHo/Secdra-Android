@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.ImageView
@@ -44,8 +45,8 @@ import kotlinx.android.synthetic.main.layout_drawer_start.*
 import kotlinx.android.synthetic.main.layout_navigation_view_header.view.*
 
 @SuppressLint("InflateParams")
-class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
-        BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, NavigationView.OnNavigationItemSelectedListener, RvItemClickListener,
+        DrawerLayout.DrawerListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private lateinit var dlDrawer: DrawerLayout
     private lateinit var nvNavigation: NavigationView
@@ -57,11 +58,12 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
     private val model = MPictureModel(this)
     private val adapter: PictureRvAdapter = PictureRvAdapter(this)
-    private var page = 1   // 第一页为0，第二页为1
-    private var lastClickTime: Long = 0
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
+    private var page = 1   // 第一页为0，第二页为1
+    private var lastClickTime: Long = 0
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
+    private var whichId = -1   //点击侧滑的菜单记录id，侧滑关闭后再根据id进行界面操作，提高体验
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -166,22 +168,36 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onClick(v: View) {
         when (v.id) {
+
             R.id.fb_top -> rvPicture.scrollToPosition(0)
 
             R.id.iv_portrait -> openDrawer()
 
             R.id.iv_menu -> openDrawer()
 
-            R.id.tv_search -> ToastUtil.showToastShort("去搜索！")
+            else -> setWhichId(v.id)    // else 的都是侧滑菜单里的id
+
         }
     }
 
-    override fun onRefresh() {
-        getDataFromUrl()
+    private fun setActionFromWhichId() {
+        if (whichId != -1)
+            when (whichId) {
+                R.id.action_logout -> ToastUtil.showToastShort("退出登录")
+
+                R.id.fl_header -> ToastUtil.showToastShort("个人中心")
+            }
+        whichId = -1
     }
 
-    private fun stopRefresh() {
-        srlRefresh.post { srlRefresh.isRefreshing = false }
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {   //侧滑菜单点击事件
+        setWhichId(item.itemId)
+        return false
+    }
+
+    private fun setWhichId(id: Int) {   //记录侧滑点击view的id
+        whichId = id
+        closeDrawer()
     }
 
     override fun initView() {
@@ -190,6 +206,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         srlRefresh = srl_refresh
         rvPicture = rv_picture
         srlRefresh.setOnRefreshListener(this)
+        dlDrawer.addDrawerListener(this)
+        nvNavigation.setNavigationItemSelectedListener(this)
         iv_portrait.setOnClickListener(this)
         iv_menu.setOnClickListener(this)
         fb_top.setOnClickListener(this)
@@ -210,6 +228,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     private fun initNavigationView() {
+        nvNavigation.getHeaderView(0).setOnClickListener(this)
         ivPortraitDrawer = nvNavigation.getHeaderView(0).iv_portraitDrawer
         ivBackground = nvNavigation.getHeaderView(0).iv_background
         tvName = nvNavigation.getHeaderView(0).tv_name
@@ -235,6 +254,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         fb_top.layoutParams = param
     }
 
+    override fun onDrawerClosed(drawerView: View) {  //侧滑关闭回调
+        setActionFromWhichId()
+    }
+
     private fun isDrawerOpen(): Boolean {
         return dlDrawer.isDrawerOpen(GravityCompat.START)
     }
@@ -245,6 +268,14 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun closeDrawer() {
         dlDrawer.closeDrawer(GravityCompat.START)
+    }
+
+    override fun onRefresh() {
+        getDataFromUrl()
+    }
+
+    private fun stopRefresh() {
+        srlRefresh.post { srlRefresh.isRefreshing = false }
     }
 
     override fun onDestroy() {
@@ -269,5 +300,14 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
                 lastClickTime = currentTime
             }
         }
+    }
+
+    override fun onDrawerOpened(drawerView: View) {
+    }
+
+    override fun onDrawerStateChanged(newState: Int) {
+    }
+
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
     }
 }
