@@ -31,5 +31,6 @@ object AccountManager {
         PreferencesHelper.setAppFlag(SIGN_TAG, false)
         PreferencesHelper.removeAppFlag(TOKEN)
         PreferencesHelper.removeAppFlag(USER_DETAILS)
+        PreferencesHelper.removeAppFlag(USER_ID)
     }
 }

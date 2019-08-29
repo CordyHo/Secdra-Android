@@ -58,6 +58,12 @@
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
+        <activity
+            android:name=".module.search.view.SearchListActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="user"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

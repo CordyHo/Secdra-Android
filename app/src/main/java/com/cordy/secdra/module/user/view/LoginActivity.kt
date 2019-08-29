@@ -74,6 +74,7 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
     override fun initView() {
         super.initView()
         etPhone = et_phone
+        etPhone.requestFocus()
         etPw = et_pw
         btn_login.setOnClickListener(this)
         iv_eye.setOnClickListener(this)

@@ -28,10 +28,12 @@ import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
+import com.cordy.secdra.module.main.dialog.LogoutDialog
 import com.cordy.secdra.module.main.interfaces.IPictureInterface
 import com.cordy.secdra.module.main.interfaces.RvItemClickListener
 import com.cordy.secdra.module.main.model.MPictureModel
 import com.cordy.secdra.module.pictureGal.view.PicGalleryActivity
+import com.cordy.secdra.module.search.view.SearchListActivity
 import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.utils.*
 import com.cordy.secdra.widget.ImmersionBar
@@ -175,6 +177,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
             R.id.iv_menu -> openDrawer()
 
+            R.id.tv_search -> startActivity(Intent(this, SearchListActivity::class.java))
+
             else -> setWhichId(v.id)    // else 的都是侧滑菜单里的id
 
         }
@@ -183,7 +187,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun setActionFromWhichId() {
         if (whichId != -1)
             when (whichId) {
-                R.id.action_logout -> ToastUtil.showToastShort("退出登录")
+                R.id.action_logout -> LogoutDialog().show(this)
 
                 R.id.fl_header -> ToastUtil.showToastShort("个人中心")
             }
