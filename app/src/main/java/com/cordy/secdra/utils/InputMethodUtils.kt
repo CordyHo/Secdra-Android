@@ -14,5 +14,6 @@ object InputMethodUtils {
     fun closeInputMethod(editText: EditText) {
         val imm = SecdraApplication.application?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editText.windowToken, 0)
+        editText.clearFocus()
     }
 }
