@@ -21,7 +21,6 @@ class MPictureSearchModel(private val iPictureInterface: IPictureInterface) {
                     override fun onRequestFailure(errMsg: String) {
                         iPictureInterface.getPictureListFailure(errMsg)
                     }
-
                 })
     }
 }

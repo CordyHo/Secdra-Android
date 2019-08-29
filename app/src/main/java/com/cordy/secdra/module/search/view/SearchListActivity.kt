@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.animation.ScaleInAnimation
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
@@ -17,13 +18,14 @@ import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.interfaces.IPictureInterface
 import com.cordy.secdra.module.main.interfaces.RvItemClickListener
 import com.cordy.secdra.module.search.model.MPictureSearchModel
+import com.cordy.secdra.utils.InputMethodUtils
 import com.cordy.secdra.utils.ScreenUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_search_list.*
 
-class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener
-        , BaseQuickAdapter.RequestLoadMoreListener {
+class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
+        BaseQuickAdapter.RequestLoadMoreListener {
 
     private var content = ""  //搜索的内容，因为有翻页，所以要保存输入的内容来请求
     private val model = MPictureSearchModel(this)
@@ -40,22 +42,14 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
         initView()
     }
 
-    private fun getDataFromUrl() {
-        if (!content.isBlank())
-            model.searchPictureFromUrl(content, 0)
-        else if (!etSearch.text.isNullOrBlank()) {
-            srlRefresh.post { srlRefresh.isRefreshing = true }
-            content = etSearch.text.toString().trim()
-            model.searchPictureFromUrl(content, 0)
-        } else
-            ToastUtil.showToastShort(getString(R.string.please_input))
-    }
-
     override fun onItemClick(ivPicture: ImageView, pos: Int) {
+
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {
         rvPicture.visibility = View.VISIBLE
+        hideKeyboard()
+        stopRefresh()
         if (!isLoadMore)   //第一次加载
             initRv(jsonBeanPicture)
         else
@@ -63,9 +57,12 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
     }
 
     private fun initRv(jsonBeanPicture: JsonBeanPicture) {
-        stopRefresh()
-        page = 1
-        adapter.setNewData(jsonBeanPicture.data.content)
+        if (jsonBeanPicture.data.content.isNotEmpty()) {
+            page = 1
+            rvPicture.scrollToPosition(0)  // 得到新数据后不会回到顶部，要调用滚到顶部
+            adapter.setNewData(jsonBeanPicture.data.content)
+        } else
+            rvPicture.visibility = View.INVISIBLE
     }
 
     private fun loadMoreRv(jsonBeanPicture: JsonBeanPicture) {
@@ -88,13 +85,29 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
         model.searchPictureFromUrl(content, page)
     }
 
+    private fun getDataFromUrl() {
+        if (content.isNotBlank())
+            model.searchPictureFromUrl(content, 0)
+        else
+            stopRefresh()
+    }
+
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        getDataFromUrl()
+        if (!etSearch.text.isNullOrBlank()) {
+            srlRefresh.post { srlRefresh.isRefreshing = true }
+            content = etSearch.text.toString().trim()
+            model.searchPictureFromUrl(content, 0)
+        } else
+            ToastUtil.showToastShort(getString(R.string.please_input))
         return true
     }
 
     override fun onRefresh() {
         getDataFromUrl()
+    }
+
+    private fun hideKeyboard() {
+        InputMethodUtils.closeInputMethod(etSearch)
     }
 
     private fun stopRefresh() {
@@ -104,15 +117,23 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
     override fun initView() {
         super.initView()
         etSearch = et_search
+        srlRefresh = srl_refresh
+        rvPicture = rv_picture
         etSearch.requestFocus()
         etSearch.setOnEditorActionListener(this)
-        srlRefresh = srl_refresh
         srlRefresh.setOnRefreshListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
-        srlRefresh.post { srlRefresh.isRefreshing = true }
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
+        adapter.openLoadAnimation(ScaleInAnimation())
+        adapter.setOnLoadMoreListener(this, rvPicture)
+        rvPicture.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
+                    hideKeyboard()
+            }
+        })
     }
 }
