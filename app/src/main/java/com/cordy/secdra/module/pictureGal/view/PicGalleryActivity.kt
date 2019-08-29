@@ -18,7 +18,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     private lateinit var vpPicture: ViewPager
     private lateinit var adapter: VpPictureAdapter
     private lateinit var localBroadcastManager: LocalBroadcastManager
-    private var tag: Int? = -1   //用来记录启动该activity的是哪个activity，区别发送滚动RV的广播
+    private var tag: String? = ""  //用来记录启动该activity的是哪个activity，区别发送滚动RV的广播
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportPostponeEnterTransition()  //延迟元素共享动画，更连贯，记得重新开启
@@ -76,7 +76,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     override fun initView() {
         vpPicture = vp_picture
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        tag = intent?.getIntExtra("tag", -1)
+        tag = intent?.getStringExtra("tag")
     }
 
     override fun onPageScrollStateChanged(state: Int) {

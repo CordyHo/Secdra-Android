@@ -49,6 +49,7 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var page = 1
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
+    private val tag = "SearchListActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +85,7 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent?.getIntExtra("tag", -1) == taskId) {
+                if (intent?.getStringExtra("tag") == tag) {
                     appbarLayout.setExpanded(false)
                     intent.run { rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0)) }
                 }
@@ -100,7 +101,7 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
         startActivity(Intent(this, PicGalleryActivity::class.java)
                 .putExtra("pos", pos)
-                .putExtra("tag", taskId), options.toBundle()) // pos 作为元素共享的唯一tag，taskId用于接收滚动RV广播
+                .putExtra("tag", "SearchListActivity"), options.toBundle()) // pos 作为元素共享的唯一tag，tag用于接收滚动RV广播
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {

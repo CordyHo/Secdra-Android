@@ -67,6 +67,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private var lastClickTime: Long = 0
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private var whichId = -1   //点击侧滑的菜单记录id，侧滑关闭后再根据id进行界面操作，提高体验
+    private val tag = "MainActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
@@ -120,7 +121,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent?.getIntExtra("tag", -1) == taskId) {
+                if (intent?.getStringExtra("tag") == tag) {
                     appbarLayout.setExpanded(false)
                     intent.run { rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0)) }
                 }
@@ -136,7 +137,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
         startActivity(Intent(this, PicGalleryActivity::class.java)
                 .putExtra("pos", pos)
-                .putExtra("tag", taskId), options.toBundle()) // pos 作为元素共享的唯一tag，taskId用于接收滚动RV广播
+                .putExtra("tag", tag), options.toBundle()) // pos 作为元素共享的唯一tag，tag用于接收滚动RV广播
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {
