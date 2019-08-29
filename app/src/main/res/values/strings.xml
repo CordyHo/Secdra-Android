@@ -11,4 +11,5 @@
     <string name="saveSuccess">保存成功！</string>
     <string name="saveFailure">保存失败，请重新获取图片！</string>
     <string name="search">搜索</string>
+    <string name="logout">退出登录</string>
 </resources>

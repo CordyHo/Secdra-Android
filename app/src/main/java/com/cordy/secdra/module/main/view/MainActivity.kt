@@ -170,6 +170,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
             R.id.iv_portrait -> openDrawer()
 
+            R.id.iv_menu -> openDrawer()
+
             R.id.tv_search -> ToastUtil.showToastShort("去搜索！")
         }
     }
@@ -189,6 +191,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         rvPicture = rv_picture
         srlRefresh.setOnRefreshListener(this)
         iv_portrait.setOnClickListener(this)
+        iv_menu.setOnClickListener(this)
         fb_top.setOnClickListener(this)
         tv_search.setOnClickListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
