@@ -1,11 +1,14 @@
 package com.cordy.secdra.module.search.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.app.SharedElementCallback
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -17,10 +20,13 @@ import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.interfaces.IPictureInterface
 import com.cordy.secdra.module.main.interfaces.RvItemClickListener
+import com.cordy.secdra.module.pictureGal.view.PicGalleryActivity
 import com.cordy.secdra.module.search.model.MPictureSearchModel
 import com.cordy.secdra.utils.InputMethodUtils
+import com.cordy.secdra.utils.PicturesListMiddleware
 import com.cordy.secdra.utils.ScreenUtils
 import com.cordy.secdra.utils.ToastUtil
+import com.cordy.secdra.widget.ScaleImageView
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_search_list.*
 
@@ -35,15 +41,43 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
     private val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
     private val adapter: PictureRvAdapter = PictureRvAdapter(this)
     private var page = 1
+    private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_list)
         initView()
+        exitShareElementCallback()
     }
 
-    override fun onItemClick(ivPicture: ImageView, pos: Int) {
+    override fun onActivityReenter(resultCode: Int, data: Intent) {
+        super.onActivityReenter(resultCode, data)
+        bundle = Bundle(data.extras)
+    }
 
+    private fun exitShareElementCallback() {    //返回时元素共享处理
+        setExitSharedElementCallback(object : SharedElementCallback() {
+            override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String?, View>?) {
+                bundle?.run {
+                    val pos = bundle?.getInt("pos", 0)
+                    sharedElements?.clear()
+                    names?.clear()
+                    val itemView = pos?.let { layoutManager.findViewByPosition(it) }
+                    itemView?.run {
+                        val imageView = itemView.findViewById<ScaleImageView>(R.id.iv_picture) as View
+                        sharedElements?.set(pos.toString(), imageView)  // pos 作为元素共享的唯一tag
+                    }
+                    bundle = null
+                }
+            }
+        })
+    }
+
+    override fun onItemClick(ivPicture: ImageView, pos: Int) {  //item点击事件
+        bundle?.putInt("pos", pos)  //提前设置pos，防止第一次进入没有共享动画
+        PicturesListMiddleware.setPictureList(adapter.data as ArrayList<JsonBeanPicture.DataBean.ContentBean>) //设置全局静态变量，用putExtra传递List给Activity的话，太大会炸掉
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
+        startActivity(Intent(this, PicGalleryActivity::class.java).putExtra("pos", pos), options.toBundle()) // pos 作为元素共享的唯一tag
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {
