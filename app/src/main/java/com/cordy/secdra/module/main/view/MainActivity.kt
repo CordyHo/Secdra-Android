@@ -45,6 +45,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_drawer_start.*
 import kotlinx.android.synthetic.main.layout_navigation_view_header.view.*
+import kotlinx.android.synthetic.main.view_float_button.*
 
 @SuppressLint("InflateParams")
 class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, NavigationView.OnNavigationItemSelectedListener, RvItemClickListener,
@@ -119,8 +120,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                appbarLayout.setExpanded(false)
-                intent?.run { rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0)) }
+                if (intent?.getIntExtra("tag", -1) == taskId) {
+                    appbarLayout.setExpanded(false)
+                    intent.run { rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0)) }
+                }
             }
         }
         localBroadcastManager = LocalBroadcastManager.getInstance(this)
@@ -131,7 +134,9 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         bundle?.putInt("pos", pos)  //提前设置pos，防止第一次进入没有共享动画
         PicturesListMiddleware.setPictureList(adapter.data as ArrayList<JsonBeanPicture.DataBean.ContentBean>) //设置全局静态变量，用putExtra传递List给Activity的话，太大会炸掉
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
-        startActivity(Intent(this, PicGalleryActivity::class.java).putExtra("pos", pos), options.toBundle()) // pos 作为元素共享的唯一tag
+        startActivity(Intent(this, PicGalleryActivity::class.java)
+                .putExtra("pos", pos)
+                .putExtra("tag", taskId), options.toBundle()) // pos 作为元素共享的唯一tag，taskId用于接收滚动RV广播
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {

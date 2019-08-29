@@ -91,4 +91,6 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <include layout="@layout/view_float_button" />
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

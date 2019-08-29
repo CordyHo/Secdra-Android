@@ -115,20 +115,7 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_top"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="10dp"
-            android:alpha=".7"
-            android:rotation="-90"
-            android:src="@android:drawable/ic_media_ff"
-            app:fabSize="normal"
-            app:hoveredFocusedTranslationZ="10dp"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-            app:pressedTranslationZ="10dp"
-            app:rippleColor="@color/bgTransparent" />
+        <include layout="@layout/view_float_button" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
