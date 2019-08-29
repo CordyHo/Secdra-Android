@@ -85,7 +85,16 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
         model.searchPictureFromUrl(content, page)
     }
 
-    private fun getDataFromUrl() {
+    private fun searchDataFromUrl() {   // 搜索的请求方法
+        if (!etSearch.text.isNullOrBlank()) {
+            srlRefresh.post { srlRefresh.isRefreshing = true }
+            content = etSearch.text.toString().trim()
+            model.searchPictureFromUrl(content, 0)
+        } else
+            ToastUtil.showToastShort(getString(R.string.please_input))
+    }
+
+    private fun useContentGetDataFromUrl() {   // 刷新的请求方法
         if (content.isNotBlank())
             model.searchPictureFromUrl(content, 0)
         else
@@ -93,17 +102,12 @@ class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPic
     }
 
     override fun onEditorAction(p0: TextView?, p1: Int, p2: KeyEvent?): Boolean {
-        if (!etSearch.text.isNullOrBlank()) {
-            srlRefresh.post { srlRefresh.isRefreshing = true }
-            content = etSearch.text.toString().trim()
-            model.searchPictureFromUrl(content, 0)
-        } else
-            ToastUtil.showToastShort(getString(R.string.please_input))
+        searchDataFromUrl()
         return true
     }
 
     override fun onRefresh() {
-        getDataFromUrl()
+        useContentGetDataFromUrl()
     }
 
     private fun hideKeyboard() {
