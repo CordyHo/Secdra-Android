@@ -124,19 +124,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.getStringExtra("tag") == tag) {
                     appbarLayout.setExpanded(false)
-                    intent.run {
-                        rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
-                        when (intent.getStringExtra("upOrDown")) {
-                            "up" -> {
-                                val statusBarHeight = ScreenUtils.getStatusHeight(this@MainActivity)
-                                rvPicture.scrollBy(0, -statusBarHeight)  //因为沉浸状态栏，所以要往下滑状态栏高度的距离
-                            }
-                            else -> {
-                                val navBarHeight = ScreenUtils.getNavigationBarHeight(this@MainActivity)
-                                rvPicture.scrollBy(0, navBarHeight)   //因为沉浸导航栏，所以要往上滑导航栏高度的距离
-                            }
-                        }
-                    }
+                    intent.run { rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0)) }
                 }
             }
         }
