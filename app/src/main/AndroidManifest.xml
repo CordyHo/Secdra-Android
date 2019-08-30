@@ -65,6 +65,12 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustPan|stateVisible" />
 
+        <activity
+            android:name=".module.user.view.UserDetailsActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:screenOrientation="user"
+            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

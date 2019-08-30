@@ -35,6 +35,7 @@ import com.cordy.secdra.module.main.model.MPictureModel
 import com.cordy.secdra.module.pictureGal.view.PicGalleryActivity
 import com.cordy.secdra.module.search.view.SearchListActivity
 import com.cordy.secdra.module.user.bean.JsonBeanUser
+import com.cordy.secdra.module.user.view.UserDetailsActivity
 import com.cordy.secdra.utils.*
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.ScaleImageView
@@ -195,7 +196,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
             when (whichId) {
                 R.id.action_logout -> LogoutDialog().show(this)
 
-                R.id.fl_header -> ToastUtil.showToastShort("个人中心")
+                R.id.fl_header -> startActivityForResult(Intent(this, UserDetailsActivity::class.java), 1)
             }
         whichId = -1
     }
