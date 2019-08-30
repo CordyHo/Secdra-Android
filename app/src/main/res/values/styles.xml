@@ -22,8 +22,6 @@
     </style>
 
     <!-- toolbar白色返回键样式 -->
-    <style name="AppTheme.ToolBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-        <item name="android:background">@color/colorPrimary</item>
-    </style>
+    <style name="AppTheme.ToolBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
 </resources>
