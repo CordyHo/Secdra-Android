@@ -19,6 +19,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     private lateinit var adapter: VpPictureAdapter
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var tag: String? = ""  //用来记录启动该activity的是哪个activity，区别发送滚动RV的广播
+    private var currentPage = 0   //记录当前Vp的位置，左右滑动时判断是滑下一页还是上一页，发广播更新RV向上滚或向下滚添加系统栏的高度偏移
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportPostponeEnterTransition()  //延迟元素共享动画，更连贯，记得重新开启
@@ -53,10 +54,16 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     }
 
     override fun onPageSelected(pos: Int) {  //滑动VP发送广播滚动RV到相应位置
+        val upOrDown = when {
+            currentPage < pos -> "down"
+            else -> "up"
+        }
         changeBgColor(pos)
+        currentPage = pos
         localBroadcastManager.sendBroadcast(Intent("scrollPos")
                 .putExtra("scrollPos", vpPicture.currentItem)
-                .putExtra("tag", tag))
+                .putExtra("tag", tag)
+                .putExtra("upOrDown", upOrDown))
     }
 
     private fun changeBgColor(pos: Int) {
