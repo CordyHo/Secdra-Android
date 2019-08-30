@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Build
 import android.util.DisplayMetrics
@@ -22,6 +23,28 @@ class ScreenUtils private constructor() {
 
 
     companion object {
+
+        const val STATUS_BAR_TXT_DARK = 0
+        const val STATUS_BAR_TXT_LIGHT = 1
+
+        fun setStatusBariImmerse(context: Activity) {
+            context.window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            context.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            context.window.statusBarColor = Color.TRANSPARENT
+        }
+
+        fun setStatusBariImmerse(context: Activity, DarkOrLight: Int) {
+            context.window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            context.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            context.window.statusBarColor = Color.TRANSPARENT
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (DarkOrLight == STATUS_BAR_TXT_DARK)
+                    context.window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR)//状态栏深色文字
+                else if (DarkOrLight == STATUS_BAR_TXT_LIGHT)
+                    context.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE //状态栏默认颜色文字
+            }
+        }
 
         fun setStatusBarTxtColor(context: Activity) {
             if (Build.VERSION.SDK_INT < 26) {

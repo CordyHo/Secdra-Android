@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewTreeObserver
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -39,6 +38,7 @@ import com.cordy.secdra.module.user.view.UserDetailsActivity
 import com.cordy.secdra.utils.*
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.ScaleImageView
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
@@ -234,7 +234,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
         adapter.footerLayout?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
-        setToolBarHeightAndPadding()
+        setToolBarMargin()
         setFloatingActionButtonPadding(navigationBarHeight)
     }
 
@@ -246,17 +246,9 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         nvNavigation.getHeaderView(0).lv_userInfo.setPadding(0, ScreenUtils.dp2px(this, 15f) + ScreenUtils.getStatusHeight(this), 0, 0)
     }
 
-    private fun setToolBarHeightAndPadding() {
-        srlRefresh.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
-            override fun onGlobalLayout() {
-                val statusBarHeight = ScreenUtils.getStatusHeight(this@MainActivity)
-                val height = toolbar.measuredHeight
-                toolbar.layoutParams.height = height + statusBarHeight
-                toolbar.setPadding(0, statusBarHeight, 0, 0)
-                if (height > 0)
-                    srlRefresh.viewTreeObserver.removeOnGlobalLayoutListener(this)
-            }
-        })
+    private fun setToolBarMargin() {
+        val statusBarHeight = ScreenUtils.getStatusHeight(this)
+        (toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).setMargins(0, statusBarHeight, 0, 0)
     }
 
     private fun setFloatingActionButtonPadding(navigationBarHeight: Int) {
