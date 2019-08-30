@@ -15,7 +15,11 @@
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:scrimAnimationDuration="1"
+            app:scrimVisibleHeightTrigger="1dp"
             app:titleEnabled="false">
+
+        <!--不变色了 scrimAnimationDuration 艹-->
 
             <ImageView
                 android:id="@+id/iv_background"
