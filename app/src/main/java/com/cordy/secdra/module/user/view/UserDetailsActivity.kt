@@ -2,6 +2,7 @@ package com.cordy.secdra.module.user.view
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -39,6 +40,7 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
         ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portrait_small)
         tv_name.text = jsonBeanUser.data?.name
+        tv_introduce.text = jsonBeanUser.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }
     }
 
     private fun initVp() {
@@ -77,6 +79,17 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
         tabInfo = tab_info
         appbarLayout.addOnOffsetChangedListener(this)
         setToolBarMargin()
+        setInfoLayoutHeight()
+    }
+
+    private fun setInfoLayoutHeight() {
+        ctl_toolbar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                lv_info.setPadding(100,100,0,0)
+
+                ctl_toolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
     }
 
     private fun setToolBarMargin() {
