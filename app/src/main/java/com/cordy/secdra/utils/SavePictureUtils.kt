@@ -19,14 +19,14 @@ object SavePictureUtils {
 
     private val PICTURE_PATH = Environment.getExternalStorageDirectory().path + "/Pictures/"
 
-    fun savePicture(context: Activity?, url: String?) {
+    fun savePicture(context: Activity?, url: String?, headOrBgUrl: String = "") {   // headOrBgUrl 保存的是头像或者背景图时传入
 
         object : Thread() {
             override fun run() {
                 try {
                     createPictureFolder()
-                    val cacheFile = getGlidePictureFromCache(url, null)  //得到Glide缓存图片，要在后台线程执行
-                    val newFile = File(PICTURE_PATH + url)    // 新建一个复制缓存图片的文件
+                    val cacheFile = getGlidePictureFromCache(url, null, headOrBgUrl)  //得到Glide缓存图片，要在后台线程执行
+                    val newFile = File("$PICTURE_PATH$url.jpg")    // 新建一个复制缓存图片的文件
                     newFile.run {
                         cacheFile?.copyTo(this, true)   //把缓存图片复制到新文件
                         context?.runOnUiThread {
@@ -41,12 +41,15 @@ object SavePictureUtils {
         }.start()
     }
 
-    fun getGlidePictureFromCache(url: Any?, pictureLoadCallBack: PictureLoadCallBack?): File? {
+    fun getGlidePictureFromCache(url: Any?, pictureLoadCallBack: PictureLoadCallBack?, headOrBgUrl: String = ""): File? {
         SecdraApplication.application?.run {
             return try {
+                var prefix = headOrBgUrl
+                if (prefix.isBlank())
+                    prefix = AppParamUtils.base_img_url
                 Glide.with(this)
                         .asFile()
-                        .load(AppParamUtils.base_img_url + url)
+                        .load(prefix + url)
                         .addListener(object : RequestListener<File> {
                             override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<File>?, isFirstResource: Boolean): Boolean {
                                 return false

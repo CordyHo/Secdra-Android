@@ -40,9 +40,9 @@ class PictureViewerActivity : BaseActivity(), IPermissionCallback {
 
     override fun permissionGranted() {
         when (intent?.action) {
-            "head" -> SavePictureUtils.savePicture(this, AppParamUtils.portrait_img_url + intent?.getStringExtra("url"))
+            "head" -> SavePictureUtils.savePicture(this, intent?.getStringExtra("url"), AppParamUtils.portrait_img_url)
 
-            "bg" -> SavePictureUtils.savePicture(this, AppParamUtils.back_ground_img_url + intent?.getStringExtra("url"))
+            "bg" -> SavePictureUtils.savePicture(this, intent?.getStringExtra("url"), AppParamUtils.back_ground_img_url)
 
             else -> SavePictureUtils.savePicture(this, AppParamUtils.base_img_url + intent?.getStringExtra("url"))
         }
