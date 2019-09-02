@@ -14,17 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:scrimAnimationDuration="1"
-            app:scrimVisibleHeightTrigger="1dp"
-            app:titleEnabled="false">
-
-        <!--不变色了 scrimAnimationDuration 艹-->
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
+            app:scrimAnimationDuration="1000">
 
             <ImageView
                 android:id="@+id/iv_background"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 app:layout_collapseMode="parallax"
                 tools:ignore="ContentDescription" />
@@ -32,7 +28,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="?attr/actionBarSize"
                 android:theme="@style/AppTheme.ToolBarTheme"
                 app:contentInsetStart="0dp"
                 app:contentInsetStartWithNavigation="0dp"
