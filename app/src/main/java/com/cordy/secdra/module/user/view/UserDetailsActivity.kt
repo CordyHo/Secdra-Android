@@ -1,9 +1,11 @@
 package com.cordy.secdra.module.user.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
@@ -22,10 +24,11 @@ import kotlinx.android.synthetic.main.activity_user_details.*
 import java.util.*
 import kotlin.math.abs
 
-class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListener {
+class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
     private lateinit var vpInfo: ViewPager
     private lateinit var tabInfo: TabLayout
+    private var jsonBeanUser = JsonBeanUser()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ScreenUtils.setStatusBariImmerse(this)
@@ -37,10 +40,10 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
     }
 
     private fun setViewData() {
-        val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
+        jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
-        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portraitSmall)
-        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portraitBig)
+        ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, iv_portraitSmall)
+        ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, iv_portraitBig)
         tv_name.text = jsonBeanUser.data?.name
         tv_nameBig.text = jsonBeanUser.data?.name
         tv_introduce.text = jsonBeanUser.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }
@@ -79,10 +82,27 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
         }
     }
 
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.iv_portraitBig ->
+                startActivity(Intent(this, PictureViewerActivity::class.java)
+                        .setAction("head")
+                        .putExtra("url", jsonBeanUser.data?.head),
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(this, iv_portraitBig, "picture").toBundle())
+
+            R.id.iv_background -> startActivity(Intent(this, PictureViewerActivity::class.java)
+                    .setAction("bg")
+                    .putExtra("url", jsonBeanUser.data?.background),
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this, iv_background, "picture").toBundle())
+        }
+    }
+
     override fun initView() {
         super.initView()
         vpInfo = vp_info
         tabInfo = tab_info
+        iv_portraitBig.setOnClickListener(this)
+        iv_background.setOnClickListener(this)
         appbarLayout.addOnOffsetChangedListener(this)
         setToolBarMargin()
         setInfoLayoutHeight()

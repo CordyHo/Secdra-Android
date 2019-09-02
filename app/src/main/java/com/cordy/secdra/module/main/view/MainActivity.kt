@@ -113,8 +113,8 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun setViewData() {    //设置用户信息
         val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
-        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portrait)
-        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, ivPortraitDrawer)
+        ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, iv_portrait)
+        ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, ivPortraitDrawer)
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, ivBackground)
         tvName.text = jsonBeanUser.data?.name
     }

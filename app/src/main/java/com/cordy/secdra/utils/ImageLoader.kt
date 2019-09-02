@@ -51,7 +51,7 @@ object ImageLoader {
         }
     }
 
-    fun setOriginBaseImageWithCallbackFromUrl(url: Any?, iv_image: ImageView, pictureLoadCallBack: PictureLoadCallBack) {  //普通图片原图
+    fun setOriginBaseImageWithCallbackFromUrl(url: Any?, iv_image: ImageView, pictureLoadCallBack: PictureLoadCallBack?) {  //普通图片原图
         val options = RequestOptions()
                 .fitCenter()
         application?.run {
@@ -64,7 +64,7 @@ object ImageLoader {
 
                         override fun onResourceReady(drawable: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                             val bd = drawable as BitmapDrawable
-                            pictureLoadCallBack.onCallBack(bd.bitmap, null)
+                            pictureLoadCallBack?.onCallBack(bd.bitmap, null)
                             return false
                         }
 
@@ -88,13 +88,13 @@ object ImageLoader {
         }
     }
 
-    fun setPortrait200FromUrl(url: Any?, iv_image: ImageView) {
+    fun setPortraitFromUrl(url: Any?, iv_image: ImageView) {
         val options = RequestOptions()
                 .dontAnimate()
                 .fitCenter()
         application?.run {
             Glide.with(this)
-                    .load(AppParamUtils.portrait_img_url + url + AppParamUtils.thumb_portrait_img_200)
+                    .load(AppParamUtils.portrait_img_url + url)
                     .apply(options)
                     .into(iv_image)
         }

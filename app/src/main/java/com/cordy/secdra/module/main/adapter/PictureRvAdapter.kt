@@ -34,7 +34,7 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
                     getPictureMainColor(bitmap, helper, helper.adapterPosition)
             }
         })
-        ImageLoader.setPortrait200FromUrl(item.user?.head, ivPortrait)
+        ImageLoader.setPortraitFromUrl(item.user?.head, ivPortrait)
         tvName.text = item.name
         helper.itemView.setOnClickListener {
             rvItemClickListener?.onItemClick(ivPicture, helper.adapterPosition)

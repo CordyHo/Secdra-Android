@@ -12,10 +12,6 @@ object AppParamUtils {
 
     const val portrait_img_url = "http://secdrahead.secdra.com/"  //头像
 
-    const val thumb_portrait_img_200 = "-small200"
-
-    const val thumb_portrait_img_500 = "-small500"
-
     const val httpSuccess = 200
 
     const val key_token = "token"
