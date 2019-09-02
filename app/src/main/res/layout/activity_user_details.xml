@@ -16,10 +16,8 @@
             android:id="@+id/ctl_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:scrimAnimationDuration="1000"
-            app:titleEnabled="true">
+            android:animateLayoutChanges="true"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
 
             <ImageView
                 android:id="@+id/iv_background"
@@ -50,8 +48,7 @@
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/bg_ripple"
-                    android:src="@drawable/ic_icon"
-                    android:stateListAnimator="@drawable/selector_state_list_animator" />
+                    android:src="@drawable/ic_icon" />
 
                 <TextView
                     android:id="@+id/tv_nameBig"

@@ -70,10 +70,13 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
     }
 
     override fun onOffsetChanged(view: AppBarLayout?, verticalOffset: Int) {
-        if (abs(verticalOffset) >= appbarLayout.totalScrollRange)  //CollapsingToolbarLayout 完全收起
+        if (abs(verticalOffset) >= appbarLayout.totalScrollRange) { //CollapsingToolbarLayout 完全收起
             lv_title.visibility = View.VISIBLE
-        else
+            lv_info.visibility = View.INVISIBLE
+        } else {
             lv_title.visibility = View.INVISIBLE
+            lv_info.visibility = View.VISIBLE
+        }
     }
 
     override fun initView() {
