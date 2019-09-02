@@ -76,19 +76,6 @@ object ImageLoader {
         }
     }
 
-    fun setOriginBaseImageFromUrl(url: Any?, iv_image: ImageView) {  //普通图片原图
-        val options = RequestOptions()
-                .fitCenter()
-        application?.run {
-            Glide.with(this)
-                    .load(AppParamUtils.base_img_url + url)
-                    .apply(options)
-                    .transition(DrawableTransitionOptions().crossFade())
-                    .apply(options)
-                    .into(iv_image)
-        }
-    }
-
     fun setBackGroundImageFromUrl(url: Any?, iv_image: ImageView) {  //背景图原图
         val options = RequestOptions()
                 .fitCenter()
@@ -108,18 +95,6 @@ object ImageLoader {
         application?.run {
             Glide.with(this)
                     .load(AppParamUtils.portrait_img_url + url + AppParamUtils.thumb_portrait_img_200)
-                    .apply(options)
-                    .into(iv_image)
-        }
-    }
-
-    fun setPortrait500FromUrl(url: Any?, iv_image: ImageView) {
-        val options = RequestOptions()
-                .dontAnimate()
-                .fitCenter()
-        application?.run {
-            Glide.with(this)
-                    .load(AppParamUtils.portrait_img_url + url + AppParamUtils.thumb_portrait_img_500)
                     .apply(options)
                     .into(iv_image)
         }

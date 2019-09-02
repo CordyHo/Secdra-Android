@@ -16,4 +16,6 @@
     <string name="confirm">确认</string>
     <string name="cancel">取消</string>
     <string name="please_input">请输入内容</string>
+    <string name="works">作品</string>
+    <string name="collect">收藏</string>
 </resources>
