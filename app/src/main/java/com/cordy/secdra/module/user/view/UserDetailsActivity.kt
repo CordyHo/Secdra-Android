@@ -38,7 +38,8 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
     private fun setViewData() {
         val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
-        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portrait_small)
+        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portraitSmall)
+        ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portraitBig)
         tv_name.text = jsonBeanUser.data?.name
         tv_introduce.text = jsonBeanUser.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }
     }
@@ -85,7 +86,7 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
     private fun setInfoLayoutHeight() {
         ctl_toolbar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                lv_info.setPadding(100,100,0,0)
+                lv_info.setPadding(100, 100, 0, 0)
 
                 ctl_toolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
