@@ -2,6 +2,7 @@ package com.cordy.secdra.module.user.view
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -86,9 +87,15 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
     private fun setInfoLayoutHeight() {
         ctl_toolbar.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                lv_info.setPadding(100, 100, 0, 0)
-
-                ctl_toolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val statusBarHeight = ScreenUtils.getStatusHeight(this@UserDetailsActivity)
+                val paddingHorizontal = ScreenUtils.dp2px(this@UserDetailsActivity, 15f)
+                val paddingTop = toolbar.height + statusBarHeight + ScreenUtils.dp2px(this@UserDetailsActivity, 5f)
+                val paddingBottom = ScreenUtils.dp2px(this@UserDetailsActivity, 10f)
+                val ivBackgroundHeight = ScreenUtils.dp2px(this@UserDetailsActivity, 250f)
+                lv_info.setPadding(paddingHorizontal, paddingTop, paddingHorizontal, 0)
+                iv_background.layoutParams = CollapsingToolbarLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ivBackgroundHeight + statusBarHeight + paddingBottom)
+                if (toolbar.height > 0)
+                    ctl_toolbar.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
     }
