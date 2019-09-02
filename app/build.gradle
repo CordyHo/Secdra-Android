@@ -45,4 +45,5 @@ dependencies {
     implementation 'com.github.zyyoona7:recyclerviewdivider:1.0.2' // RV分割线
     implementation 'com.github.chrisbanes:PhotoView:2.3.0' //photoView
     implementation 'com.serhatsurguvec.libraries:swipablelayout:0.0.1'  //滑动退出Activity
+    implementation 'com.r0adkll:slidableactivity:2.1.0'  //侧滑退出Activity
 }

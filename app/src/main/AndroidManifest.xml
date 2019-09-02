@@ -62,14 +62,14 @@
             android:name=".module.search.view.SearchListActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="user"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar.Transparent"
             android:windowSoftInputMode="adjustPan|stateVisible" />
 
         <activity
             android:name=".module.user.view.UserDetailsActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:screenOrientation="user"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
     </application>
 

@@ -18,8 +18,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.animation.ScaleInAnimation
-import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
+import com.cordy.secdra.SlideActivity
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.interfaces.IPictureInterface
@@ -35,7 +35,7 @@ import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import kotlinx.android.synthetic.main.activity_search_list.*
 import kotlinx.android.synthetic.main.view_float_button.*
 
-class SearchListActivity : BaseActivity(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
+class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
         BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
 
     private var content = ""  //搜索的内容，因为有翻页，所以要保存输入的内容来请求

@@ -2,17 +2,17 @@ package com.cordy.secdra.module.user.view
 
 import android.os.Bundle
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.utils.AccountManager
 import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.ScreenUtils
+import com.cordy.secdra.SlideActivity
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_user_details.*
 
-class UserDetailsActivity : BaseActivity() {
+class UserDetailsActivity : SlideActivity() {
 
     private lateinit var srlRefresh: SwipeRefreshLayout
 
