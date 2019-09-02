@@ -42,6 +42,7 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
         ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portraitSmall)
         ImageLoader.setPortrait200FromUrl(jsonBeanUser.data?.head, iv_portraitBig)
         tv_name.text = jsonBeanUser.data?.name
+        tv_nameBig.text = jsonBeanUser.data?.name
         tv_introduce.text = jsonBeanUser.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }
     }
 
