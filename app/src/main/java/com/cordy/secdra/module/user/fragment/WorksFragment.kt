@@ -21,10 +21,6 @@ class WorksFragment : Fragment() {
         return rootView
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun initView(rootView: View) {
         srlRefresh = rootView.srl_refresh
     }
