@@ -58,13 +58,13 @@ object ImageLoader {
             Glide.with(this)
                     .load(AppParamUtils.base_img_url + url)
                     .apply(options)
+                    .skipMemoryCache(true)
                     .transition(DrawableTransitionOptions().crossFade())
                     .apply(options)
                     .listener(object : RequestListener<Drawable> {
 
                         override fun onResourceReady(drawable: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            val bd = drawable as BitmapDrawable
-                            pictureLoadCallBack?.onCallBack(bd.bitmap, null)
+                            pictureLoadCallBack?.onCallBack(null, null)
                             return false
                         }
 

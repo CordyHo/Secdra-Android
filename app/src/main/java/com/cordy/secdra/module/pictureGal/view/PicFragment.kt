@@ -61,10 +61,8 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
     private fun setPicture() {
         ImageLoader.setOriginBaseImageWithCallbackFromUrl(bean.url, ivPictureOrigin, object : PictureLoadCallBack {
             override fun onCallBack(bitmap: Bitmap?, file: File?) {
-                activity.runOnUiThread {
-                    pbProgress.visibility = View.GONE
-                    activity.supportStartPostponedEnterTransition()  //加载图片成功后才重新开启元素共享动画，更连贯
-                }
+                pbProgress.visibility = View.GONE
+                activity.supportStartPostponedEnterTransition()  //加载图片成功后才重新开启元素共享动画，更连贯
             }
         })
     }
