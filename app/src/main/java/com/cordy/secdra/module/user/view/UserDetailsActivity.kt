@@ -88,12 +88,17 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
                 startActivity(Intent(this, PictureViewerActivity::class.java)
                         .setAction("head")
                         .putExtra("url", jsonBeanUser.data?.head),
-                        ActivityOptionsCompat.makeSceneTransitionAnimation(this, iv_portraitBig, "picture").toBundle())
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, "picture").toBundle())
+
+            R.id.iv_portraitSmall -> startActivity(Intent(this, PictureViewerActivity::class.java)
+                    .setAction("head")
+                    .putExtra("url", jsonBeanUser.data?.head),
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, "picture").toBundle())
 
             R.id.iv_background -> startActivity(Intent(this, PictureViewerActivity::class.java)
                     .setAction("bg")
                     .putExtra("url", jsonBeanUser.data?.background),
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(this, iv_background, "picture").toBundle())
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, "picture").toBundle())
         }
     }
 
@@ -102,6 +107,7 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
         vpInfo = vp_info
         tabInfo = tab_info
         iv_portraitBig.setOnClickListener(this)
+        iv_portraitSmall.setOnClickListener(this)
         iv_background.setOnClickListener(this)
         appbarLayout.addOnOffsetChangedListener(this)
         setToolBarMargin()
