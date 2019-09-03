@@ -58,7 +58,7 @@ object ImageLoader {
             Glide.with(this)
                     .load(AppParamUtils.base_img_url + url)
                     .apply(options)
-                    .skipMemoryCache(true)
+                    .skipMemoryCache(true)  //跳过内存缓存，防止OOM ？
                     .transition(DrawableTransitionOptions().crossFade())
                     .apply(options)
                     .listener(object : RequestListener<Drawable> {
