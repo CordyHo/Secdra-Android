@@ -16,9 +16,7 @@ class PhotoViewPager : ViewPager {
         try {
             return super.onInterceptTouchEvent(ev)
         } catch (e: IllegalArgumentException) {
-            e.printStackTrace()
         } catch (e: ArrayIndexOutOfBoundsException) {
-            e.printStackTrace()
         }
         return false
     }

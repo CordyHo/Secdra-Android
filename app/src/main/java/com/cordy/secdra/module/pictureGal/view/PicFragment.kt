@@ -101,7 +101,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, V
     }
 
     private fun initView(rootView: View) {
-        rootView.sbl_layout.setOnLayoutCloseListener { activity.supportFinishAfterTransition() } //下滑关闭Activity
+        rootView.sbl_layout.setOnLayoutCloseListener { activity.onBackPressed() }  //下滑关闭Activity
         pbProgress = rootView.pb_progress
         ivPictureOrigin = rootView.iv_pictureOrigin
         ivPictureOrigin.setOnLongClickListener(this)
