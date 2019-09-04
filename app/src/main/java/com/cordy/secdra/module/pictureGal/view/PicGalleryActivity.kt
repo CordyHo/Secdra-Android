@@ -11,11 +11,12 @@ import com.cordy.secdra.R
 import com.cordy.secdra.module.pictureGal.adapter.VpPictureAdapter
 import com.cordy.secdra.utils.PicturesListMiddleware
 import com.cordy.secdra.widget.ImmersionBar
+import com.cordy.secdra.widget.PhotoViewPager
 import kotlinx.android.synthetic.main.activity_pic_gallery.*
 
 class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
-    private lateinit var vpPicture: ViewPager
+    private lateinit var vpPicture: PhotoViewPager
     private lateinit var adapter: VpPictureAdapter
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var tag: String? = ""  //用来记录启动该activity的是哪个activity，区别发送滚动RV的广播

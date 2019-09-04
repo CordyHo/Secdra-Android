@@ -18,11 +18,10 @@ import com.cordy.secdra.utils.PictureLoadCallBack
 import com.cordy.secdra.utils.SavePictureUtils
 import com.cordy.secdra.widget.ImmersionBar
 import com.github.chrisbanes.photoview.PhotoView
-import com.serhatsurguvec.swipablelayout.SwipeableLayout
 import kotlinx.android.synthetic.main.fragment_picture.view.*
 import java.io.File
 
-class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, SwipeableLayout.OnLayoutCloseListener, View.OnClickListener {
+class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, View.OnClickListener {
 
     private lateinit var activity: PicGalleryActivity
     private var bean = JsonBeanPicture.DataBean.ContentBean()
@@ -94,10 +93,6 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
         }
     }
 
-    override fun OnLayoutClosed() {  //下滑关闭Activity
-        activity.onBackPressed()
-    }
-
     override fun permissionGranted() {  //授予了权限
         SavePictureUtils.savePicture(activity, bean.url)
     }
@@ -106,7 +101,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, S
     }
 
     private fun initView(rootView: View) {
-        rootView.sbl_layout.setOnLayoutCloseListener(this)
+        rootView.sbl_layout.setOnLayoutCloseListener { activity.supportFinishAfterTransition() } //下滑关闭Activity
         pbProgress = rootView.pb_progress
         ivPictureOrigin = rootView.iv_pictureOrigin
         ivPictureOrigin.setOnLongClickListener(this)
