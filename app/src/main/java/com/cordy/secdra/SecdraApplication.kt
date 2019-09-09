@@ -15,7 +15,6 @@ class SecdraApplication : Application() {
     companion object {
 
         var httpQueues: RequestQueue? = null
-            private set
 
         var application: Context? = null
 
