@@ -8,7 +8,7 @@ class MUserModel(private val iUserInterface: IUserInterface) {
 
     fun login(phone: String?, pw: String?) {
         UrlRequest()
-                .url("account/signin")
+                .url("account/signIn")
                 .param("phone", phone)
                 .param("password", pw)
                 .getTokenFromUrlLoginPost(object : UrlRequest.DataRequestResponse {
