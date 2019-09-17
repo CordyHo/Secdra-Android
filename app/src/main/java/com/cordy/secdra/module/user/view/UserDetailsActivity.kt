@@ -28,7 +28,7 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
 
     private lateinit var vpInfo: ViewPager
     private lateinit var tabInfo: TabLayout
-    private var jsonBeanUser = JsonBeanUser()
+    private var jsonBeanUser:JsonBeanUser? = JsonBeanUser()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ScreenUtils.setStatusBariImmerse(this)
@@ -41,12 +41,12 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
 
     private fun setViewData() {
         jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
-        ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, iv_background)
-        ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, iv_portraitSmall)
-        ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, iv_portraitBig)
-        tv_name.text = jsonBeanUser.data?.name
-        tv_nameBig.text = jsonBeanUser.data?.name
-        tv_introduce.text = jsonBeanUser.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }
+        ImageLoader.setBackGroundImageFromUrl(jsonBeanUser?.data?.background, iv_background)
+        ImageLoader.setPortraitFromUrl(jsonBeanUser?.data?.head, iv_portraitSmall)
+        ImageLoader.setPortraitFromUrl(jsonBeanUser?.data?.head, iv_portraitBig)
+        tv_name.text = jsonBeanUser?.data?.name
+        tv_nameBig.text = jsonBeanUser?.data?.name
+        tv_introduce.text = jsonBeanUser?.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }
     }
 
     private fun initVp() {
@@ -87,17 +87,17 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
             R.id.iv_portraitBig ->
                 startActivity(Intent(this, PictureViewerActivity::class.java)
                         .setAction("head")
-                        .putExtra("url", jsonBeanUser.data?.head),
+                        .putExtra("url", jsonBeanUser?.data?.head),
                         ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, "picture").toBundle())
 
             R.id.iv_portraitSmall -> startActivity(Intent(this, PictureViewerActivity::class.java)
                     .setAction("head")
-                    .putExtra("url", jsonBeanUser.data?.head),
+                    .putExtra("url", jsonBeanUser?.data?.head),
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, "picture").toBundle())
 
             R.id.iv_background -> startActivity(Intent(this, PictureViewerActivity::class.java)
                     .setAction("bg")
-                    .putExtra("url", jsonBeanUser.data?.background),
+                    .putExtra("url", jsonBeanUser?.data?.background),
                     ActivityOptionsCompat.makeSceneTransitionAnimation(this, v, "picture").toBundle())
         }
     }
