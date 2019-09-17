@@ -33,14 +33,14 @@ import com.cordy.secdra.module.main.interfaces.RvItemClickListener
 import com.cordy.secdra.module.main.model.MPictureModel
 import com.cordy.secdra.module.pictureGal.view.PicGalleryActivity
 import com.cordy.secdra.module.search.view.SearchListActivity
-import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.module.user.view.UserDetailsActivity
-import com.cordy.secdra.utils.*
+import com.cordy.secdra.utils.PicturesListMiddleware
+import com.cordy.secdra.utils.ScreenUtils
+import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.ScaleImageView
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.navigation.NavigationView
-import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -112,11 +112,12 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     private fun setViewData() {    //设置用户信息
-        val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
+        /*todo 用户信息登录时不返回了*/
+     /*   val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
         ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, iv_portrait)
         ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, ivPortraitDrawer)
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, ivBackground)
-        tvName.text = jsonBeanUser.data?.name
+        tvName.text = jsonBeanUser.data?.name*/
     }
 
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动

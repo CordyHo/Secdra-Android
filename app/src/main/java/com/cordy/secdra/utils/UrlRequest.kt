@@ -84,7 +84,7 @@ class UrlRequest {
             if (jsonObject.getInt("status") == AppParamUtils.httpSuccess) {
                 dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
                 AccountManager.userDetails = response
-                AccountManager.userId = jsonObject.getJSONObject("data").getString("id")
+// todo                AccountManager.userId = jsonObject.getJSONObject("data").getString("id")
                 AccountManager.setSignState(true)
             } else {
                 val msg = jsonObject.getString("message")
