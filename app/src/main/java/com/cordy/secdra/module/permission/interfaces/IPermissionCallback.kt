@@ -1,8 +1,6 @@
 package com.cordy.secdra.module.permission.interfaces
 
-import java.io.Serializable
-
-interface IPermissionCallback : Serializable {
+interface IPermissionCallback {
 
     fun permissionGranted()
 
