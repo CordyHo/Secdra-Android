@@ -99,4 +99,16 @@ object ImageLoader {
                     .into(iv_image)
         }
     }
+
+    fun setImageResource(resource: Any?, iv_image: ImageView) {
+        val options = RequestOptions()
+                .dontAnimate()
+                .fitCenter()
+        application?.run {
+            Glide.with(this)
+                    .load(resource)
+                    .apply(options)
+                    .into(iv_image)
+        }
+    }
 }

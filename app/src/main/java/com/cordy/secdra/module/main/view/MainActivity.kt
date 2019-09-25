@@ -119,10 +119,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun setViewData() {    //设置用户信息
         if (!AccountManager.isSignIn) {
             nvNavigation.menu.findItem(R.id.action_logout_or_login).isVisible = false
-            ImageLoader.setPortraitFromUrl(null, iv_portrait)
-            ImageLoader.setPortraitFromUrl(null, ivPortraitDrawer)
-            ImageLoader.setBackGroundImageFromUrl(null, ivBackground)
-            tvName.text =getString(R.string.click_to_login)
+            ImageLoader.setImageResource(R.drawable.ic_icon, iv_portrait)
+            ImageLoader.setImageResource(R.drawable.ic_icon, ivPortraitDrawer)
+            ImageLoader.setImageResource(R.drawable.ic_icon, ivBackground)
+            tvName.text = getString(R.string.click_to_login)
         } else {
             nvNavigation.menu.findItem(R.id.action_logout_or_login).isVisible = true
             val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
