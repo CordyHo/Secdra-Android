@@ -18,4 +18,5 @@
     <string name="please_input">请输入内容</string>
     <string name="works">作品</string>
     <string name="collect">收藏</string>
+    <string name="click_to_login">点击头像登录</string>
 </resources>
