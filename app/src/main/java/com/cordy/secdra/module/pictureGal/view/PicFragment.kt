@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.cordy.secdra.R
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
@@ -16,6 +17,7 @@ import com.cordy.secdra.module.permission.utils.PermissionUtils
 import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.PictureLoadCallBack
 import com.cordy.secdra.utils.SavePictureUtils
+import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
 import com.github.chrisbanes.photoview.PhotoView
 import kotlinx.android.synthetic.main.fragment_picture.view.*
@@ -83,7 +85,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, V
     }
 
     override fun onLongClick(v: View?): Boolean {   //长按检查权限后保存图片
-        PermissionUtils.requestPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, this)
+        requestStoragePermission()
         return false
     }
 
@@ -93,11 +95,28 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, V
         }
     }
 
-    override fun permissionGranted() {  //授予了权限
-        SavePictureUtils.savePicture(activity, bean.url)
+    private fun requestStoragePermission() {
+        PermissionUtils.requestPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE, this)
     }
 
-    override fun permissionDenied() {
+    override fun permissionGranted(permissionName: String) {  //授予了权限
+        if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            SavePictureUtils.savePicture(activity, bean.url)
+    }
+
+    override fun permissionDenied(permissionName: String, isNoLongerPrompt: Boolean) {
+        if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE && !isNoLongerPrompt) {
+            //用户拒绝权限
+            AlertDialog.Builder(activity)
+                    .setCancelable(true)
+                    .setMessage(getString(R.string.requestStoragePermission))
+                    .setPositiveButton(getString(R.string.giveCPermission)) { _, _ -> requestStoragePermission() }
+                    .setNegativeButton("取消", null)
+                    .show()
+        } else if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE && isNoLongerPrompt) {
+            PermissionUtils.gotoAppDetailSetting(activity)
+            ToastUtil.showToastLong(R.string.requestStoragePermissionToast)
+        }
     }
 
     private fun initView(rootView: View) {

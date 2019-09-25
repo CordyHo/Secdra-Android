@@ -3,6 +3,7 @@ package com.cordy.secdra.module.user.view
 import android.Manifest
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 import com.cordy.secdra.module.permission.interfaces.IPermissionCallback
@@ -10,6 +11,7 @@ import com.cordy.secdra.module.permission.utils.PermissionUtils
 import com.cordy.secdra.utils.AppParamUtils
 import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.SavePictureUtils
+import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
 import kotlinx.android.synthetic.main.activity_picture_viewer.*
 
@@ -32,23 +34,40 @@ class PictureViewerActivity : BaseActivity(), IPermissionCallback {
         sbl_layout.setOnLayoutCloseListener { supportFinishAfterTransition() }
         iv_picture.setOnClickListener { setShowOrHideUIBar() }
         iv_picture.setOnLongClickListener {
-            PermissionUtils.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, this)
+            requestStoragePermission()
             false
         }
         supportStartPostponedEnterTransition()  //加载图片成功后才重新开启元素共享动画，更连贯
     }
 
-    override fun permissionGranted() {
-        when (intent?.action) {
-            "head" -> SavePictureUtils.savePicture(this, intent?.getStringExtra("url"), AppParamUtils.portrait_img_url)
-
-            "bg" -> SavePictureUtils.savePicture(this, intent?.getStringExtra("url"), AppParamUtils.back_ground_img_url)
-
-            else -> SavePictureUtils.savePicture(this, AppParamUtils.base_img_url + intent?.getStringExtra("url"))
-        }
+    private fun requestStoragePermission() {
+        PermissionUtils.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, this)
     }
 
-    override fun permissionDenied() {
+    override fun permissionGranted(permissionName: String) {
+        if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            when (intent?.action) {
+                "head" -> SavePictureUtils.savePicture(this, intent?.getStringExtra("url"), AppParamUtils.portrait_img_url)
+
+                "bg" -> SavePictureUtils.savePicture(this, intent?.getStringExtra("url"), AppParamUtils.back_ground_img_url)
+
+                else -> SavePictureUtils.savePicture(this, AppParamUtils.base_img_url + intent?.getStringExtra("url"))
+            }
+    }
+
+    override fun permissionDenied(permissionName: String, isNoLongerPrompt: Boolean) {
+        if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE && !isNoLongerPrompt) {
+            //用户拒绝权限
+            AlertDialog.Builder(this)
+                    .setCancelable(true)
+                    .setMessage(getString(R.string.requestStoragePermission))
+                    .setPositiveButton(getString(R.string.giveCPermission)) { _, _ -> requestStoragePermission() }
+                    .setNegativeButton("取消", null)
+                    .show()
+        } else if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE && isNoLongerPrompt) {
+            PermissionUtils.gotoAppDetailSetting(this)
+            ToastUtil.showToastLong(R.string.requestStoragePermissionToast)
+        }
     }
 
     private fun setShowOrHideUIBar() {  //显示或隐藏状态栏和导航栏
