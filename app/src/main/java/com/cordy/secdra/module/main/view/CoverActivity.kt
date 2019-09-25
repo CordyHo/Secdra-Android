@@ -9,8 +9,6 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.cordy.secdra.R
-import com.cordy.secdra.module.user.view.LoginActivity
-import com.cordy.secdra.utils.AccountManager
 
 class CoverActivity : AppCompatActivity() {
 
@@ -29,10 +27,7 @@ class CoverActivity : AppCompatActivity() {
         val uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         window.decorView.systemUiVisibility = uiOptions
         Handler().postDelayed({
-            if (AccountManager.isSignIn)
-                startActivity(Intent(this, MainActivity::class.java))
-            else
-                startActivity(Intent(this, LoginActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }, 800)
     }
