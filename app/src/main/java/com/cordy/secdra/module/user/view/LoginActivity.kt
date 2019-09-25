@@ -3,7 +3,6 @@
 package com.cordy.secdra.module.user.view
 
 import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -11,13 +10,14 @@ import android.view.View
 import android.widget.EditText
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
-import com.cordy.secdra.module.main.view.MainActivity
+import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.module.user.interfaces.IUserInterface
 import com.cordy.secdra.module.user.model.MUserModel
 import com.cordy.secdra.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
+
     private lateinit var etPhone: EditText
     private lateinit var etPw: EditText
     private var shouldShowPw = true
@@ -30,11 +30,20 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
         initView()
     }
 
-    override fun loginSuccess(msg: String) {
+    override fun loginSuccess(msg: String) {  //登录
+        // 登录成功继续请求用户信息
+        mUserModel.getUserInfo()
+    }
+
+    override fun getUserInfoSuccess(jsonBeanUser: JsonBeanUser) {  //得到用户信息成功
         progressDialog.dismiss()
-        ToastUtil.showToastShort(msg)
-        startActivity(Intent(this, MainActivity::class.java))
         finish()
+    }
+
+    override fun getUserInfoFailure(msg: String) {
+        progressDialog.dismiss()
+        btn_login.isEnabled = true
+        ToastUtil.showToastShort(msg)
     }
 
     override fun loginFailure(msg: String) {

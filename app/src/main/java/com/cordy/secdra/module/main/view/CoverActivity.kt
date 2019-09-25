@@ -7,10 +7,10 @@ import android.os.Handler
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
+import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 
-class CoverActivity : AppCompatActivity() {
+class CoverActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //无title

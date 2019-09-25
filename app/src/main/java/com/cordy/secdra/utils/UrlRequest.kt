@@ -40,7 +40,13 @@ class UrlRequest {
             }
         }, { error ->
             dataRequestResponse.onRequestFailure("error：" + error?.networkResponse?.statusCode)
-        }) {}
+        }) {
+
+            override fun getHeaders(): Map<String?, String?> { //传头部
+                requestParams[AppParamUtils.key_token] = AccountManager.token + ""
+                return requestParams
+            }
+        }
 
         stringRequest.tag = url
         //设置超时时长
@@ -83,9 +89,6 @@ class UrlRequest {
             val jsonObject = JSONObject(response)
             if (jsonObject.getInt("status") == AppParamUtils.httpSuccess) {
                 dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
-                AccountManager.userDetails = response
-// todo                AccountManager.userId = jsonObject.getJSONObject("data").getString("id")
-                AccountManager.setSignState(true)
             } else {
                 val msg = jsonObject.getString("message")
                 dataRequestResponse.onRequestFailure(msg)

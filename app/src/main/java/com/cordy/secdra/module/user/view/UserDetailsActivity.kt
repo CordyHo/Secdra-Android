@@ -13,10 +13,13 @@ import com.cordy.secdra.R
 import com.cordy.secdra.SlideActivity
 import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.module.user.fragment.WorksFragment
+import com.cordy.secdra.utils.AccountManager
+import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.ScreenUtils
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayout
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_user_details.*
 import java.util.*
 import kotlin.math.abs
@@ -37,14 +40,13 @@ class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListene
     }
 
     private fun setViewData() {
-        /*todo 提前获取用户信息*/
-  /*      jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
+        jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
         ImageLoader.setBackGroundImageFromUrl(jsonBeanUser?.data?.background, iv_background)
         ImageLoader.setPortraitFromUrl(jsonBeanUser?.data?.head, iv_portraitSmall)
         ImageLoader.setPortraitFromUrl(jsonBeanUser?.data?.head, iv_portraitBig)
         tv_name.text = jsonBeanUser?.data?.name
         tv_nameBig.text = jsonBeanUser?.data?.name
-        tv_introduce.text = jsonBeanUser?.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }*/
+        tv_introduce.text = jsonBeanUser?.data?.let { it.gender + it.introduction + it.address + it.birthday + it.focus }
     }
 
     private fun initVp() {
