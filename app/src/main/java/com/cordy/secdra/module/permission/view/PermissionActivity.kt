@@ -19,6 +19,10 @@ class PermissionActivity : BaseActivity() {
         requestPermission()
     }
 
+    private fun requestPermission() {
+        requestPermissions(arrayOf(permissionName), 1)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1)
@@ -31,10 +35,6 @@ class PermissionActivity : BaseActivity() {
                 permissionDenied(true)
             } else
                 permissionGranted()
-    }
-
-    private fun requestPermission() {
-        requestPermissions(arrayOf(permissionName), 1)
     }
 
     private fun permissionGranted() {
