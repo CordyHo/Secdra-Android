@@ -66,7 +66,7 @@ class PictureViewerActivity : BaseActivity(), IPermissionCallback {
                     .show()
         } else if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE && isNoLongerPrompt) {
             PermissionUtils.gotoAppDetailSetting(this)
-            ToastUtil.showToastLong(R.string.requestStoragePermissionToast)
+            ToastUtil.showToastLong(getString(R.string.requestStoragePermissionToast))
         }
     }
 

@@ -115,7 +115,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, V
                     .show()
         } else if (permissionName == Manifest.permission.WRITE_EXTERNAL_STORAGE && isNoLongerPrompt) {
             PermissionUtils.gotoAppDetailSetting(activity)
-            ToastUtil.showToastLong(R.string.requestStoragePermissionToast)
+            ToastUtil.showToastLong(getString(R.string.requestStoragePermissionToast))
         }
     }
 
