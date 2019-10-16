@@ -26,6 +26,16 @@ object ActivityStackManager {
             }
     }
 
+    fun checkInstanceIsExist(className: Class<*>): Boolean {
+        var isExist = false
+        for (activity in stackList)
+            if (activity.javaClass == className) {
+                isExist = true
+                break
+            }
+        return isExist
+    }
+
     fun getCurrentTopActivity(): Activity? {
         return stackList.lastOrNull()
     }
