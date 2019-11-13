@@ -18,6 +18,7 @@
         android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:useEmbeddedDex="true"
         android:networkSecurityConfig="@xml/no_https_still_working_config"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@drawable/ic_icon"
@@ -27,6 +28,7 @@
         tools:replace="android:allowBackup">
 
         <!--todo requestLegacyExternalStorage   暂时不受Android 10 存储沙箱的控制 ，存储行为变更-->
+        <!--useEmbeddedDex 防DEX篡改，但可能影响性能，看下gradle-->
 
         <activity
             android:name=".module.main.view.CoverActivity"
