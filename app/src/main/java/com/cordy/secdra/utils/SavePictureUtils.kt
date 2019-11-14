@@ -27,13 +27,11 @@ object SavePictureUtils {
                     createPictureFolder()
                     val newFile = File("$PICTURE_PATH$url.jpg")  // 新建一个复制缓存图片的文件
                     val cacheFile = getGlidePictureFromCache(url, null, headOrBgUrl)  //得到Glide缓存图片，要在后台线程执行
-                    newFile.run {
-                        cacheFile?.copyTo(this, true)   //把缓存图片复制到新文件
-                        context?.runOnUiThread {
-                            //更新相册
-                            MediaScannerConnection.scanFile(context, arrayOf(newFile.absolutePath), arrayOf(MimeTypeMap.getSingleton().getMimeTypeFromExtension("jpg")), null)
-                            ToastUtil.showToastLong(context.getString(R.string.saveSuccess))
-                        }
+                    cacheFile?.copyTo(newFile, true)   //把缓存图片复制到新文件
+                    context?.runOnUiThread {
+                        //更新相册
+                        MediaScannerConnection.scanFile(context, arrayOf(newFile.absolutePath), arrayOf(MimeTypeMap.getSingleton().getMimeTypeFromExtension("jpg")), null)
+                        ToastUtil.showToastLong(context.getString(R.string.saveSuccess))
                     }
                 } catch (e: Exception) {
                     context?.runOnUiThread { ToastUtil.showToastLong(context.getString(R.string.saveFailure)) }
