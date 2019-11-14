@@ -17,7 +17,7 @@ import java.io.File
 
 object SavePictureUtils {
 
-    private var PICTURE_PATH = Environment.getExternalStorageDirectory().path + "/Pictures/"
+    private var PICTURE_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).path + "/"
 
     fun savePicture(context: Activity?, url: String?, headOrBgUrl: String = "") {   // headOrBgUrl 保存的是头像或者背景图时传入
 
