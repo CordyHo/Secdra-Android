@@ -42,11 +42,11 @@ object SavePictureUtils {
         }.start()
     }
 
-    fun getGlidePictureFromCache(url: Any?, pictureLoadCallBack: PictureLoadCallBack?, headOrBgUrl: String = ""): File? {
+    fun getGlidePictureFromCache(url: Any?, pictureLoadCallBack: PictureLoadCallBack?, headOrBgUrl: String? = ""): File? {
         SecdraApplication.application?.run {
             return try {
                 var prefix = headOrBgUrl
-                if (prefix.isBlank())
+                if (prefix.isNullOrBlank())
                     prefix = AppParamUtils.base_img_url
                 Glide.with(this)
                         .asFile()
