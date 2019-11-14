@@ -10,11 +10,11 @@ object ToastUtil {
 
     fun showToastShort(msg: Any?) {
         if (msg != oldMsg) {
-            Toast.makeText(SecdraApplication.application, msg.toString(), Toast.LENGTH_SHORT).show()
+            Toast.makeText(SecdraApplication.application, msg?.toString(), Toast.LENGTH_SHORT).show()
             time = System.currentTimeMillis()
         } else {
             if (System.currentTimeMillis() - time > 1500) {
-                Toast.makeText(SecdraApplication.application, msg.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(SecdraApplication.application, msg?.toString(), Toast.LENGTH_SHORT).show()
                 time = System.currentTimeMillis()
             }
         }
@@ -23,11 +23,11 @@ object ToastUtil {
 
     fun showToastLong(msg: Any?) {
         if (msg != oldMsg) {
-            Toast.makeText(SecdraApplication.application, msg.toString(), Toast.LENGTH_LONG).show()
+            Toast.makeText(SecdraApplication.application, msg?.toString(), Toast.LENGTH_LONG).show()
             time = System.currentTimeMillis()
         } else {
             if (System.currentTimeMillis() - time > 1500) {
-                Toast.makeText(SecdraApplication.application, msg.toString(), Toast.LENGTH_LONG).show()
+                Toast.makeText(SecdraApplication.application, msg?.toString(), Toast.LENGTH_LONG).show()
                 time = System.currentTimeMillis()
             }
         }

@@ -3,9 +3,9 @@
 package com.cordy.secdra.utils
 
 import android.app.Activity
-import android.content.Intent
-import android.net.Uri
+import android.media.MediaScannerConnection
 import android.os.Environment
+import android.webkit.MimeTypeMap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -17,7 +17,7 @@ import java.io.File
 
 object SavePictureUtils {
 
-    private val PICTURE_PATH = Environment.getExternalStorageDirectory().path + "/Pictures/"
+    private var PICTURE_PATH = Environment.getExternalStorageDirectory().path + "/Pictures/"
 
     fun savePicture(context: Activity?, url: String?, headOrBgUrl: String = "") {   // headOrBgUrl 保存的是头像或者背景图时传入
 
@@ -25,12 +25,13 @@ object SavePictureUtils {
             override fun run() {
                 try {
                     createPictureFolder()
+                    val newFile = File("$PICTURE_PATH$url.jpg")  // 新建一个复制缓存图片的文件
                     val cacheFile = getGlidePictureFromCache(url, null, headOrBgUrl)  //得到Glide缓存图片，要在后台线程执行
-                    val newFile = File("$PICTURE_PATH$url.jpg")    // 新建一个复制缓存图片的文件
                     newFile.run {
                         cacheFile?.copyTo(this, true)   //把缓存图片复制到新文件
                         context?.runOnUiThread {
-                            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://${newFile.absolutePath}")))  //更新相册
+                            //更新相册
+                            MediaScannerConnection.scanFile(context, arrayOf(newFile.absolutePath), arrayOf(MimeTypeMap.getSingleton().getMimeTypeFromExtension("jpg")), null)
                             ToastUtil.showToastLong(context.getString(R.string.saveSuccess))
                         }
                     }
