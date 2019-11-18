@@ -41,7 +41,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
     implementation "androidx.preference:preference:1.1.0"
     implementation 'androidx.palette:palette:1.0.0'   // palette google调色板
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.tencent.bugly:crashreport:3.0.1' // Bugly
     implementation 'com.github.bumptech.glide:glide:4.10.0'      //Glide
