@@ -35,8 +35,7 @@ class UrlRequest {
                 dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
             } else {
                 val msg = jsonObject.getString("message")
-                if (!JumpToLoginUtils.jumpToLogin(msg))
-                    dataRequestResponse.onRequestFailure(msg)
+                dataRequestResponse.onRequestFailure(msg)
             }
         }, { error ->
             dataRequestResponse.onRequestFailure("error：" + error?.networkResponse?.statusCode)
@@ -62,8 +61,7 @@ class UrlRequest {
                 dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
             } else {
                 val msg = jsonObject.getString("message")
-                if (!JumpToLoginUtils.jumpToLogin(msg))
-                    dataRequestResponse.onRequestFailure(msg)
+                dataRequestResponse.onRequestFailure(msg)
             }
         }, { error ->
             dataRequestResponse.onRequestFailure("error：" + error?.networkResponse?.statusCode)
