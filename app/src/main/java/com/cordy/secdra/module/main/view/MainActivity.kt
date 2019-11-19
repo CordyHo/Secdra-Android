@@ -69,7 +69,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private var lastClickTime: Long = 0
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private var whichId = -1   //点击侧滑的菜单记录id，侧滑关闭后再根据id进行界面操作，提高体验
-    private val tag = "MainActivity"
+    private val tag = javaClass.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
