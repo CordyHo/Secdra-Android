@@ -49,7 +49,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var page = 1
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
-    private val tag = "SearchListActivity"
+    private val tag = javaClass.name
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
