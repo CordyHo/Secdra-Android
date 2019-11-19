@@ -101,7 +101,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, ivPicture, pos.toString())
         startActivity(Intent(this, PicGalleryActivity::class.java)
                 .putExtra("pos", pos)
-                .putExtra("tag", "SearchListActivity"), options.toBundle()) // pos 作为元素共享的唯一tag，tag用于接收滚动RV广播
+                .putExtra("tag", tag), options.toBundle()) // pos 作为元素共享的唯一tag，tag用于接收滚动RV广播
     }
 
     override fun getPictureListSuccess(jsonBeanPicture: JsonBeanPicture, isLoadMore: Boolean) {
