@@ -56,7 +56,7 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
         when (v.id) {
 
             R.id.btn_login -> {
-                if (!etPw.text.isNullOrBlank()) {
+                if (!etPhone.text.isNullOrBlank() && !etPw.text.isNullOrBlank()) {
                     progressDialog.show()
                     mUserModel.login(etPhone.text.toString(), etPw.text.toString())
                     btn_login.isEnabled = false
