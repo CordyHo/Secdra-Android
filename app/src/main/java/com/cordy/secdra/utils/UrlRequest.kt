@@ -120,9 +120,9 @@ class UrlRequest {
     private fun createUrlParamForGet() {
         var paramString = ""
         for (key in requestParams.keys)
-            paramString += key + "=" + requestParams[key] + "&"
+            paramString += "$key=${requestParams[key]}&"
         if (paramString.isNotBlank())
-            url += "?" + StringBuilder(paramString).replace(paramString.lastIndex, paramString.length, "").toString() //替换最后的&号
+            url += "?" + paramString.replaceRange(paramString.lastIndex, paramString.length, "")   // 替换最后的&号
     }
 
     interface DataRequestResponse {
