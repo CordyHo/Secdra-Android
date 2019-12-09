@@ -9,7 +9,9 @@ class MPictureSearchModel(private val iPictureInterface: IPictureInterface) {
 
     fun searchPictureFromUrl(content: String?, page: Int) {
         UrlRequest()
-                .url("draw/paging?page=$page&tagList=$content")
+                .url("draw/paging")
+                .param("page", page)
+                .param("tagList", content)
                 .getDataFromUrlGet(object : UrlRequest.DataRequestResponse {
                     override fun onRequestSuccess(jsonData: String) {
                         if (page < 1)

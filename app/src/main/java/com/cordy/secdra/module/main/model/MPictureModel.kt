@@ -10,7 +10,9 @@ class MPictureModel(private val iPictureInterface: IPictureInterface) {
 
     fun getMainPictureFromUrl(page: Int) {
         UrlRequest()
-                .url("draw/paging?page=$page&userid=${AccountManager.userId}")
+                .url("draw/paging")
+                .param("page", page)
+                .param("userid", AccountManager.userId)
                 .getDataFromUrlGet(object : UrlRequest.DataRequestResponse {
                     override fun onRequestSuccess(jsonData: String) {
                         if (page < 1)

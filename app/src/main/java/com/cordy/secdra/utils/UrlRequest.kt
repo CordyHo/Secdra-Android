@@ -5,6 +5,7 @@ import com.android.volley.NetworkResponse
 import com.android.volley.ParseError
 import com.android.volley.Response
 import com.android.volley.toolbox.HttpHeaderParser
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.cordy.secdra.SecdraApplication
 import org.json.JSONObject
@@ -29,13 +30,12 @@ class UrlRequest {
 
     //Get请求
     fun getDataFromUrlGet(dataRequestResponse: DataRequestResponse) {
-        val stringRequest = object : StringRequest(Method.GET, url, { response ->
-            val jsonObject = JSONObject(response)
+        createUrlParamForGet()
+        val stringRequest = object : JsonObjectRequest(Method.GET, url, null, { jsonObject ->
             if (jsonObject.getInt("status") == AppParamUtils.httpSuccess) {
-                dataRequestResponse.onRequestSuccess(response)  //state 200 请求成功
+                dataRequestResponse.onRequestSuccess(jsonObject.toString())  //state 200 请求成功
             } else {
-                val msg = jsonObject.getString("message")
-                dataRequestResponse.onRequestFailure(msg)
+                dataRequestResponse.onRequestFailure(jsonObject.getString("message"))
             }
         }, { error ->
             dataRequestResponse.onRequestFailure("error：" + error?.networkResponse?.statusCode)
@@ -115,6 +115,14 @@ class UrlRequest {
         //设置超时时长
         stringRequest.retryPolicy = DefaultRetryPolicy(10000, 0, 2f)
         SecdraApplication.httpQueues?.add(stringRequest)
+    }
+
+    private fun createUrlParamForGet() {
+        var paramString = ""
+        for (key in requestParams.keys)
+            paramString += key + "=" + requestParams[key] + "&"
+        if (paramString.isNotBlank())
+            url += "?" + StringBuilder(paramString).replace(paramString.lastIndex, paramString.length, "").toString() //替换最后的&号
     }
 
     interface DataRequestResponse {
