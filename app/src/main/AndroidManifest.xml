@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.cordy.secdra">
+    package="com.cordy.secdra"
+    android:versionName="1.0.0"
+    android:versionCode="1">
 
     <dist:module dist:instant="true" />
 
