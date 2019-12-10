@@ -1,3 +1,7 @@
+import com.android.builder.core.DefaultManifestParser
+
+import java.util.function.BooleanSupplier
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -12,7 +16,13 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "secdra_${defaultConfig.versionName}_${defaultConfig.versionCode}.apk"
+            def manifestParser = new DefaultManifestParser(android.sourceSets.main.manifest.srcFile, new BooleanSupplier() {
+                @Override
+                boolean getAsBoolean() {
+                    return true
+                }
+            }, null)
+            outputFileName = "secdra_${manifestParser.getVersionName()}_${manifestParser.getVersionCode()}.apk"
         }
     }
 
