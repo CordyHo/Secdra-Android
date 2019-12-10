@@ -138,7 +138,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.getStringExtra("tag") == tag) {
                     appbarLayout.setExpanded(false)
-                    intent.run { rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0)) }
+                    rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
                 }
             }
         }
