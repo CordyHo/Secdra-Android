@@ -34,7 +34,7 @@
 
         <activity
             android:name=".module.main.view.CoverActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:theme="@style/AppTheme.NoActionBar.Transparent">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,44 +45,44 @@
 
         <activity
             android:name=".module.main.view.MainActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".module.pictureGal.view.PicGalleryActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
         <activity
             android:name=".module.user.view.LoginActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name=".module.permission.view.PermissionActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
         <activity
             android:name=".module.search.view.SearchListActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.Transparent"
             android:windowSoftInputMode="adjustPan|stateVisible" />
 
         <activity
             android:name=".module.user.view.UserDetailsActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
         <activity
             android:name=".module.user.view.PictureViewerActivity"
-            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation|fontScale|density"
             android:screenOrientation="user"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
