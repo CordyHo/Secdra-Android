@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.palette.graphics.Palette
 import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.module.LoadMoreModule
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.cordy.secdra.R
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
@@ -18,7 +19,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 
 @SuppressLint("SetTextI18n")
-class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
+class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) : LoadMoreModule,
         BaseQuickAdapter<JsonBeanPicture.DataBean.ContentBean, BaseViewHolder>(R.layout.item_rv_picture) {
 
     private lateinit var palette: Palette
@@ -27,17 +28,15 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) :
         val ivPicture = helper.getView<ScaleImageView>(R.id.iv_picture)
         val ivPortrait = helper.getView<CircleImageView>(R.id.iv_portrait)
         val tvName = helper.getView<TextView>(R.id.tv_name)
-        item?.apply {
-            ivPicture.setInitSize(width, height)  //重写IV的测量方法，设置图片宽高缩放到屏幕实际的宽高
-            ImageLoader.setBaseImageWithoutPlaceholderCallbackFromUrl(url, ivPicture, object : PictureLoadCallBack {
-                override fun onCallBack(bitmap: Bitmap?, file: File?) {
-                    if (helper.adapterPosition >= 0)
-                        getPictureMainColor(bitmap, helper, helper.adapterPosition)
-                }
-            })
-            ImageLoader.setPortraitFromUrl(user?.head, ivPortrait)
-            tvName.text = name
-        }
+        ivPicture.setInitSize(item!!.width, item.height)  //重写IV的测量方法，设置图片宽高缩放到屏幕实际的宽高
+        ImageLoader.setBaseImageWithoutPlaceholderCallbackFromUrl(item.url, ivPicture, object : PictureLoadCallBack {
+            override fun onCallBack(bitmap: Bitmap?, file: File?) {
+                if (helper.adapterPosition >= 0)
+                    getPictureMainColor(bitmap, helper, helper.adapterPosition)
+            }
+        })
+        ImageLoader.setPortraitFromUrl(item.user?.head, ivPortrait)
+        tvName.text = item.name
         helper.itemView.setOnClickListener {
             rvItemClickListener?.onItemClick(ivPicture, helper.adapterPosition)
         }

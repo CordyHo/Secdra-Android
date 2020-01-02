@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.animation.ScaleInAnimation
+import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.cordy.secdra.R
 import com.cordy.secdra.SlideActivity
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
@@ -36,9 +36,9 @@ import kotlinx.android.synthetic.main.activity_search_list.*
 import kotlinx.android.synthetic.main.view_float_button.*
 
 class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
-        BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+        OnLoadMoreListener, View.OnClickListener {
 
-    private var content = ""  //搜索的内容，因为有翻页，所以要保存输入的内容来请求
+    private var content: String? = ""  //搜索的内容，因为有翻页，所以要保存输入的内容来请求
     private val model = MPictureSearchModel(this)
     private lateinit var etSearch: EditText
     private lateinit var srlRefresh: SwipeRefreshLayout
@@ -87,7 +87,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
             override fun onReceive(context: Context?, intent: Intent?) {
                 if (intent?.getStringExtra("tag") == tag) {
                     appbarLayout.setExpanded(false)
-                     rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
+                    rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
                 }
             }
         }
@@ -125,11 +125,11 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
 
     private fun loadMoreRv(jsonBeanPicture: JsonBeanPicture) {
         if (jsonBeanPicture.data.content.isNotEmpty()) {
-            adapter.loadMoreComplete()
+            adapter.loadMoreModule?.loadMoreComplete()
             adapter.addData(jsonBeanPicture.data.content)
             page++
         } else
-            adapter.loadMoreEnd(true)
+            adapter.loadMoreModule?.loadMoreEnd(true)
     }
 
     override fun getPictureListFailure(msg: String?) {
@@ -139,7 +139,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
         ToastUtil.showToastShort(msg)
     }
 
-    override fun onLoadMoreRequested() {
+    override fun onLoadMore() {
         model.searchPictureFromUrl(content, page)
     }
 
@@ -153,7 +153,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
     }
 
     private fun useContentGetDataFromUrl() {   // 刷新的请求方法
-        if (content.isNotBlank())
+        if (!content.isNullOrBlank())
             model.searchPictureFromUrl(content, 0)
         else
             stopRefresh()
@@ -200,8 +200,8 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
-        adapter.openLoadAnimation(ScaleInAnimation())
-        adapter.setOnLoadMoreListener(this, rvPicture)
+        adapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.ScaleIn)
+        adapter.loadMoreModule?.setOnLoadMoreListener(this)
         rvPicture.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING)
