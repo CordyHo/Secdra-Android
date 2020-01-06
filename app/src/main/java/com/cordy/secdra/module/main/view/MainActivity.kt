@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.animation.ScaleInAnimation
+import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
@@ -51,7 +51,7 @@ import kotlinx.android.synthetic.main.view_float_button.*
 
 @SuppressLint("InflateParams")
 class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, NavigationView.OnNavigationItemSelectedListener, RvItemClickListener,
-        DrawerLayout.DrawerListener, BaseQuickAdapter.RequestLoadMoreListener, View.OnClickListener {
+        DrawerLayout.DrawerListener, OnLoadMoreListener, View.OnClickListener {
 
     private lateinit var dlDrawer: DrawerLayout
     private lateinit var nvNavigation: NavigationView
@@ -66,7 +66,6 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private lateinit var broadcastReceiver: BroadcastReceiver
     private lateinit var localBroadcastManager: LocalBroadcastManager
     private var page = 1   // 第一页为0，第二页为1
-    private var lastClickTime: Long = 0
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private var whichId = -1   //点击侧滑的菜单记录id，侧滑关闭后再根据id进行界面操作，提高体验
     private val tag = javaClass.name
@@ -171,11 +170,11 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun loadMoreRv(jsonBeanPicture: JsonBeanPicture) {
         if (jsonBeanPicture.data.content.isNotEmpty()) {
-            adapter.loadMoreComplete()
+            adapter.loadMoreModule?.loadMoreComplete()
             adapter.addData(jsonBeanPicture.data.content)
             page++
         } else
-            adapter.loadMoreEnd(true)
+            adapter.loadMoreModule?.loadMoreEnd(true)
     }
 
     override fun getPictureListFailure(msg: String?) {
@@ -185,7 +184,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         ToastUtil.showToastShort(msg)
     }
 
-    override fun onLoadMoreRequested() {
+    override fun onLoadMore() {
         model.getMainPictureFromUrl(page)
     }
 
@@ -251,11 +250,11 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         rvPicture.layoutManager = layoutManager
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
-        adapter.openLoadAnimation(ScaleInAnimation())
-        adapter.setOnLoadMoreListener(this, rvPicture)
+        adapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.ScaleIn)
+        adapter.loadMoreModule?.setOnLoadMoreListener(this)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
-        adapter.footerLayout?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
+        adapter.getFooterLayout()?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度
         setToolBarMargin()
         setFloatingActionButtonPadding(navigationBarHeight)
     }
@@ -309,22 +308,10 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     override fun onBackPressed() {
-        val currentTime = System.currentTimeMillis()
-        when {
-            isDrawerOpen() -> closeDrawer()
-
-            lastClickTime <= 0 -> {
-                lastClickTime = currentTime
-                ToastUtil.showToastShort(getString(R.string.press_once_again_exit) + getString(R.string.app_name))
-            }
-
-            currentTime - lastClickTime < 1500 -> super.onBackPressed()
-
-            else -> {
-                ToastUtil.showToastShort(getString(R.string.press_once_again_exit) + getString(R.string.app_name))
-                lastClickTime = currentTime
-            }
-        }
+        if (isDrawerOpen())
+            closeDrawer()
+        else
+            super.onBackPressed()
     }
 
     override fun onDrawerOpened(drawerView: View) {

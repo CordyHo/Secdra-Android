@@ -55,7 +55,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.10.0'      //Glide
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'      //Glide
     implementation 'de.hdodenhof:circleimageview:3.0.1'     //圆形IV
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta5'    // rv adapter
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.0-beta7'    // rv adapter
     implementation 'com.github.zyyoona7:recyclerviewdivider:1.0.2' // RV分割线
     implementation 'com.github.chrisbanes:PhotoView:2.3.0' //photoView
     implementation 'com.serhatsurguvec.libraries:swipablelayout:0.0.1'  //滑动退出Activity
