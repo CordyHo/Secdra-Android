@@ -71,7 +71,7 @@ object SavePictureUtils {
             cacheFileUri?.let { inStream = FileInputStream(cacheFileUri) }   //原图片生成输入流
             val buffer = ByteArray(1024)
             while (inStream?.read(buffer).also { byteRead = it } != -1)
-                byteRead?.let { outStream?.write(buffer, 0, it) }   //写入保存图片
+                byteRead?.let { outStream?.write(buffer, 0, it) }   //写入要保存的图片
             context?.runOnUiThread { ToastUtil.showToastLong(context.getString(R.string.saveSuccess)) }
         } catch (e: Exception) {
             e.printStackTrace()
