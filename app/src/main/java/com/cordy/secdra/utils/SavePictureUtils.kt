@@ -73,11 +73,13 @@ object SavePictureUtils {
             outStream = null
             insertUri?.let { outStream = resolver?.openOutputStream(insertUri) }
             cacheFileUri?.let { inStream = FileInputStream(cacheFileUri) }
-
             buffer = ByteArray(1024)
             while (inStream?.read(buffer).also { byteRead = it } != -1)
                 byteRead?.let { outStream?.write(buffer, 0, it) }
             context?.runOnUiThread { ToastUtil.showToastLong(context.getString(R.string.saveSuccess)) }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            context?.runOnUiThread { ToastUtil.showToastLong(context.getString(R.string.saveFailure)) }
         } finally {
             inStream?.close()
             outStream?.close()
