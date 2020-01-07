@@ -57,25 +57,21 @@ object SavePictureUtils {
 
     private fun savePictureFor10Up(context: Activity?, url: String?, headOrBgUrl: String = "") {   // Android 10以上
         // Android 10之后不允许使用File类来操作公有文件目录，要用ContentResolver和MediaStore
-        val insertUri: Uri?  //需要保存的图片的路径uri
-        val cacheFileUri = getGlidePictureFromCache(url, headOrBgUrl)?.path  //得到Glide缓存图片，要在后台线程执行
         val resolver = context?.contentResolver
-        val values = ContentValues()
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, "$url.jpg")
-        values.put(MediaStore.Images.Media.MIME_TYPE, "image/$url.jpg")  //设置文件类型为image
-        insertUri = resolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        val values = ContentValues()  //配置需要保存图片的相关属性
+        values.put(MediaStore.Images.Media.DISPLAY_NAME, "$url.jpg")  //设置文件名字
+        values.put(MediaStore.Images.Media.MIME_TYPE, "image/$url.jpg")  //设置文件类型为image，貌似默认保存到Pictures这个文件夹里
+        val insertUri: Uri? = resolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)  //生成要保存的文件的uri，即路径
         var inStream: FileInputStream? = null
         var outStream: OutputStream? = null
-        val buffer: ByteArray
-        var byteRead: Int?
         try {
-            inStream = null
-            outStream = null
-            insertUri?.let { outStream = resolver?.openOutputStream(insertUri) }
-            cacheFileUri?.let { inStream = FileInputStream(cacheFileUri) }
-            buffer = ByteArray(1024)
+            var byteRead: Int?
+            val cacheFileUri = getGlidePictureFromCache(url, headOrBgUrl)?.path  //得到Glide缓存图片，要在后台线程执行
+            insertUri?.let { outStream = resolver.openOutputStream(insertUri) }  //要保存的图片生成一个输出流，即一个空的文件
+            cacheFileUri?.let { inStream = FileInputStream(cacheFileUri) }   //原图片生成输入流
+            val buffer = ByteArray(1024)
             while (inStream?.read(buffer).also { byteRead = it } != -1)
-                byteRead?.let { outStream?.write(buffer, 0, it) }
+                byteRead?.let { outStream?.write(buffer, 0, it) }   //写入保存图片
             context?.runOnUiThread { ToastUtil.showToastLong(context.getString(R.string.saveSuccess)) }
         } catch (e: Exception) {
             e.printStackTrace()
