@@ -11,11 +11,7 @@ object ActivityStackManager {
     }
 
     fun onDestroyRemove(activity: Activity?) {
-        activity?.let {
-            if (!it.isFinishing)
-                it.finish()
-        }
-        stackList.removeAt(stackList.indexOf(activity))
+        stackList.remove(activity)
     }
 
     fun removeByName(className: Class<*>) {  //这里不需要remove List，因为activity finish的时候会执行在onDestroy()里执行 onDestroyRemove() 方法，防止数组越界
