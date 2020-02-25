@@ -1,7 +1,3 @@
-import com.android.builder.core.DefaultManifestParser
-
-import java.util.function.BooleanSupplier
-
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -14,7 +10,7 @@ android {
         targetSdkVersion 29
     }
 
-    android.applicationVariants.all { variant ->
+   /* android.applicationVariants.all { variant ->
         variant.outputs.all {
             def manifestParser = new DefaultManifestParser(android.sourceSets.main.manifest.srcFile, new BooleanSupplier() {
                 @Override
@@ -24,7 +20,7 @@ android {
             }, null)
             outputFileName = "secdra_${manifestParser.getVersionName()}_${manifestParser.getVersionCode()}.apk"
         }
-    }
+    }*/
 
     aaptOptions {
         noCompress 'dex'
