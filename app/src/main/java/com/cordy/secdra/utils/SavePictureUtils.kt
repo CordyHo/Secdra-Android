@@ -72,6 +72,6 @@ object SavePictureUtils {
             } catch (e: Exception) {
                 null
             }
-        } ?: run { return null }
+        } ?: return null
     }
 }
