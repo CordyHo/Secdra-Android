@@ -48,7 +48,7 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:3.0.1' // Bugly
     implementation 'com.github.bumptech.glide:glide:4.11.0'      //Glide
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'      //Glide
-    implementation 'de.hdodenhof:circleimageview:3.0.1'     //圆形IV
+    implementation 'de.hdodenhof:circleimageview:3.1.0'     //圆形IV
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.1'    // rv adapter
     implementation 'com.github.zyyoona7:recyclerviewdivider:1.0.2' // RV分割线
     implementation 'com.github.chrisbanes:PhotoView:2.3.0' //photoView
