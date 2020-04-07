@@ -1,6 +1,5 @@
 package com.cordy.secdra.module.main.adapter
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.widget.TextView
@@ -8,37 +7,35 @@ import androidx.cardview.widget.CardView
 import androidx.palette.graphics.Palette
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.module.LoadMoreModule
+import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.cordy.secdra.R
+import com.cordy.secdra.databinding.ItemRvPictureBinding
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.interfaces.RvItemClickListener
 import com.cordy.secdra.utils.ImageLoader
 import com.cordy.secdra.utils.PictureLoadCallBack
-import com.cordy.secdra.widget.ScaleImageView
-import de.hdodenhof.circleimageview.CircleImageView
 import java.io.File
 
-@SuppressLint("SetTextI18n")
 class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) : LoadMoreModule,
-        BaseQuickAdapter<JsonBeanPicture.DataBean.ContentBean, BaseViewHolder>(R.layout.item_rv_picture) {
+        BaseQuickAdapter<JsonBeanPicture.DataBean.ContentBean, BaseDataBindingHolder<ItemRvPictureBinding>>(R.layout.item_rv_picture) {
 
     private lateinit var palette: Palette
 
-    override fun convert(holder: BaseViewHolder, item: JsonBeanPicture.DataBean.ContentBean) {
-        val ivPicture = holder.getView<ScaleImageView>(R.id.iv_picture)
-        val ivPortrait = holder.getView<CircleImageView>(R.id.iv_portrait)
-        val tvName = holder.getView<TextView>(R.id.tv_name)
-        ivPicture.setInitSize(item.width, item.height)  //重写IV的测量方法，设置图片宽高缩放到屏幕实际的宽高
+    override fun convert(holder: BaseDataBindingHolder<ItemRvPictureBinding>, item: JsonBeanPicture.DataBean.ContentBean) {
+        holder.dataBinding?.info = item
+        val ivPicture = holder.dataBinding?.ivPicture
+        val ivPortrait = holder.dataBinding?.ivPortrait
+        ivPicture?.setInitSize(item.width, item.height)  //重写IV的测量方法，设置图片宽高缩放到屏幕实际的宽高
         ImageLoader.setBaseImageWithoutPlaceholderCallbackFromUrl(item.url, ivPicture, object : PictureLoadCallBack {
             override fun onCallBack(bitmap: Bitmap?, file: File?) {
                 if (holder.adapterPosition >= 0)
                     getPictureMainColor(bitmap, holder, holder.adapterPosition)
             }
         })
-        ImageLoader.setPortraitFromUrl(item.user?.head, ivPortrait)
-        tvName.text = item.name
+        ImageLoader.setPortraitFromUrl(item.user?.head, ivPortrait!!)
         holder.itemView.setOnClickListener {
-            rvItemClickListener?.onItemClick(ivPicture, holder.adapterPosition)
+            rvItemClickListener?.onItemClick(ivPicture!!, holder.adapterPosition)
         }
     }
 

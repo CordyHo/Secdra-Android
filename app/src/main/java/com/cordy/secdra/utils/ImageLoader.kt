@@ -27,7 +27,7 @@ object ImageLoader {
         }
     }
 
-    fun setBaseImageWithoutPlaceholderCallbackFromUrl(url: Any?, iv_image: ImageView, pictureLoadCallBack: PictureLoadCallBack?) {  //普通图片小图没有占位符
+    fun setBaseImageWithoutPlaceholderCallbackFromUrl(url: Any?, iv_image: ImageView?, pictureLoadCallBack: PictureLoadCallBack?) {  //普通图片小图没有占位符
         val options = RequestOptions()
                 .fitCenter()
         application?.run {
@@ -47,7 +47,7 @@ object ImageLoader {
                             return false
                         }
                     })
-                    .into(iv_image)
+                    .into(iv_image!!)
         }
     }
 
