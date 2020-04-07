@@ -118,18 +118,18 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
         if (jsonBeanPicture.data.content.isNotEmpty()) {
             page = 1
             rvPicture.scrollToPosition(0)  // 得到新数据后不会回到顶部，要调用滚到顶部
-            adapter.setNewData(jsonBeanPicture.data.content)
+            adapter.setNewInstance(jsonBeanPicture.data.content)
         } else
             rvPicture.visibility = View.INVISIBLE
     }
 
     private fun loadMoreRv(jsonBeanPicture: JsonBeanPicture) {
         if (jsonBeanPicture.data.content.isNotEmpty()) {
-            adapter.loadMoreModule?.loadMoreComplete()
+            adapter.loadMoreModule.loadMoreComplete()
             adapter.addData(jsonBeanPicture.data.content)
             page++
         } else
-            adapter.loadMoreModule?.loadMoreEnd(true)
+            adapter.loadMoreModule.loadMoreEnd(true)
     }
 
     override fun getPictureListFailure(msg: String?) {
@@ -201,7 +201,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
         adapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.ScaleIn)
-        adapter.loadMoreModule?.setOnLoadMoreListener(this)
+        adapter.loadMoreModule.setOnLoadMoreListener(this)
         rvPicture.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_DRAGGING)

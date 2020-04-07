@@ -165,16 +165,16 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun initRv(jsonBeanPicture: JsonBeanPicture) {
         stopRefresh()
         page = 1
-        adapter.setNewData(jsonBeanPicture.data.content)
+        adapter.setNewInstance(jsonBeanPicture.data.content)
     }
 
     private fun loadMoreRv(jsonBeanPicture: JsonBeanPicture) {
         if (jsonBeanPicture.data.content.isNotEmpty()) {
-            adapter.loadMoreModule?.loadMoreComplete()
+            adapter.loadMoreModule.loadMoreComplete()
             adapter.addData(jsonBeanPicture.data.content)
             page++
         } else
-            adapter.loadMoreModule?.loadMoreEnd(true)
+            adapter.loadMoreModule.loadMoreEnd(true)
     }
 
     override fun getPictureListFailure(msg: String?) {
@@ -251,7 +251,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         rvPicture.adapter = adapter
         rvPicture.addItemDecoration(StaggeredGridItemDecoration(StaggeredGridItemDecoration.Builder().includeStartEdge().includeEdge().spacingSize(ScreenUtils.dp2px(this, 10f))))
         adapter.setAnimationWithDefault(BaseQuickAdapter.AnimationType.ScaleIn)
-        adapter.loadMoreModule?.setOnLoadMoreListener(this)
+        adapter.loadMoreModule.setOnLoadMoreListener(this)
         adapter.setFooterView(layoutInflater.inflate(R.layout.rv_empty_footer, null))
         val navigationBarHeight = ScreenUtils.getNavigationBarHeight(this)
         adapter.footerLayout?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, navigationBarHeight)  //设置RV底部=导航栏高度

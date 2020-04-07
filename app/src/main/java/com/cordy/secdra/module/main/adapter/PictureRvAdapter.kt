@@ -24,21 +24,21 @@ class PictureRvAdapter(private val rvItemClickListener: RvItemClickListener?) : 
 
     private lateinit var palette: Palette
 
-    override fun convert(helper: BaseViewHolder, item: JsonBeanPicture.DataBean.ContentBean) {
-        val ivPicture = helper.getView<ScaleImageView>(R.id.iv_picture)
-        val ivPortrait = helper.getView<CircleImageView>(R.id.iv_portrait)
-        val tvName = helper.getView<TextView>(R.id.tv_name)
+    override fun convert(holder: BaseViewHolder, item: JsonBeanPicture.DataBean.ContentBean) {
+        val ivPicture = holder.getView<ScaleImageView>(R.id.iv_picture)
+        val ivPortrait = holder.getView<CircleImageView>(R.id.iv_portrait)
+        val tvName = holder.getView<TextView>(R.id.tv_name)
         ivPicture.setInitSize(item.width, item.height)  //重写IV的测量方法，设置图片宽高缩放到屏幕实际的宽高
         ImageLoader.setBaseImageWithoutPlaceholderCallbackFromUrl(item.url, ivPicture, object : PictureLoadCallBack {
             override fun onCallBack(bitmap: Bitmap?, file: File?) {
-                if (helper.adapterPosition >= 0)
-                    getPictureMainColor(bitmap, helper, helper.adapterPosition)
+                if (holder.adapterPosition >= 0)
+                    getPictureMainColor(bitmap, holder, holder.adapterPosition)
             }
         })
         ImageLoader.setPortraitFromUrl(item.user?.head, ivPortrait)
         tvName.text = item.name
-        helper.itemView.setOnClickListener {
-            rvItemClickListener?.onItemClick(ivPicture, helper.adapterPosition)
+        holder.itemView.setOnClickListener {
+            rvItemClickListener?.onItemClick(ivPicture, holder.adapterPosition)
         }
     }
 
