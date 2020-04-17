@@ -2,7 +2,7 @@ package com.cordy.secdra.utils
 
 import android.app.Activity
 
-/*Activity堆栈管理*/
+/*Activity堆栈管理.*/
 object ActivityStackManager {
 
     private val stackList = ArrayList<Activity>()
