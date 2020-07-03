@@ -46,7 +46,6 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
     private val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
     private val adapter: PictureRvAdapter = PictureRvAdapter(this)
     private lateinit var broadcastReceiver: BroadcastReceiver
-    private lateinit var localBroadcastManager: LocalBroadcastManager
     private var page = 1
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private val tag = javaClass.name
@@ -84,15 +83,14 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
 
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
         broadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent?.getStringExtra("tag") == tag) {
+            override fun onReceive(context: Context?, intent: Intent) {
+                if (intent.getStringExtra("tag") == tag) {
                     appbarLayout.setExpanded(false)
                     rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
                 }
             }
         }
-        localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        localBroadcastManager.registerReceiver(broadcastReceiver, IntentFilter("scrollPos"))
+        registerReceiver(broadcastReceiver, IntentFilter("scrollPos"))
     }
 
     override fun onItemClick(ivPicture: ImageView, pos: Int) {  //item点击事件
@@ -184,7 +182,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
 
     override fun onDestroy() {
         super.onDestroy()
-        localBroadcastManager.unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(broadcastReceiver)
     }
 
     override fun initView() {

@@ -17,7 +17,6 @@ import androidx.core.app.SharedElementCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -64,7 +63,6 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private val model = MPictureModel(this)
     private val adapter: PictureRvAdapter = PictureRvAdapter(this)
     private lateinit var broadcastReceiver: BroadcastReceiver
-    private lateinit var localBroadcastManager: LocalBroadcastManager
     private var page = 1   // 第一页为0，第二页为1
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private var whichId = -1   //点击侧滑的菜单记录id，侧滑关闭后再根据id进行界面操作，提高体验
@@ -134,15 +132,14 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun initBroadcastReceiver() {  //查看大图VP滑动时更新RV滑动
         broadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (intent?.getStringExtra("tag") == tag) {
+            override fun onReceive(context: Context?, intent: Intent) {
+                if (intent.getStringExtra("tag") == tag) {
                     appbarLayout.setExpanded(false)
                     rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
                 }
             }
         }
-        localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        localBroadcastManager.registerReceiver(broadcastReceiver, IntentFilter("scrollPos"))
+        registerReceiver(broadcastReceiver, IntentFilter("scrollPos"))
     }
 
     override fun onItemClick(ivPicture: ImageView, pos: Int) {  //item点击事件
@@ -304,7 +301,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     override fun onDestroy() {
         super.onDestroy()
-        localBroadcastManager.unregisterReceiver(broadcastReceiver)
+        unregisterReceiver(broadcastReceiver)
     }
 
     override fun onBackPressed() {

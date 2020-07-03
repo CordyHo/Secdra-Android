@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.SharedElementCallback
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.viewpager.widget.ViewPager
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
@@ -18,7 +17,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     private lateinit var vpPicture: PhotoViewPager
     private lateinit var adapter: VpPictureAdapter
-    private lateinit var localBroadcastManager: LocalBroadcastManager
     private var tag: String? = ""  //用来记录启动该activity的是哪个activity，区别发送滚动RV的广播
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +53,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     override fun onPageSelected(pos: Int) {  //滑动VP发送广播滚动RV到相应位置
         changeBgColor(pos)
-        localBroadcastManager.sendBroadcast(Intent("scrollPos")
+        sendBroadcast(Intent("scrollPos")
                 .putExtra("scrollPos", vpPicture.currentItem)
                 .putExtra("tag", tag))
     }
@@ -76,7 +74,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
     override fun initView() {
         vpPicture = vp_picture
-        localBroadcastManager = LocalBroadcastManager.getInstance(this)
         tag = intent?.getStringExtra("tag")
     }
 
