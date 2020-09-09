@@ -11,8 +11,8 @@ android {
         targetSdkVersion 30
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
    /* android.applicationVariants.all { variant ->
@@ -52,9 +52,10 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
     implementation "androidx.preference:preference:1.1.1"
     implementation 'androidx.palette:palette:1.0.0'   // palette google调色板
     implementation 'com.google.code.gson:gson:2.8.6'
