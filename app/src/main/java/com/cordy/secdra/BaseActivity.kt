@@ -10,7 +10,7 @@ import com.cordy.secdra.utils.ToastUtil
 
 abstract class BaseActivity : AppCompatActivity() {
 
-    private var lastClickTime: Long = 0
+    private var lastClickTime = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
