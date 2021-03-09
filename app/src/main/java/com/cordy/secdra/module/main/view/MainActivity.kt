@@ -24,6 +24,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
+import com.cordy.secdra.databinding.ActivityMainBinding
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.dialog.LogoutDialog
@@ -43,10 +44,6 @@ import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.layout_drawer_start.*
-import kotlinx.android.synthetic.main.layout_navigation_view_header.view.*
-import kotlinx.android.synthetic.main.view_float_button.*
 
 @SuppressLint("InflateParams")
 class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, NavigationView.OnNavigationItemSelectedListener, RvItemClickListener,
@@ -67,13 +64,15 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private var whichId = -1   //点击侧滑的菜单记录id，侧滑关闭后再根据id进行界面操作，提高体验
     private val tag = javaClass.name
+    private lateinit var vBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
         window.navigationBarColor = ContextCompat.getColor(this, R.color.navigationTransparent)
         window.statusBarColor = ContextCompat.getColor(this, R.color.navigationTransparent)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        vBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(vBinding.root)
         initView()
         initNavigationView()
         getDataFromUrl()
@@ -116,14 +115,14 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private fun setViewData() {    //设置用户信息
         if (!AccountManager.isSignIn) {
             nvNavigation.menu.findItem(R.id.action_logout_or_login).isVisible = false
-            ImageLoader.setImageResource(R.drawable.ic_icon, iv_portrait)
+            ImageLoader.setImageResource(R.drawable.ic_icon, vBinding.ivPortrait)
             ImageLoader.setImageResource(R.drawable.ic_icon, ivPortraitDrawer)
             ImageLoader.setImageResource(R.drawable.ic_icon, ivBackground)
             tvName.text = getString(R.string.click_to_login)
         } else {
             nvNavigation.menu.findItem(R.id.action_logout_or_login).isVisible = true
             val jsonBeanUser = Gson().fromJson(AccountManager.userDetails, JsonBeanUser::class.java)
-            ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, iv_portrait)
+            ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, vBinding.ivPortrait)
             ImageLoader.setPortraitFromUrl(jsonBeanUser.data?.head, ivPortraitDrawer)
             ImageLoader.setBackGroundImageFromUrl(jsonBeanUser.data?.background, ivBackground)
             tvName.text = jsonBeanUser.data?.name
@@ -134,7 +133,7 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
                 if (intent.getStringExtra("tag") == tag) {
-                    appbarLayout.setExpanded(false)
+                    vBinding.appbarLayout.setExpanded(false)
                     rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
                 }
             }
@@ -230,17 +229,17 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     }
 
     override fun initView() {
-        dlDrawer = dl_drawer
-        nvNavigation = nv_navigation
-        srlRefresh = srl_refresh
-        rvPicture = rv_picture
+        dlDrawer = vBinding.dlDrawer
+        nvNavigation = vBinding.layoutDrawerStart.nvNavigation
+        srlRefresh = vBinding.srlRefresh
+        rvPicture = vBinding.rvPicture
         srlRefresh.setOnRefreshListener(this)
         dlDrawer.addDrawerListener(this)
         nvNavigation.setNavigationItemSelectedListener(this)
-        iv_portrait.setOnClickListener(this)
-        iv_menu.setOnClickListener(this)
-        fb_top.setOnClickListener(this)
-        tv_search.setOnClickListener(this)
+        vBinding.ivPortrait.setOnClickListener(this)
+        vBinding.ivMenu.setOnClickListener(this)
+        vBinding.viewFloatButton.fbTop.setOnClickListener(this)
+        vBinding.tvSearch.setOnClickListener(this)
         srlRefresh.setColorSchemeResources(R.color.colorAccent)
         srlRefresh.setProgressViewOffset(true, 0, 100)
         srlRefresh.post { srlRefresh.isRefreshing = true }
@@ -258,21 +257,21 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
 
     private fun initNavigationView() {
         nvNavigation.getHeaderView(0).setOnClickListener(this)
-        ivPortraitDrawer = nvNavigation.getHeaderView(0).iv_portraitDrawer
-        ivBackground = nvNavigation.getHeaderView(0).iv_background
-        tvName = nvNavigation.getHeaderView(0).tv_name
-        nvNavigation.getHeaderView(0).lv_userInfo.setPadding(0, ScreenUtils.dp2px(this, 15f) + ScreenUtils.getStatusHeight(this), 0, 0)
+        ivPortraitDrawer = nvNavigation.getHeaderView(0).findViewById(R.id.iv_portraitDrawer)
+        ivBackground = nvNavigation.getHeaderView(0).findViewById(R.id.iv_background)
+        tvName = nvNavigation.getHeaderView(0).findViewById(R.id.tv_name)
+        nvNavigation.getHeaderView(0).findViewById<LinearLayout>(R.id.lv_userInfo).setPadding(0, ScreenUtils.dp2px(this, 15f) + ScreenUtils.getStatusHeight(this), 0, 0)
     }
 
     private fun setToolBarMargin() {
         val statusBarHeight = ScreenUtils.getStatusHeight(this)
-        (toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).setMargins(0, statusBarHeight, 0, 0)
+        (vBinding.toolbar.layoutParams as CollapsingToolbarLayout.LayoutParams).setMargins(0, statusBarHeight, 0, 0)
     }
 
     private fun setFloatingActionButtonPadding(navigationBarHeight: Int) {
-        val param = fb_top.layoutParams as CoordinatorLayout.LayoutParams
+        val param = vBinding.viewFloatButton.fbTop.layoutParams as CoordinatorLayout.LayoutParams
         param.bottomMargin = param.bottomMargin + navigationBarHeight
-        fb_top.layoutParams = param
+        vBinding.viewFloatButton.fbTop.layoutParams = param
     }
 
     override fun onDrawerClosed(drawerView: View) {  //侧滑关闭回调

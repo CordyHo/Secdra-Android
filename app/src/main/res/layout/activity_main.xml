@@ -114,10 +114,14 @@
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <include layout="@layout/view_float_button" />
+        <include
+            android:id="@+id/view_float_button"
+            layout="@layout/view_float_button" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <include layout="@layout/layout_drawer_start" />
+    <include
+        android:id="@+id/layout_drawerStart"
+        layout="@layout/layout_drawer_start" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

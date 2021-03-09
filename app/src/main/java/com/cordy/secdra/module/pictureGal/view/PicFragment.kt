@@ -20,7 +20,7 @@ import com.cordy.secdra.utils.SavePictureUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
 import com.github.chrisbanes.photoview.PhotoView
-import kotlinx.android.synthetic.main.fragment_picture.view.*
+import com.serhatsurguvec.swipablelayout.SwipeableLayout
 import java.io.File
 
 class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, View.OnClickListener {
@@ -120,9 +120,9 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, V
     }
 
     private fun initView(rootView: View) {
-        rootView.sbl_layout.setOnLayoutCloseListener { activity.onBackPressed() }  //下滑关闭Activity
-        pbProgress = rootView.pb_progress
-        ivPictureOrigin = rootView.iv_pictureOrigin
+        rootView.findViewById<SwipeableLayout>(R.id.sbl_layout).setOnLayoutCloseListener { activity.onBackPressed() }  //下滑关闭Activity
+        pbProgress = rootView.findViewById(R.id.pb_progress)
+        ivPictureOrigin = rootView.findViewById(R.id.iv_pictureOrigin)
         ivPictureOrigin.setOnLongClickListener(this)
         ivPictureOrigin.setOnClickListener(this)
     }

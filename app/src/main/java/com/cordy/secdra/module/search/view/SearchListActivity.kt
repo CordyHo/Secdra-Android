@@ -12,7 +12,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.SharedElementCallback
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -20,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
 import com.cordy.secdra.R
 import com.cordy.secdra.SlideActivity
+import com.cordy.secdra.databinding.ActivitySearchListBinding
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
 import com.cordy.secdra.module.main.interfaces.IPictureInterface
@@ -32,8 +32,6 @@ import com.cordy.secdra.utils.ScreenUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ScaleImageView
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
-import kotlinx.android.synthetic.main.activity_search_list.*
-import kotlinx.android.synthetic.main.view_float_button.*
 
 class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
         OnLoadMoreListener, View.OnClickListener {
@@ -49,10 +47,12 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
     private var page = 1
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private val tag = javaClass.name
+    private lateinit var vBinding: ActivitySearchListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_list)
+        vBinding = ActivitySearchListBinding.inflate(layoutInflater)
+        setContentView(vBinding.root)
         initView()
         initBroadcastReceiver()
         exitShareElementCallback()
@@ -85,7 +85,7 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
         broadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent) {
                 if (intent.getStringExtra("tag") == tag) {
-                    appbarLayout.setExpanded(false)
+                    vBinding.appbarLayout.setExpanded(false)
                     rvPicture.scrollToPosition(intent.getIntExtra("scrollPos", 0))
                 }
             }
@@ -187,9 +187,9 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
 
     override fun initView() {
         super.initView()
-        etSearch = et_search
-        srlRefresh = srl_refresh
-        rvPicture = rv_picture
+        etSearch = vBinding.etSearch
+        srlRefresh = vBinding.srlRefresh
+        rvPicture = vBinding.rvPicture
         etSearch.requestFocus()
         etSearch.setOnEditorActionListener(this)
         srlRefresh.setOnRefreshListener(this)
@@ -206,6 +206,6 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
                     hideKeyboard()
             }
         })
-        fb_top.setOnClickListener(this)
+        vBinding.viewFloatButton.fbTop.setOnClickListener(this)
     }
 }

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.cordy.secdra.R
-import kotlinx.android.synthetic.main.fragment_works_collect.view.*
 
 @SuppressLint("InflateParams")
 class WorksFragment : Fragment() {
@@ -22,6 +21,6 @@ class WorksFragment : Fragment() {
     }
 
     private fun initView(rootView: View) {
-        srlRefresh = rootView.srl_refresh
+        srlRefresh = rootView.findViewById(R.id.srl_refresh)
     }
 }

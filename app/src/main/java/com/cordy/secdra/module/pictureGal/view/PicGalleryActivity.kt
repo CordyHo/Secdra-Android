@@ -11,7 +11,6 @@ import com.cordy.secdra.module.pictureGal.adapter.VpPictureAdapter
 import com.cordy.secdra.utils.PicturesListMiddleware
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.PhotoViewPager
-import kotlinx.android.synthetic.main.activity_pic_gallery.*
 
 class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
 
@@ -73,7 +72,7 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
     }
 
     override fun initView() {
-        vpPicture = vp_picture
+        vpPicture = findViewById(R.id.vp_picture)
         tag = intent?.getStringExtra("tag")
     }
 

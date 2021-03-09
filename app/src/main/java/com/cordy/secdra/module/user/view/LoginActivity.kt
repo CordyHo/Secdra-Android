@@ -10,11 +10,11 @@ import android.view.View
 import android.widget.EditText
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
+import com.cordy.secdra.databinding.ActivityLoginBinding
 import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.module.user.interfaces.IUserInterface
 import com.cordy.secdra.module.user.model.MUserModel
 import com.cordy.secdra.utils.ToastUtil
-import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
 
@@ -23,10 +23,12 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
     private var shouldShowPw = true
     private val mUserModel = MUserModel(this)
     private lateinit var progressDialog: ProgressDialog
+    private lateinit var vBinding : ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        vBinding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(vBinding.root)
         initView()
     }
 
@@ -42,13 +44,13 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
 
     override fun getUserInfoFailure(msg: String) {
         progressDialog.dismiss()
-        btn_login.isEnabled = true
+        vBinding.btnLogin.isEnabled = true
         ToastUtil.showToastShort(msg)
     }
 
     override fun loginFailure(msg: String) {
         progressDialog.dismiss()
-        btn_login.isEnabled = true
+        vBinding.btnLogin.isEnabled = true
         ToastUtil.showToastShort(msg)
     }
 
@@ -59,7 +61,7 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
                 if (!etPhone.text.isNullOrBlank() && !etPw.text.isNullOrBlank()) {
                     progressDialog.show()
                     mUserModel.login(etPhone.text.toString(), etPw.text.toString())
-                    btn_login.isEnabled = false
+                    vBinding.btnLogin.isEnabled = false
                 } else if (etPhone.text.isNullOrBlank())
                     ToastUtil.showToastShort(getString(R.string.input_phone))
                 else
@@ -82,11 +84,11 @@ class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
 
     override fun initView() {
         super.initView()
-        etPhone = et_phone
+        etPhone = vBinding.etPhone
         etPhone.requestFocus()
-        etPw = et_pw
-        btn_login.setOnClickListener(this)
-        iv_eye.setOnClickListener(this)
+        etPw = vBinding.etPhone
+        vBinding.btnLogin.setOnClickListener(this)
+        vBinding.ivEye.setOnClickListener(this)
         progressDialog = ProgressDialog(this)
         progressDialog.run {
             setMessage(getString(R.string.please_wait))

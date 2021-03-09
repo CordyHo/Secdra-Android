@@ -7,6 +7,7 @@
     android:layout_gravity="bottom|end"
     android:layout_margin="10dp"
     android:alpha=".7"
+    android:contentDescription="@string/confirm"
     android:rotation="-90"
     android:src="@android:drawable/ic_media_ff"
     app:fabSize="normal"
