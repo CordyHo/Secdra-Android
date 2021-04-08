@@ -15,17 +15,14 @@ import com.cordy.secdra.utils.SavePictureUtils
 import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ImmersionBar
 
-class PictureViewerActivity : BaseActivity(), IPermissionCallback {
+class PictureViewerActivity : BaseActivity<ActivityPictureViewerBinding>(), IPermissionCallback {
 
     private var isHideUIBar = true
-    private lateinit var vBinding: ActivityPictureViewerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportPostponeEnterTransition()  //延迟元素共享动画，更连贯，记得重新开启
         ImmersionBar(this).setImmersionBar()
         super.onCreate(savedInstanceState)
-        vBinding = ActivityPictureViewerBinding.inflate(layoutInflater)
-        setContentView(vBinding.root)
         when (intent?.action) {
             "head" -> ImageLoader.setPortraitFromUrl(intent?.getStringExtra("url"), vBinding.ivPicture)
 

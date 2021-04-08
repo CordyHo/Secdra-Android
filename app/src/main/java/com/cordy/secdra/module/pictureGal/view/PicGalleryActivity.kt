@@ -7,12 +7,13 @@ import androidx.core.app.SharedElementCallback
 import androidx.viewpager.widget.ViewPager
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
+import com.cordy.secdra.databinding.ActivityPicGalleryBinding
 import com.cordy.secdra.module.pictureGal.adapter.VpPictureAdapter
 import com.cordy.secdra.utils.PicturesListMiddleware
 import com.cordy.secdra.widget.ImmersionBar
 import com.cordy.secdra.widget.PhotoViewPager
 
-class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
+class PicGalleryActivity : BaseActivity<ActivityPicGalleryBinding>(), ViewPager.OnPageChangeListener {
 
     private lateinit var vpPicture: PhotoViewPager
     private lateinit var adapter: VpPictureAdapter
@@ -22,7 +23,6 @@ class PicGalleryActivity : BaseActivity(), ViewPager.OnPageChangeListener {
         supportPostponeEnterTransition()  //延迟元素共享动画，更连贯，记得重新开启
         ImmersionBar(this).setImmersionBar()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pic_gallery)
         initView()
         initVp()
         enterShareElementCallback()

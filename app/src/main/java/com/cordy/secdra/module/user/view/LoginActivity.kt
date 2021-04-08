@@ -16,19 +16,16 @@ import com.cordy.secdra.module.user.interfaces.IUserInterface
 import com.cordy.secdra.module.user.model.MUserModel
 import com.cordy.secdra.utils.ToastUtil
 
-class LoginActivity : BaseActivity(), IUserInterface, View.OnClickListener {
+class LoginActivity : BaseActivity<ActivityLoginBinding>(), IUserInterface, View.OnClickListener {
 
     private lateinit var etPhone: EditText
     private lateinit var etPw: EditText
     private var shouldShowPw = true
     private val mUserModel = MUserModel(this)
     private lateinit var progressDialog: ProgressDialog
-    private lateinit var vBinding : ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vBinding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(vBinding.root)
         initView()
     }
 

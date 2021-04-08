@@ -46,7 +46,7 @@ import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 import de.hdodenhof.circleimageview.CircleImageView
 
 @SuppressLint("InflateParams")
-class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, NavigationView.OnNavigationItemSelectedListener, RvItemClickListener,
+class MainActivity : BaseActivity<ActivityMainBinding>(), IPictureInterface, SwipeRefreshLayout.OnRefreshListener, NavigationView.OnNavigationItemSelectedListener, RvItemClickListener,
         DrawerLayout.DrawerListener, OnLoadMoreListener, View.OnClickListener {
 
     private lateinit var dlDrawer: DrawerLayout
@@ -64,15 +64,12 @@ class MainActivity : BaseActivity(), IPictureInterface, SwipeRefreshLayout.OnRef
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private var whichId = -1   //点击侧滑的菜单记录id，侧滑关闭后再根据id进行界面操作，提高体验
     private val tag = javaClass.name
-    private lateinit var vBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ImmersionBar(this).setImmersionBar()
         window.navigationBarColor = ContextCompat.getColor(this, R.color.navigationTransparent)
         window.statusBarColor = ContextCompat.getColor(this, R.color.navigationTransparent)
         super.onCreate(savedInstanceState)
-        vBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(vBinding.root)
         initView()
         initNavigationView()
         getDataFromUrl()

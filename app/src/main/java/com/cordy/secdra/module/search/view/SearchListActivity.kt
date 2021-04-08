@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.listener.OnLoadMoreListener
+import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
-import com.cordy.secdra.SlideActivity
 import com.cordy.secdra.databinding.ActivitySearchListBinding
 import com.cordy.secdra.module.main.adapter.PictureRvAdapter
 import com.cordy.secdra.module.main.bean.JsonBeanPicture
@@ -33,7 +33,7 @@ import com.cordy.secdra.utils.ToastUtil
 import com.cordy.secdra.widget.ScaleImageView
 import com.zyyoona7.itemdecoration.provider.StaggeredGridItemDecoration
 
-class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
+class SearchListActivity : BaseActivity<ActivitySearchListBinding>(), TextView.OnEditorActionListener, IPictureInterface, SwipeRefreshLayout.OnRefreshListener, RvItemClickListener,
         OnLoadMoreListener, View.OnClickListener {
 
     private var content: String? = ""  //搜索的内容，因为有翻页，所以要保存输入的内容来请求
@@ -47,12 +47,9 @@ class SearchListActivity : SlideActivity(), TextView.OnEditorActionListener, IPi
     private var page = 1
     private var bundle: Bundle? = Bundle()   //接收元素共享View返回的位置，用于返回动画
     private val tag = javaClass.name
-    private lateinit var vBinding: ActivitySearchListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vBinding = ActivitySearchListBinding.inflate(layoutInflater)
-        setContentView(vBinding.root)
         initView()
         initBroadcastReceiver()
         exitShareElementCallback()

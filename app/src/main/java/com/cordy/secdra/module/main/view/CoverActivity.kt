@@ -12,9 +12,9 @@ import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
 import com.cordy.secdra.BaseActivity
-import com.cordy.secdra.R
+import com.cordy.secdra.databinding.ActivityCoverBinding
 
-class CoverActivity : BaseActivity() {
+class CoverActivity : BaseActivity<ActivityCoverBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //刘海适配全屏
@@ -25,7 +25,6 @@ class CoverActivity : BaseActivity() {
             window.attributes = params
         }
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cover)
         if (Build.VERSION.SDK_INT >= 30) {
             //隐藏SystemBar，适配Android 11
             window.setDecorFitsSystemWindows(false)

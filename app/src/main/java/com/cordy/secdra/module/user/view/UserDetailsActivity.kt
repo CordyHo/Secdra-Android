@@ -9,8 +9,8 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
+import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
-import com.cordy.secdra.SlideActivity
 import com.cordy.secdra.databinding.ActivityUserDetailsBinding
 import com.cordy.secdra.module.user.bean.JsonBeanUser
 import com.cordy.secdra.module.user.fragment.WorksFragment
@@ -24,19 +24,16 @@ import com.google.gson.Gson
 import java.util.*
 import kotlin.math.abs
 
-class UserDetailsActivity : SlideActivity(), AppBarLayout.OnOffsetChangedListener,
+class UserDetailsActivity : BaseActivity<ActivityUserDetailsBinding>(), AppBarLayout.OnOffsetChangedListener,
     View.OnClickListener {
 
     private lateinit var vpInfo: ViewPager
     private lateinit var tabInfo: TabLayout
     private var jsonBeanUser: JsonBeanUser? = JsonBeanUser()
-    private lateinit var vBinding: ActivityUserDetailsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ScreenUtils.setStatusBariImmerse(this)
         super.onCreate(savedInstanceState)
-        vBinding = ActivityUserDetailsBinding.inflate(layoutInflater)
-        setContentView(vBinding.root)
         initView()
         initVp()
         setViewData()

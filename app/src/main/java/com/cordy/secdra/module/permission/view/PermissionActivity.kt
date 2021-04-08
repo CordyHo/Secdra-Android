@@ -2,13 +2,13 @@ package com.cordy.secdra.module.permission.view
 
 import android.content.pm.PackageManager
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.module.permission.utils.PermissionUtils
 import com.cordy.secdra.widget.ImmersionBar
 
 /*仅用于被启动后请求权限并处理返回*/
-class PermissionActivity : BaseActivity() {
+class PermissionActivity : AppCompatActivity() {
 
     private var permissionName = ""
 
