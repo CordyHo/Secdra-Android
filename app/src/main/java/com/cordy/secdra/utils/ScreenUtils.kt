@@ -93,36 +93,11 @@ class ScreenUtils private constructor() {
          * @return
          */
         fun getStatusHeight(context: Context): Int {
-
-            var statusHeight = -1
-            try {
-                @SuppressLint("PrivateApi")
-                val clazz = Class.forName("com.android.internal.R\$dimen")
-                val `object` = clazz.newInstance()
-                val height = Integer.parseInt(
-                        clazz.getField("status_bar_height")
-                                .get(`object`).toString()
-                )
-                statusHeight = context.resources.getDimensionPixelSize(height)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-
-            return statusHeight
+            return context.resources.getDimensionPixelSize(context.resources.getIdentifier("status_bar_height", "dimen", "android"))
         }
 
         fun getNavigationBarHeight(context: Context): Int {
-            return if (!checkDeviceHasNavigationBar(context))
-                0
-            else {
-                val resourceId: Int
-                val rid = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
-                if (rid != 0) {
-                    resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-                    context.resources.getDimensionPixelSize(resourceId)
-                } else
-                    0
-            }
+            return context.resources.getDimensionPixelSize(context.resources.getIdentifier("navigation_bar_height", "dimen", "android"))
         }
 
         private fun checkDeviceHasNavigationBar(context: Context): Boolean {
