@@ -66,7 +66,6 @@
                             android:layout_marginEnd="15dp"
                             android:layout_weight="1"
                             android:background="@drawable/bg_rectangle_search"
-                            android:drawableStart="@drawable/ic_search_white"
                             android:drawablePadding="7dp"
                             android:hint="@string/search"
                             android:paddingStart="17dp"
@@ -74,7 +73,8 @@
                             android:paddingEnd="0dp"
                             android:paddingBottom="6dp"
                             android:textColorHint="@color/white"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            app:drawableStartCompat="@drawable/ic_search_white" />
 
                     </LinearLayout>
 
