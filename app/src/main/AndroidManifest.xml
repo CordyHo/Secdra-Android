@@ -30,7 +30,8 @@
         <activity
             android:name=".module.main.view.CoverActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:theme="@style/AppTheme.NoActionBar.Transparent">
+            android:theme="@style/AppTheme.NoActionBar.Transparent"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

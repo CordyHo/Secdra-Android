@@ -11,7 +11,6 @@ import com.cordy.secdra.SecdraApplication
 import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.nio.charset.Charset
-import java.util.*
 
 class UrlRequest {
 
@@ -98,7 +97,7 @@ class UrlRequest {
             override fun parseNetworkResponse(response: NetworkResponse): Response<String> {  //登录拿token
                 return try {
                     val responseHeaders = response.headers
-                    val rawCookies = responseHeaders["token"]
+                    val rawCookies = responseHeaders?.get("token")
                     AccountManager.token = rawCookies
                     val dataString = String(response.data, Charset.forName("utf-8"))
                     Response.success(dataString, HttpHeaderParser.parseCacheHeaders(response))
