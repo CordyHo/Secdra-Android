@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import androidx.core.app.ActivityOptionsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.cordy.secdra.BaseActivity
 import com.cordy.secdra.R
 import com.cordy.secdra.databinding.ActivityUserDetailsBinding
@@ -20,14 +20,14 @@ import com.cordy.secdra.utils.ScreenUtils
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.gson.Gson
-import java.util.*
 import kotlin.math.abs
 
-class UserDetailsActivity : BaseActivity<ActivityUserDetailsBinding>(), AppBarLayout.OnOffsetChangedListener,
-    View.OnClickListener {
+class UserDetailsActivity : BaseActivity<ActivityUserDetailsBinding>(),
+    AppBarLayout.OnOffsetChangedListener, View.OnClickListener {
 
-    private lateinit var vpInfo: ViewPager
+    private lateinit var vpInfo: ViewPager2
     private lateinit var tabInfo: TabLayout
     private var jsonBeanUser: JsonBeanUser? = JsonBeanUser()
 
@@ -55,23 +55,22 @@ class UserDetailsActivity : BaseActivity<ActivityUserDetailsBinding>(), AppBarLa
         fragmentList.add(WorksFragment())
         fragmentList.add(WorksFragment())
         vpInfo.adapter = object :
-            FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-            override fun getItem(position: Int): Fragment {
+            FragmentStateAdapter(supportFragmentManager, lifecycle) {
+
+            override fun createFragment(position: Int): Fragment {
                 return fragmentList[position]
             }
 
-            override fun getPageTitle(position: Int): CharSequence {
-                return when (position) {
-                    0 -> getString(R.string.works)
-                    else -> getString(R.string.collect)
-                }
-            }
-
-            override fun getCount(): Int {
+            override fun getItemCount(): Int {
                 return fragmentList.size
             }
         }
-        tabInfo.setupWithViewPager(vpInfo)
+        TabLayoutMediator(tabInfo, vpInfo) { tab, pos ->
+            tab.text = when (pos) {
+                0 -> getString(R.string.works)
+                else -> getString(R.string.collect)
+            }
+        }.attach()
     }
 
     override fun onOffsetChanged(view: AppBarLayout?, verticalOffset: Int) {
