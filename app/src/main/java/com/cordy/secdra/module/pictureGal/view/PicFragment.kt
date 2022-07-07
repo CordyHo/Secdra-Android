@@ -31,7 +31,7 @@ class PicFragment : Fragment(), View.OnLongClickListener, IPermissionCallback, V
     private lateinit var ivPictureOrigin: PhotoView
     private var isHideUIBar = false
 
-    val sharedElement: View?
+    val sharedElement: View
         get() = ivPictureOrigin
 
     fun newFragment(bean: JsonBeanPicture.DataBean.ContentBean?): Fragment {
