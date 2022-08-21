@@ -83,7 +83,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(), IUserInterface, View
         super.initView()
         etPhone = vBinding.etPhone
         etPhone.requestFocus()
-        etPw = vBinding.etPhone
+        etPw = vBinding.etPw
         vBinding.btnLogin.setOnClickListener(this)
         vBinding.ivEye.setOnClickListener(this)
         progressDialog = ProgressDialog(this)
