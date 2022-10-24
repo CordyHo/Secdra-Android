@@ -10,35 +10,25 @@ object PreferencesHelper {
      * PreferenceManager.getDefaultSharedPreferences(Context)生成 包名_preferences.xml
      * Context.getSharedPreferences(String name,int mode)生成name.xml
      */
-    private val appPreference = PreferenceManager.getDefaultSharedPreferences(SecdraApplication.application)
+    private val appPreference = SecdraApplication.application?.let { PreferenceManager.getDefaultSharedPreferences(it) }
 
     fun setAppFlag(key: String, flag: Boolean) {
-        appPreference
-            .edit()
-            .putBoolean(key, flag)
-            .apply()
+        appPreference?.edit()?.putBoolean(key, flag)?.apply()
     }
 
     fun getAppFlag(key: String): Boolean {
-        return appPreference
-            .getBoolean(key, false)
+        return appPreference?.getBoolean(key, false) == true
     }
 
     fun removeAppFlag(key: String) {
-        appPreference
-            .edit()
-            .remove(key)
-            .apply()
+        appPreference?.edit()?.remove(key)?.apply()
     }
 
     fun addCustomAppProfile(key: String?, s: String?) {
-        appPreference
-            .edit()
-            .putString(key, s)
-            .apply()
+        appPreference?.edit()?.putString(key, s)?.apply()
     }
 
     fun getCustomAppProfile(key: String?): String? {
-        return appPreference.getString(key, "")
+        return appPreference?.getString(key, "")
     }
 }
