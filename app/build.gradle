@@ -37,11 +37,6 @@ android {
         jvmTarget = '1.8'
     }
 
-    aaptOptions {
-        noCompress 'dex'
-        /*防DEX篡改，但可能影响性能，看下 AndroidManifest*/
-        /*https://developer.android.com/topic/security/dex.md*/
-    }
 
     buildTypes {
         release {
@@ -53,6 +48,13 @@ android {
     }
 
     namespace 'com.cordy.secdra'
+    packagingOptions {
+        /*防DEX篡改，但可能影响性能，看下 AndroidManifest*/
+        /*https://developer.android.com/topic/security/dex.md*/
+        dex {
+            useLegacyPackaging false
+        }
+    }
 }
 
 dependencies {
